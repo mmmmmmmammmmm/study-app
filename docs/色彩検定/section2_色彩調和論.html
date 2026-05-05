@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+    
+body {
+    font-family: 'Helvetica Neue', Arial, 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', Meiryo, sans-serif;
+    font-size: 15px;
+    line-height: 1.8;
+    word-wrap: break-word;
+    background-color: #f4f7f6;
+    color: #333;
+    margin: 0;
+    padding: 20px 10px;
+}
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    background-color: #fff;
+    padding: 30px 40px;
+    border-radius: 15px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+}
+@media (max-width: 600px) {
+    .container { padding: 20px; }
+}
+h1 {
+    font-size: 1.8em;
+    color: #2c3e50;
+    text-align: center;
+    border-bottom: 3px solid #f0f2f5;
+    padding-bottom: 15px;
+    margin-bottom: 30px;
+    position: relative;
+}
+h1::after {
+    content: '';
+    position: absolute;
+    bottom: -3px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60px;
+    height: 3px;
+    background: #e74c3c;
+}
+h2 {
+    font-size: 1.4em;
+    color: #2c3e50;
+    background: #f8f9fa;
+    padding: 10px 15px;
+    border-left: 5px solid #3498db;
+    border-radius: 0 8px 8px 0;
+    margin-top: 40px;
+    margin-bottom: 20px;
+}
+h3 {
+    font-size: 1.2em;
+    color: #34495e;
+    margin-top: 30px;
+    display: flex;
+    align-items: center;
+}
+h3::before {
+    content: '🔶';
+    font-size: 0.8em;
+    margin-right: 8px;
+}
+ul {
+    padding-left: 20px;
+    background: #fafbfc;
+    padding: 15px 15px 15px 35px;
+    border-radius: 8px;
+    border: 1px solid #f0f2f5;
+}
+li { margin-bottom: 8px; }
+strong {
+    background: linear-gradient(transparent 60%, #ffeaa7 60%);
+    padding: 0 4px;
+    color: #d35400;
+}
+a {
+    color: #3498db;
+    text-decoration: none;
+    font-weight: bold;
+}
+a:hover { text-decoration: underline; }
+pre, code {
+    font-family: Consolas, monospace;
+    background-color: #f6f8fa;
+    border-radius: 4px;
+}
+code { padding: 2px 5px; color: #e83e8c; }
+pre { padding: 15px; overflow-x: auto; border: 1px solid #eaecef; }
+.back-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 40px;
+    padding: 12px 25px;
+    background-color: #2c3e50;
+    color: white !important;
+    text-decoration: none;
+    border-radius: 30px;
+    font-weight: bold;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
+    width: 100%;
+    max-width: 300px;
+}
+.back-button:hover {
+    background-color: #34495e;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+    text-decoration: none;
+}
+table {
+    border-collapse: collapse;
+    width: 100%;
+    margin: 15px 0;
+}
+th, td {
+    border: 1px solid #ddd;
+    padding: 8px;
+}
+th {
+    background-color: #f2f2f2;
+}
+/* 本格的な画像表示用のスタイル */
+.real-image-box {
+    background: #fff;
+    border: 1px solid #e0e0e0;
+    border-radius: 12px;
+    padding: 15px;
+    margin: 25px 0;
+    text-align: center;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+}
+.image-caption {
+    font-size: 0.9em;
+    color: #555;
+    margin-top: 12px;
+    font-weight: bold;
+}
+/* 加法・減法混色 (CSS図解) */
+.venn-container {
+    display: flex; justify-content: center; align-items: center;
+    height: 160px; position: relative; border-radius: 8px; overflow: hidden;
+    margin-top: 10px;
+}
+.venn-add { background: #000; }
+.venn-add .circle { mix-blend-mode: screen; }
+.venn-sub { background: #fff; border: 1px solid #ddd; }
+.venn-sub .circle { mix-blend-mode: multiply; }
+.circle {
+    width: 100px; height: 100px; border-radius: 50%; position: absolute;
+    display: flex; align-items: center; justify-content: center; font-weight: bold;
+}
+.circle.r { background: #ff0000; top: 15px; left: calc(50% - 50px); color: #fff; }
+.circle.g { background: #00ff00; bottom: 15px; left: calc(50% - 75px); color: #fff; }
+.circle.b { background: #0000ff; bottom: 15px; left: calc(50% - 25px); color: #fff; }
+.circle.c { background: #00ffff; top: 15px; left: calc(50% - 50px); color: #333; }
+.circle.m { background: #ff00ff; bottom: 15px; left: calc(50% - 75px); color: #333; }
+.circle.y { background: #ffff00; bottom: 15px; left: calc(50% - 25px); color: #333; }
+
+    </style>
+    <title>section2_色彩調和論</title>
+</head>
+<body>
+    <div class="container">
+        <h1>【Section 2】色彩調和論</h1>
+<p>公式テキスト（24〜30ページ）の内容に基づき、代表的な色彩調和論の特徴と原理をまとめます。</p>
+<hr />
+<h2>1. ジャッド (Judd, D.B.) の4つの原理</h2>
+<p>アメリカの色彩学者ジャッドは、古今東西のあらゆる色彩調和論を読破し、共通する基本原理を以下の4つにまとめました。</p>
+<ol>
+<li><strong>秩序の原理:</strong><ul>
+<li>知覚的に等間隔な尺度で構成された色空間（色立体や色相環）から、規則的（直線や正三角形など単純な幾何学図形）に選ばれた配色は調和する。</li>
+<li><em>例:</em> 補色色相配色（色相環上で直線で結ばれる2色）。オストワルトの調和論もこれに属する。</li>
+</ul>
+</li>
+<li><strong>なじみの原理（親近性の原理）:</strong><ul>
+<li>人々が自然界や日常で慣れ親しんでいる色の配列は調和する。</li>
+<li><em>例:</em> 夕焼け空のグラデーション、ナチュラルハーモニー。</li>
+</ul>
+</li>
+<li><strong>類似性の原理（共通性の原理）:</strong><ul>
+<li>共通要素を持つ色の集まりは、その共通性によって調和する。</li>
+<li><em>例:</em> 同一色相配色、同一トーン配色。</li>
+</ul>
+</li>
+<li><strong>明瞭性の原理:</strong><ul>
+<li>色の差が小さすぎたり意図が曖昧な配色は調和せず、はっきりとした対比（コントラスト）がある配色は調和する。</li>
+<li><em>例:</em> ビコロール配色、トリコロール配色。</li>
+</ul>
+</li>
+</ol>
+<hr />
+<h2>2. シュヴルール (Chevreul, M.E.) の色彩調和論</h2>
+<p>フランスの化学者・ゴブラン織物工場長のシュヴルールは、1839年に『色彩の同時対比の法則とこの法則に基づく配色について』を著し、印象派や新印象派に大きな影響を与えました。彼は色彩調和を「2種類・6通り」に分類しました。</p>
+<h3>A. 類似色の調和（3通り）</h3>
+<ol>
+<li><strong>単一色相における異なる色調の調和:</strong> 同一色相で明度・彩度が異なる配色。（例: 同一色相の濃淡）</li>
+<li><strong>隣接近似色相による色調類似の調和:</strong> 色相が隣接し、トーン（色調）が同一または類似の配色。</li>
+<li><strong>一つの主張色による調和:</strong> 全ての色を色ガラスを通して見たような、全体が同一色相に支配された配色（ドミナントカラー）。</li>
+</ol>
+<h3>B. 対比の調和（3通り）</h3>
+<ol start="4">
+<li><strong>同一色相による色調対比の調和:</strong> 同一色相で、明暗や強弱の差が大きく対比される配色。（例: ペールトーンとダークトーン）</li>
+<li><strong>隣接色相における色調対比の調和:</strong> 隣接色相で、明度差やトーンの差が大きい配色。</li>
+<li><strong>色相対比を増大するように選ばれた色彩対比の調和:</strong> 色相が大きく離れた配色。（例: 明度差のある補色配色）</li>
+</ol>
+<hr />
+<h2>3. ルード (Rood, O.N.) の色彩調和論</h2>
+<p>アメリカのオグデン・ルードは、1879年に『現代色彩学』を著しました。</p>
+<ul>
+<li><strong>色相の自然連鎖 (ナチュラルハーモニー):</strong><ul>
+<li>自然界の光の当たり方に基づき、「黄色寄りの色の明度を高く、青紫寄りの色の明度を低くする」配色が調和すると述べました。</li>
+<li>※「ナチュラルハーモニー」という名称は後から付けられたものです。PCCSの色相環もこの原理に則って配置されています。</li>
+</ul>
+</li>
+</ul>
+<hr />
+<h2>4. オストワルト (Ostwald, W.) の色彩調和論</h2>
+<p>ドイツの化学者（ノーベル賞受賞者）オストワルトは、1917年に独自の表色系を発表しました。</p>
+<ul>
+<li><strong>「調和は秩序に等しい」:</strong><ul>
+<li>彼の調和論はジャッドの「秩序の原理」に分類されます。</li>
+<li>配色の各色の間に規則的な関係があることが調和を生むと考えました。</li>
+</ul>
+</li>
+<li><strong>等色相三角形における調和:</strong><ul>
+<li><strong>等白系列:</strong> 白色量(W)が共通する色の配列。</li>
+<li><strong>等黒系列:</strong> 黒色量(B)が共通する色の配列。</li>
+<li><strong>等純系列 (シャドウシリーズ):</strong> 純色量(C)と白色量(W)の比率が一定の色の配列（キアロスクーロの一種と考えられ、なじみの原理にもあたる）。</li>
+</ul>
+</li>
+</ul>
+<hr />
+<h2>5. イッテン (Itten, J.) の色彩調和論</h2>
+<p>スイスの美術教育者であり、バウハウスの教授であったヨハネス・イッテンは、『色彩の芸術』で調和論を展開しました。</p>
+<ul>
+<li><strong>12色相環:</strong> 絵具の三原色（赤・黄・青）を基に、独自の12色相環を作成。向かい合う色は補色となります。</li>
+<li><strong>調和のとれた面積比:</strong><ul>
+<li>「調和には客観性が必要であり、調和は力の均衡である」とし、色の明度の逆数を面積比にすることで調和が取れると提唱しました。</li>
+<li><em>比率:</em> 黄(3) : 橙(4) : 赤(6) : 緑(6) : 青(8) : 紫(9)</li>
+<li>（明るい黄色は面積を小さく、暗い紫は面積を大きくする）</li>
+</ul>
+</li>
+</ul>
+<hr />
+<h2>6. ムーンとスペンサー (Moon, P. &amp; Spencer, D.E.) の色彩調和論</h2>
+<p>1944年に連名で発表された論文で、色彩調和を「数値化・法則化」したことで有名です。</p>
+<ul>
+<li><strong>調和の2条件:</strong><ol>
+<li>2つの色の差が曖昧でないこと。</li>
+<li>独自の「オメガ空間」内で、色が単純な幾何学図形で関係付けられること。</li>
+</ol>
+</li>
+<li><strong>3つの調和関係と不調和:</strong><ul>
+<li>調和する関係を <strong>「同一」「類似」「対比」</strong> の3つに限定し、それぞれ色相差・明度差・彩度差の範囲を設定。</li>
+<li>これに当てはまらない曖昧な差を「第1不明瞭」「第2不明瞭」とし、不調和であると定義しました。</li>
+</ul>
+</li>
+<li><strong>美度 (M) の計算:</strong><ul>
+<li>$M = 秩序(O) / 複雑さ(C)$</li>
+<li>この公式で評価を数値化し、美度が <strong>0.5以上</strong> であれば調和するとしました。</li>
+</ul>
+</li>
+</ul>
+<hr />
+<p><a href="../index.html?tab=tab-course" class="back-btn">⬅ 教材一覧へ戻る</a></p>
+        <div style="text-align: center; margin-top: 30px;">
+            <a href="../index.html?tab=tab-course" class="back-button">⬅ 教材一覧へ戻る</a>
+        </div>
+    </div>
+    
+    <script>
+        function addVisuals() {
+            const container = document.querySelector('.container');
+            const elements = Array.from(container.querySelectorAll('h2, h3, p, li'));
+            const insertedVisuals = new Set();
+            
+            elements.forEach(el => {
+                const text = el.textContent;
+                let visualHtml = '';
+                let visualType = '';
+
+                // 加法混色 (RGB)
+                if ((text.includes('加法混色') || (text.includes('光の三原色') && !text.includes('減法'))) && !insertedVisuals.has('vennAdd')) {
+                    visualType = 'vennAdd';
+                    visualHtml = `
+                        <div class="real-image-box">
+                            <div class="image-caption">💡 加法混色 (RGB: 光の混色イメージ)</div>
+                            <div class="venn-container venn-add">
+                                <div class="circle r">R</div><div class="circle g">G</div><div class="circle b">B</div>
+                            </div>
+                        </div>
+                    `;
+                } 
+                // 減法混色 (CMY)
+                else if ((text.includes('減法混色') || text.includes('色料の三原色')) && !insertedVisuals.has('vennSub')) {
+                    visualType = 'vennSub';
+                    visualHtml = `
+                        <div class="real-image-box">
+                            <div class="image-caption">🎨 減法混色 (CMY: インクの混色イメージ)</div>
+                            <div class="venn-container venn-sub">
+                                <div class="circle c">C</div><div class="circle m">M</div><div class="circle y">Y</div>
+                            </div>
+                        </div>
+                    `;
+                }
+                // スペクトル
+                else if ((text.includes('スペクトル') || text.includes('ニュートン')) && !insertedVisuals.has('spectrum')) {
+                    visualType = 'spectrum';
+                    visualHtml = `
+                        <div class="real-image-box">
+                            <div class="image-caption">🌈 可視光スペクトルのイメージ</div>
+                            <div style="height:30px; border-radius:15px; margin-top:10px; background:linear-gradient(to right, #ff0000, #ff7f00, #ffff00, #00ff00, #0000ff, #4b0082, #9400d3);"></div>
+                        </div>
+                    `;
+                }
+
+                if (visualHtml) {
+                    el.insertAdjacentHTML('afterend', visualHtml);
+                    insertedVisuals.add(visualType);
+                }
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            addVisuals();
+        });
+    </script>
+</body>
+</html>

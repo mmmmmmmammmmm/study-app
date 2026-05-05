@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+    
+body {
+    font-family: 'Helvetica Neue', Arial, 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', Meiryo, sans-serif;
+    font-size: 15px;
+    line-height: 1.8;
+    word-wrap: break-word;
+    background-color: #f4f7f6;
+    color: #333;
+    margin: 0;
+    padding: 20px 10px;
+}
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    background-color: #fff;
+    padding: 30px 40px;
+    border-radius: 15px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+}
+@media (max-width: 600px) {
+    .container { padding: 20px; }
+}
+h1 {
+    font-size: 1.8em;
+    color: #2c3e50;
+    text-align: center;
+    border-bottom: 3px solid #f0f2f5;
+    padding-bottom: 15px;
+    margin-bottom: 30px;
+    position: relative;
+}
+h1::after {
+    content: '';
+    position: absolute;
+    bottom: -3px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60px;
+    height: 3px;
+    background: #e74c3c;
+}
+h2 {
+    font-size: 1.4em;
+    color: #2c3e50;
+    background: #f8f9fa;
+    padding: 10px 15px;
+    border-left: 5px solid #3498db;
+    border-radius: 0 8px 8px 0;
+    margin-top: 40px;
+    margin-bottom: 20px;
+}
+h3 {
+    font-size: 1.2em;
+    color: #34495e;
+    margin-top: 30px;
+    display: flex;
+    align-items: center;
+}
+h3::before {
+    content: '🔶';
+    font-size: 0.8em;
+    margin-right: 8px;
+}
+ul {
+    padding-left: 20px;
+    background: #fafbfc;
+    padding: 15px 15px 15px 35px;
+    border-radius: 8px;
+    border: 1px solid #f0f2f5;
+}
+li { margin-bottom: 8px; }
+strong {
+    background: linear-gradient(transparent 60%, #ffeaa7 60%);
+    padding: 0 4px;
+    color: #d35400;
+}
+a {
+    color: #3498db;
+    text-decoration: none;
+    font-weight: bold;
+}
+a:hover { text-decoration: underline; }
+pre, code {
+    font-family: Consolas, monospace;
+    background-color: #f6f8fa;
+    border-radius: 4px;
+}
+code { padding: 2px 5px; color: #e83e8c; }
+pre { padding: 15px; overflow-x: auto; border: 1px solid #eaecef; }
+.back-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 40px;
+    padding: 12px 25px;
+    background-color: #2c3e50;
+    color: white !important;
+    text-decoration: none;
+    border-radius: 30px;
+    font-weight: bold;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
+    width: 100%;
+    max-width: 300px;
+}
+.back-button:hover {
+    background-color: #34495e;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+    text-decoration: none;
+}
+table {
+    border-collapse: collapse;
+    width: 100%;
+    margin: 15px 0;
+}
+th, td {
+    border: 1px solid #ddd;
+    padding: 8px;
+}
+th {
+    background-color: #f2f2f2;
+}
+/* 本格的な画像表示用のスタイル */
+.real-image-box {
+    background: #fff;
+    border: 1px solid #e0e0e0;
+    border-radius: 12px;
+    padding: 15px;
+    margin: 25px 0;
+    text-align: center;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+}
+.image-caption {
+    font-size: 0.9em;
+    color: #555;
+    margin-top: 12px;
+    font-weight: bold;
+}
+/* 加法・減法混色 (CSS図解) */
+.venn-container {
+    display: flex; justify-content: center; align-items: center;
+    height: 160px; position: relative; border-radius: 8px; overflow: hidden;
+    margin-top: 10px;
+}
+.venn-add { background: #000; }
+.venn-add .circle { mix-blend-mode: screen; }
+.venn-sub { background: #fff; border: 1px solid #ddd; }
+.venn-sub .circle { mix-blend-mode: multiply; }
+.circle {
+    width: 100px; height: 100px; border-radius: 50%; position: absolute;
+    display: flex; align-items: center; justify-content: center; font-weight: bold;
+}
+.circle.r { background: #ff0000; top: 15px; left: calc(50% - 50px); color: #fff; }
+.circle.g { background: #00ff00; bottom: 15px; left: calc(50% - 75px); color: #fff; }
+.circle.b { background: #0000ff; bottom: 15px; left: calc(50% - 25px); color: #fff; }
+.circle.c { background: #00ffff; top: 15px; left: calc(50% - 50px); color: #333; }
+.circle.m { background: #ff00ff; bottom: 15px; left: calc(50% - 75px); color: #333; }
+.circle.y { background: #ffff00; bottom: 15px; left: calc(50% - 25px); color: #333; }
+
+    </style>
+    <title>section9_データベース</title>
+</head>
+<body>
+    <div class="container">
+        <h1>【Section 9】データベース</h1>
+<h2>1. 関係データベース (RDB: Relational Database)</h2>
+<p>データを「行（レコード）」と「列（フィールド/属性）」から構成される2次元の「表（テーブル）」の形式で管理します。現在のシステム開発において最も一般的なデータベースです。</p>
+<h2>2. 主キーと外部キー（制約）</h2>
+<p>表同士を関連付け、データの矛盾を防ぐための重要なルールです。<br />
+*   <strong>主キー (Primary Key)</strong>: 表の中の行を「一意に（重複なく）」特定するための列です。社員表における「社員番号」などが該当します。主キーには「重複する値」や「NULL（データが存在しない空の状態）」を入れることはできません（一意性制約・非NULL制約）。<br />
+*   <strong>外部キー (Foreign Key)</strong>: 別の表の「主キー」を参照している列です。例えば、「社員表」にある「部署コード」列は、「部署表」の主キーを参照する外部キーです。これにより、存在しない部署コードを社員に登録できなくするルールを「参照制約」と呼びます。</p>
+<h2>3. データベース設計と正規化</h2>
+<p>データの重複（冗長性）をなくし、データを追加・更新・削除した際に矛盾（アノマリ）が発生するのを防ぐために、表を適切な形に分割していくプロセスを「正規化」と呼びます。<br />
+*   <strong>第1正規形</strong>: 1つのセルに複数のデータが入っている「繰り返し項目」を排除した状態。<br />
+*   <strong>第2正規形</strong>: 複合主キーの一部にのみ依存している項目（部分関数従属）を別の表に切り出した状態。<br />
+*   <strong>第3正規形</strong>: 主キー以外の項目に依存している項目（推移的関数従属）を別の表に切り出した状態。</p>
+<h2>4. トランザクション処理 (ACID特性)</h2>
+<p>データベースに対する「意味のある一連の処理のまとまり（例：口座Aから引出し、口座Bへ入金する）」をトランザクションと呼びます。信頼性を保つため、以下の4つの特性（ACID）が求められます。<br />
+*   <strong>Atomicity (原子性)</strong>: 処理が「完全に実行されるか」「全く実行されなかったことになるか」のどちらかであること（All or Nothing）。中途半端な状態で終わることは許されません。<br />
+*   <strong>Consistency (一貫性)</strong>: トランザクションの前後で、データベースの制約（残高がマイナスにならない等）が常に保たれていること。<br />
+*   <strong>Isolation (独立性 / 隔離性)</strong>: 複数のトランザクションを同時並行で実行しても、お互いに干渉せず、順番に単独で実行した場合と同じ結果になること。これを実現するために「排他制御（ロック）」が行われます。<br />
+*   <strong>Durability (耐久性 / 永続性)</strong>: トランザクションが正常に完了（コミット）したら、その直後に停電やシステム障害が発生しても、結果は永久に失われないこと。ログファイルを用いて障害回復（ロールフォワード等）を行います。</p>
+        <div style="text-align: center; margin-top: 30px;">
+            <a href="../index.html?tab=tab-course" class="back-button">⬅ 教材一覧へ戻る</a>
+        </div>
+    </div>
+    
+    <script>
+        function addVisuals() {
+            const container = document.querySelector('.container');
+            const elements = Array.from(container.querySelectorAll('h2, h3, p, li'));
+            const insertedVisuals = new Set();
+            
+            elements.forEach(el => {
+                const text = el.textContent;
+                let visualHtml = '';
+                let visualType = '';
+
+                // 加法混色 (RGB)
+                if ((text.includes('加法混色') || (text.includes('光の三原色') && !text.includes('減法'))) && !insertedVisuals.has('vennAdd')) {
+                    visualType = 'vennAdd';
+                    visualHtml = `
+                        <div class="real-image-box">
+                            <div class="image-caption">💡 加法混色 (RGB: 光の混色イメージ)</div>
+                            <div class="venn-container venn-add">
+                                <div class="circle r">R</div><div class="circle g">G</div><div class="circle b">B</div>
+                            </div>
+                        </div>
+                    `;
+                } 
+                // 減法混色 (CMY)
+                else if ((text.includes('減法混色') || text.includes('色料の三原色')) && !insertedVisuals.has('vennSub')) {
+                    visualType = 'vennSub';
+                    visualHtml = `
+                        <div class="real-image-box">
+                            <div class="image-caption">🎨 減法混色 (CMY: インクの混色イメージ)</div>
+                            <div class="venn-container venn-sub">
+                                <div class="circle c">C</div><div class="circle m">M</div><div class="circle y">Y</div>
+                            </div>
+                        </div>
+                    `;
+                }
+                // スペクトル
+                else if ((text.includes('スペクトル') || text.includes('ニュートン')) && !insertedVisuals.has('spectrum')) {
+                    visualType = 'spectrum';
+                    visualHtml = `
+                        <div class="real-image-box">
+                            <div class="image-caption">🌈 可視光スペクトルのイメージ</div>
+                            <div style="height:30px; border-radius:15px; margin-top:10px; background:linear-gradient(to right, #ff0000, #ff7f00, #ffff00, #00ff00, #0000ff, #4b0082, #9400d3);"></div>
+                        </div>
+                    `;
+                }
+
+                if (visualHtml) {
+                    el.insertAdjacentHTML('afterend', visualHtml);
+                    insertedVisuals.add(visualType);
+                }
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            addVisuals();
+        });
+    </script>
+</body>
+</html>
