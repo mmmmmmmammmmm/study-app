@@ -1,0 +1,801 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>色彩検定：慣用色名マスタークイズ (全127色)</title>
+    <style>
+        :root {
+            --primary-color: #4a90e2;
+            --bg-color: #f0f2f5;
+        }
+        body {
+            font-family: 'Helvetica Neue', Arial, 'Hiragino Kaku Gothic ProN', 'Meiryo', sans-serif;
+            background-color: var(--bg-color);
+            margin: 0;
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: #333;
+        }
+        .container {
+            max-width: 500px;
+            width: 100%;
+            background: white;
+            padding: 12px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            box-sizing: border-box;
+        }
+        h1 { text-align: center; color: #2c3e50; font-size: 1.1rem; margin: 5px 0 10px 0; }
+        .stats { font-size: 0.75rem; color: #7f8c8d; text-align: center; margin-bottom: 10px; }
+        
+        /* モード切り替え */
+        .tabs {
+            display: flex;
+            margin-bottom: 12px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            overflow-x: auto;
+            white-space: nowrap;
+            -webkit-overflow-scrolling: touch;
+        }
+        .tab {
+            flex: 1;
+            padding: 10px 5px;
+            text-align: center;
+            cursor: pointer;
+            font-weight: bold;
+            color: #95a5a6;
+            font-size: 0.75rem;
+            border-bottom: 3px solid transparent;
+            min-width: 70px;
+        }
+        .tab.active {
+            color: var(--primary-color);
+            border-bottom-color: var(--primary-color);
+            background: #fff;
+        }
+
+        /* グリッド(一覧)表示 */
+        .grid-container { display: grid; grid-template-columns: repeat(auto-fill, minmax(80px, 1fr)); gap: 8px; justify-content: flex-start; }
+        .grid-item { text-align: center; cursor: pointer; border: 1px solid #eee; border-radius: 8px; padding: 6px; font-size: 0.65rem; transition: background 0.2s; box-sizing: border-box; background: #fff; }
+        .grid-item:hover { background: #f0f7ff; }
+        .grid-color { width: 100%; height: 40px; border-radius: 5px; margin-bottom: 4px; border: 1px solid rgba(0,0,0,0.05); }
+        .group-title { width: 100%; text-align: left; font-weight: bold; border-left: 4px solid var(--primary-color); padding-left: 8px; margin: 15px 0 8px 0; color: #2c3e50; font-size: 0.85rem; }
+        
+        /* 検索ボックス */
+        .search-box {
+            width: 100%;
+            padding: 10px 15px;
+            border: 1px solid #ddd;
+            border-radius: 20px;
+            margin-bottom: 12px;
+            font-size: 0.85rem;
+            box-sizing: border-box;
+            background: #f8f9fa;
+        }
+
+        /* 似た色表示 (サジェスト) */
+        .similar-colors-wrapper { width: 100%; margin-top: 15px; border-top: 1px dashed #ddd; padding-top: 10px; }
+        .similar-title { font-weight: bold; font-size: 0.75rem; color: #7f8c8d; margin-bottom: 8px; }
+        .similar-colors { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 5px; }
+        .similar-item { 
+            flex: 0 0 65px;
+            text-align: center; 
+            font-size: 0.6rem; 
+            cursor: pointer; 
+            border: 1px solid #eee;
+            border-radius: 6px;
+            padding: 4px;
+            background: #fff;
+        }
+        .similar-color-box { 
+            width: 100%; 
+            height: 35px; 
+            border-radius: 4px; 
+            margin-bottom: 3px; 
+            border: 1px solid rgba(0,0,0,0.05); 
+        }
+
+        /* カード表示 */
+        .color-card {
+            text-align: center;
+            padding: 10px;
+            border-radius: 12px;
+            margin-bottom: 10px;
+            animation: fadeIn 0.3s ease;
+        }
+        .color-sample {
+            width: 100%;
+            height: 100px;
+            border-radius: 8px;
+            margin-bottom: 12px;
+            border: 1px solid rgba(0,0,0,0.1);
+            box-shadow: inset 0 0 8px rgba(0,0,0,0.05);
+        }
+        .color-name { font-size: 1.3rem; font-weight: bold; margin: 5px 0; color: #2c3e50; }
+        .pccs-info {
+            display: inline-block;
+            background: #34495e;
+            color: white;
+            padding: 3px 12px;
+            border-radius: 15px;
+            font-size: 0.75rem;
+            margin-bottom: 8px;
+        }
+        .origin-text {
+            color: #34495e;
+            line-height: 1.4;
+            text-align: left;
+            background: #f8f9fa;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 0.8rem;
+        }
+
+        /* クイズ用 */
+        .quiz-options {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            margin-top: 12px;
+        }
+        .btn {
+            padding: 12px 6px;
+            border: 2px solid #f1f3f5;
+            border-radius: 8px;
+            background: #fff;
+            cursor: pointer;
+            font-size: 0.8rem;
+            font-weight: bold;
+            transition: all 0.2s;
+            color: #2c3e50;
+        }
+        .btn.correct { background: #42b72a !important; color: white; border-color: #42b72a; }
+        .btn.incorrect { background: #fa3e3e !important; color: white; border-color: #fa3e3e; }
+        
+        .nav-btns {
+            display: flex;
+            justify-content: center;
+            margin-top: 15px;
+            gap: 15px;
+        }
+        .nav-btn {
+            padding: 10px 25px;
+            border: none;
+            border-radius: 25px;
+            background: var(--primary-color);
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 0.85rem;
+            box-shadow: 0 4px 6px rgba(74, 144, 226, 0.2);
+        }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+        
+        /* 弱点リスト用のボタン */
+        .mistake-actions { display: flex; gap: 8px; margin-bottom: 15px; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>色彩検定 慣用色名マスター (全127色)</h1>
+    <div id="stats-area" class="stats"></div>
+    
+    <div class="tabs">
+        <div id="tab-grid" class="tab" onclick="setMode('grid')">一覧</div>
+        <div id="tab-list" class="tab active" onclick="setMode('list')">図鑑</div>
+        <div id="tab-quiz" class="tab" onclick="setMode('quiz')">クイズ</div>
+        <div id="tab-mistakes" class="tab" onclick="setMode('mistakes')">弱点</div>
+        <div id="tab-review-quiz" class="tab" onclick="setMode('review_quiz')">復習</div>
+    </div>
+
+    <div id="search-container" style="display: block;">
+        <input type="text" id="search-input" class="search-box" placeholder="色名やPCCSで検索..." oninput="filterList()">
+    </div>
+
+    <div id="view-area"></div>
+
+    <div id="controls" class="nav-btns">
+        <button class="nav-btn" onclick="prev()">前へ</button>
+        <button class="nav-btn" onclick="next()">次へ</button>
+    </div>
+</div>
+
+<script>
+    // 色彩検定3級・2級範囲の全127色データ (1級の範囲はこれらすべて)
+    const allColorData = [
+        // --- 3級範囲 (64色) ---
+        // 赤系
+        { name: "カーマイン", pccs: "v2", hex: "#D7003A", origin: "コチニールカイガラムシから抽出される動物性染料の鮮やかな赤。" },
+        { name: "スカーレット", pccs: "v2", hex: "#EA5550", origin: "ペルシャ語で「模様のある毛織物」を意味する語に由来する黄みの赤。" },
+        { name: "レッド", pccs: "v2", hex: "#E60033", origin: "鮮やかな赤。" },
+        { name: "ローズ", pccs: "v1", hex: "#E9546B", origin: "バラの花のような鮮やかな紫みの赤。" },
+        { name: "コーラルレッド", pccs: "b2", hex: "#F57173", origin: "宝石の珊瑚のような明るい赤。和名は珊瑚色。" },
+        { name: "ピンク", pccs: "lt1+", hex: "#F596AA", origin: "ナデシコ（ピンク）の花の色。やわらかい赤。" },
+        { name: "ピーチ", pccs: "lt2+", hex: "#FBDAC8", origin: "桃の果肉や皮のような明るい灰みの黄赤。" },
+        { name: "桜色 (さくらいろ)", pccs: "p2+", hex: "#FEF4F4", origin: "桜の花びらのようなごく薄い紫みの赤。" },
+        { name: "朱色 (しゅいろ)", pccs: "v3", hex: "#EB6101", origin: "天然の辰砂（しんしゃ）や人工の銀朱などの顔料の色。黄みの赤。" },
+        { name: "赤 (あか)", pccs: "v2", hex: "#E60033", origin: "鮮やかな赤。" },
+        { name: "紅 (べに)", pccs: "v2", hex: "#D7003A", origin: "紅花から抽出された染料の色。鮮やかな赤。" },
+        { name: "牡丹色 (ぼたんいろ)", pccs: "v1", hex: "#E7609E", origin: "牡丹の花のような鮮やかな紫みの赤。" },
+        { name: "臙脂 (えんじ)", pccs: "dp2", hex: "#B94047", origin: "中国の燕の国から伝わったとされる、紫みの暗い赤。" },
+        { name: "茜色 (あかねいろ)", pccs: "dp2", hex: "#B7282E", origin: "アカネ科の多年草の根からとる染料の色。暗い赤。" },
+        { name: "鳶色 (とびいろ)", pccs: "dk4", hex: "#95483F", origin: "鳥のトビの羽のような暗い黄赤（茶色）。" },
+        // 黄赤系（オレンジ・茶）
+        { name: "オレンジ", pccs: "v4", hex: "#EE7800", origin: "オレンジの果皮のような鮮やかな黄赤。" },
+        { name: "ブラウン", pccs: "d4", hex: "#8F6552", origin: "暗い灰みの黄赤。茶色。" },
+        { name: "チョコレート", pccs: "dk4", hex: "#6C3524", origin: "チョコレートのようなごく暗い黄赤。" },
+        { name: "キャメル", pccs: "sf6", hex: "#C69E6E", origin: "ラクダの毛の色。くすんだ黄赤。" },
+        { name: "ベージュ", pccs: "ltg4", hex: "#EEDCB3", origin: "染めていない羊毛の色。明るい灰みの黄赤。" },
+        { name: "黄丹 (おうに)", pccs: "dp4", hex: "#EE7948", origin: "紅花とクチナシで染めた強い黄赤。皇太子の礼服の色（禁色）。" },
+        { name: "茶色 (ちゃいろ)", pccs: "d4", hex: "#734E31", origin: "お茶の葉を煎じた汁の色。暗い灰みの黄赤。" },
+        { name: "橙色 (だいだいいろ)", pccs: "v4", hex: "#EE7800", origin: "ミカン科のダイダイの果皮の色。鮮やかな黄赤。" },
+        { name: "柿色 (かきいろ)", pccs: "d4", hex: "#ED6D3D", origin: "熟した柿の実の色。強い黄赤。" },
+        // 黄系
+        { name: "イエロー", pccs: "v8", hex: "#FFD900", origin: "鮮やかな黄。" },
+        { name: "レモンイエロー", pccs: "v8", hex: "#FFF33F", origin: "レモンの果皮のような鮮やかな緑みの黄。" },
+        { name: "ブロンド", pccs: "sf8", hex: "#F2D07B", origin: "金髪の色。やわらかい黄。" },
+        { name: "カーキ", pccs: "d8", hex: "#C5B65A", origin: "ヒンズー語で「土埃」を意味する。くすんだ黄。" },
+        { name: "オリーブ", pccs: "dk8", hex: "#72640C", origin: "未熟なオリーブの実の色。暗い緑みの黄。" },
+        { name: "山吹色 (やまぶきいろ)", pccs: "v7", hex: "#F8B500", origin: "ヤマブキの花の色。鮮やかな赤みの黄。" },
+        { name: "黄色 (きいろ)", pccs: "v8", hex: "#FFD900", origin: "鮮やかな黄。" },
+        { name: "刈安色 (かりやすいろ)", pccs: "lt8", hex: "#F5E56B", origin: "ススキに似たカリヤスで染めた色。うすい緑みの黄。" },
+        { name: "クリーム色", pccs: "p8", hex: "#E3D7A3", origin: "牛乳のクリームのようなごくうすい黄。" },
+        // 緑系
+        { name: "グリーン", pccs: "v12", hex: "#00A960", origin: "鮮やかな緑。" },
+        { name: "オリーブグリーン", pccs: "dk10", hex: "#5F6527", origin: "オリーブの葉のような暗い黄緑。" },
+        { name: "ビリジアン", pccs: "v14", hex: "#30826F", origin: "ラテン語の「緑」に由来する顔料の色。くすんだ青みの緑。" },
+        { name: "黄緑 (きみどり)", pccs: "v10", hex: "#B8D200", origin: "鮮やかな黄緑。" },
+        { name: "萌葱色 (もえぎいろ)", pccs: "v12", hex: "#006E54", origin: "ネギの若芽のような色。暗い緑。" },
+        { name: "緑 (みどり)", pccs: "v12", hex: "#00A960", origin: "鮮やかな緑。" },
+        { name: "若竹色 (わかたけいろ)", pccs: "b12", hex: "#5BB496", origin: "若い竹の幹のような強い緑。" },
+        { name: "青磁色 (せいじいろ)", pccs: "d14", hex: "#7EBEA5", origin: "青磁器の肌の色。やわらかい青みの緑。" },
+        { name: "鉄色 (てついろ)", pccs: "dkg14", hex: "#005243", origin: "鉄の肌のようなごく暗い青みの緑。" },
+        // 青系
+        { name: "シアン", pccs: "v16", hex: "#00AECB", origin: "色材の三原色の一つ。明るい青。" },
+        { name: "スカイブルー", pccs: "b16", hex: "#A0D8EF", origin: "晴れた日の空の色。明るい青。" },
+        { name: "ブルー", pccs: "v18", hex: "#0071C0", origin: "鮮やかな青。" },
+        { name: "コバルトブルー", pccs: "v18", hex: "#0068B7", origin: "顔料のコバルトブルーの色。鮮やかな青。" },
+        { name: "マリンブルー", pccs: "dp16", hex: "#006D8D", origin: "海の色。濃い緑みの青。" },
+        { name: "ネイビーブルー", pccs: "dk18", hex: "#202F55", origin: "イギリス海軍の制服の色。暗い紫みの青。" },
+        { name: "水色 (みずいろ)", pccs: "lt16+", hex: "#BCE2E8", origin: "澄んだ水の色。うすい緑みの青。" },
+        { name: "空色 (そらいろ)", pccs: "b16", hex: "#A0D8EF", origin: "晴れた空の色。明るい青。" },
+        { name: "青 (あお)", pccs: "v18", hex: "#0071C0", origin: "鮮やかな青。" },
+        { name: "瑠璃色 (るりいろ)", pccs: "v19", hex: "#1E50A2", origin: "宝石のラピスラズリ（瑠璃）の色。濃い紫みの青。" },
+        { name: "藍色 (あいいろ)", pccs: "dp18", hex: "#165E83", origin: "藍染めの色。暗い青。" },
+        // 紫系
+        { name: "マゼンタ", pccs: "v24", hex: "#E4007F", origin: "色材の三原色の一つ。鮮やかな赤紫。" },
+        { name: "パープル", pccs: "v22", hex: "#884898", origin: "巻貝の分泌液からとる染料の色。鮮やかな紫。" },
+        { name: "バイオレット", pccs: "v20", hex: "#5A4498", origin: "スミレの花の色。鮮やかな青紫。" },
+        { name: "藤色 (ふじいろ)", pccs: "lt20+", hex: "#BB94D7", origin: "藤の花の色。明るい青紫。" },
+        { name: "紫 (むらさき)", pccs: "v22", hex: "#884898", origin: "鮮やかな紫。" },
+        // 無彩色系
+        { name: "ホワイト", pccs: "W", hex: "#FFFFFF", origin: "白。" },
+        { name: "グレー", pccs: "N5", hex: "#7D7D7D", origin: "灰色。" },
+        { name: "ブラック", pccs: "Bk", hex: "#000000", origin: "黒。" },
+        { name: "白 (しろ)", pccs: "W", hex: "#FFFFFF", origin: "白。" },
+        { name: "鼠色 (ねずみいろ)", pccs: "N5", hex: "#949495", origin: "ネズミの毛の色。灰色。" },
+        { name: "黒 (くろ)", pccs: "Bk", hex: "#000000", origin: "黒。" },
+
+        // --- 2級範囲 (63色) ---
+        // 赤系
+        { name: "ルビー", pccs: "v1", hex: "#C70067", origin: "宝石のルビーの色。鮮やかな紫みの赤。" },
+        { name: "ワインレッド", pccs: "dp1", hex: "#B33E5C", origin: "赤ワインの色。こい紫みの赤。" },
+        { name: "ボルドー", pccs: "dk1", hex: "#6C2735", origin: "フランスのボルドー産赤ワインの色。ごく暗い紫みの赤。" },
+        { name: "チェリーピンク", pccs: "b1", hex: "#EB6EA5", origin: "サクランボの実の色。鮮やかな紫みの赤。" },
+        { name: "ポピーレッド", pccs: "v3", hex: "#EA5550", origin: "ヒナゲシの花の色。鮮やかな黄みの赤。" },
+        { name: "ストロベリー", pccs: "v2", hex: "#D7003A", origin: "イチゴの実の色。鮮やかな赤。" },
+        { name: "テラコッタ", pccs: "d4", hex: "#BD6856", origin: "イタリア語で「焼いた土」。くすんだ黄赤。" },
+        { name: "韓紅花 (からくれない)", pccs: "v2", hex: "#E95464", origin: "紅花で染めた濃い赤。あざやかな赤。" },
+        { name: "蘇芳 (すおう)", pccs: "d2", hex: "#9E3D3F", origin: "スオウの芯材で染めた色。くすんだ赤。" },
+        { name: "紅梅色 (こうばいいろ)", pccs: "lt1+", hex: "#F2A0A1", origin: "紅梅の花の色。やわらかい赤。" },
+        // 黄赤系（オレンジ・茶）
+        { name: "バーントシエンナ", pccs: "d4", hex: "#A96E51", origin: "焼いたシエンナ土の色。くすんだ黄赤。" },
+        { name: "ローアンバー", pccs: "dk6", hex: "#8A6B4E", origin: "生のウンブリア土の色。暗い黄。" },
+        { name: "バーントアンバー", pccs: "dkg4", hex: "#6F5436", origin: "焼いたウンブリア土の色。ごく暗い赤みの黄。" },
+        { name: "セピア", pccs: "dk6", hex: "#622D18", origin: "イカの墨の色。暗い褐色の黄。" },
+        { name: "マリーゴールド", pccs: "v5", hex: "#F39800", origin: "マリーゴールドの花の色。鮮やかな赤みの黄。" },
+        { name: "アプリコット", pccs: "lt4+", hex: "#F7B977", origin: "アンズの実の色。やわらかい黄赤。" },
+        { name: "タン", pccs: "d4", hex: "#B77B57", origin: "なめし革の色。くすんだ黄赤。" },
+        { name: "コルク", pccs: "sf6", hex: "#C4A076", origin: "コルクガシの樹皮の色。くすんだ黄赤。" },
+        { name: "代赭 (たいしゃ)", pccs: "d4", hex: "#B36C3C", origin: "代州（中国）でとれた赤土の色。くすんだ黄赤。" },
+        { name: "檜皮色 (ひわだいろ)", pccs: "dkg4", hex: "#965042", origin: "ヒノキの樹皮の色。暗い灰みの黄赤。" },
+        { name: "朽葉色 (くちばいろ)", pccs: "d6", hex: "#896A45", origin: "落ち葉の色。灰みの赤みを帯びた黄。" },
+        { name: "金茶 (きんちゃ)", pccs: "d6", hex: "#C39143", origin: "金糸のような明るい茶色。明るい灰みの赤みを帯びた黄。" },
+        // 黄系
+        { name: "ネープルスイエロー", pccs: "sf6", hex: "#FDD162", origin: "ナポリの黄という意味の顔料の色。強い黄赤。" },
+        { name: "ジョンブリアン", pccs: "lt4+", hex: "#FFC48C", origin: "輝く黄という意味。鮮やかな黄。" },
+        { name: "サフランイエロー", pccs: "v7", hex: "#F8B500", origin: "サフランのめしべの色。やわらかい黄。" },
+        { name: "アンバー", pccs: "d6", hex: "#C2894B", origin: "琥珀（こはく）の色。くすんだ赤みの黄。" },
+        { name: "マスタード", pccs: "sf8", hex: "#D0AF4C", origin: "洋カラシの色。くすんだ黄。" },
+        { name: "卵色 (たまごいろ)", pccs: "lt6+", hex: "#FCD575", origin: "卵の黄身の色。明るい赤みの黄。" },
+        { name: "鬱金色 (うこんいろ)", pccs: "b8", hex: "#FABF14", origin: "ウコンの根で染めた色。強い黄。" },
+        { name: "黄土色 (おうどいろ)", pccs: "d6", hex: "#C39143", origin: "顔料の黄土の色。暗い黄赤。" },
+        { name: "鶸色 (ひわいろ)", pccs: "b10", hex: "#D7D43D", origin: "マヒワの羽の色。強い黄緑。" },
+        // 緑系
+        { name: "シャトルーズグリーン", pccs: "b10", hex: "#D3E173", origin: "シャルトリューズ修道院の薬草酒の色。明るい黄緑。" },
+        { name: "アップルグリーン", pccs: "b12", hex: "#A7D28D", origin: "青リンゴの皮の色。やわらかい黄緑。" },
+        { name: "ミントグリーン", pccs: "p12", hex: "#89C997", origin: "ミントの葉の色。明るい緑。" },
+        { name: "エメラルドグリーン", pccs: "v14", hex: "#00A968", origin: "宝石のエメラルドの色。強い緑。" },
+        { name: "マラカイトグリーン", pccs: "v14", hex: "#009854", origin: "孔雀石（マラカイト）の色。濃い緑。" },
+        { name: "グラスグリーン", pccs: "sf12", hex: "#7B8D42", origin: "牧草の色。くすんだ黄緑。" },
+        { name: "フォレストグリーン", pccs: "dp12", hex: "#288C66", origin: "森の木々の色。暗い緑。" },
+        { name: "鶯色 (うぐいすいろ)", pccs: "d10", hex: "#928C36", origin: "ウグイスの羽の色。くすんだ黄緑。" },
+        { name: "海松色 (みるいろ)", pccs: "dk10", hex: "#726D40", origin: "海藻のミル（海松）の色。暗い灰みの黄緑。" },
+        { name: "常盤色 (ときわいろ)", pccs: "dp12", hex: "#007B43", origin: "常緑樹の葉の色。こい緑。" },
+        // 青系
+        { name: "ターコイズブルー", pccs: "v16", hex: "#00AFCC", origin: "宝石のトルコ石の色。明るい緑みの青。" },
+        { name: "ピーコックブルー", pccs: "v16", hex: "#00A497", origin: "クジャクの羽の色。こい青緑。" },
+        { name: "セルリアンブルー", pccs: "v16", hex: "#008DB7", origin: "ラテン語の「空」に由来する顔料の色。あざやかな青。" },
+        { name: "サックスブルー", pccs: "lt16", hex: "#4A82AA", origin: "サクソン人の青という意味。くすんだ青。" },
+        { name: "オリエンタルブルー", pccs: "d18", hex: "#26499D", origin: "東洋の陶磁器に見られる色。こい紫みの青。" },
+        { name: "アイビーグリーン", pccs: "dk12", hex: "#556B2F", origin: "ツタの葉の色。暗い黄緑。" },
+        { name: "浅葱色 (あさぎいろ)", pccs: "b16", hex: "#00A3AF", origin: "薄いネギの葉の色。あざやかな緑みの青。" },
+        { name: "新橋色 (しんばしいろ)", pccs: "lt16+", hex: "#59B9C6", origin: "明治時代、新橋の芸者が好んだ化学染料の色。明るい緑みの青。" },
+        { name: "縹色 (はなだいろ)", pccs: "dp16", hex: "#2792C3", origin: "ツユクサの花の色、または藍染めの色。強い青。" },
+        { name: "納戸色 (なんどいろ)", pccs: "d16", hex: "#008899", origin: "江戸時代に納戸の垂れ幕に使われた色。強い緑みの青。" },
+        { name: "鉄色 (てついろ)", pccs: "dkg14", hex: "#005243", origin: "鉄の肌の色。ごく暗い青みの緑。" },
+        // 紫系
+        { name: "ウィステリア", pccs: "lt20+", hex: "#8D93C8", origin: "藤の花の色（英語名）。明るい青紫。" },
+        { name: "ライラック", pccs: "lt22+", hex: "#D1BADA", origin: "ライラックの花の色。やわらかい紫。" },
+        { name: "パンジー", pccs: "dp22", hex: "#4B2D85", origin: "パンジーの花の色。こい紫。" },
+        { name: "ヘリオトロープ", pccs: "v22", hex: "#9079B6", origin: "ヘリオトロープの花の色。あざやかな紫紫。" },
+        { name: "菖蒲色 (しょうぶいろ)", pccs: "v22", hex: "#CC7EB1", origin: "ハナショウブの花の色。あざやかな赤みの紫。" },
+        { name: "桔梗色 (ききょういろ)", pccs: "v20", hex: "#5A4498", origin: "キキョウの花の色。こい紫みの青。" },
+        { name: "江戸紫 (えどむらさき)", pccs: "dp22", hex: "#745399", origin: "江戸で染められた紫草の色。こい青みの紫。" },
+        { name: "古代紫 (こだいむらさき)", pccs: "d22", hex: "#895B8A", origin: "古くからある紫草の色。くすんだ紫。" },
+        // 無彩色系
+        { name: "ブロンド", pccs: "sf8", hex: "#F2D07B", origin: "金髪の色。やわらかい黄。" },
+        { name: "セピア", pccs: "dk6", hex: "#622D18", origin: "イカの墨の色。暗い褐色の黄。" },
+        { name: "桜色", pccs: "p2+", hex: "#FEF4F4", origin: "桜の花の色。ごくうすい紫みの赤。" }
+    ];
+
+    // --- アプリのグローバル状態 ---
+    let currentMode = 'list';
+    let currentIndex = 0;
+    let quizAnswered = false;
+    let filteredData = [...allColorData];
+    let reviewQuizData = [];
+    let currentQuizChoices = [];
+    let mistakes = JSON.parse(localStorage.getItem('color_quiz_mistakes') || '[]');
+    
+    // クイズ形式の管理用
+    let quizFormatPref = 'random'; 
+    let currentActiveQuizType = 'color2name'; 
+
+    // PCCSの色相番号を抽出するヘルパー
+    function getHue(pccs) {
+        let match = pccs.match(/\d+/);
+        return match ? parseInt(match[0]) : 99; // 99は無彩色
+    }
+
+    function saveMistake(colorName) {
+        if (!mistakes.includes(colorName)) {
+            mistakes.push(colorName);
+            localStorage.setItem('color_quiz_mistakes', JSON.stringify(mistakes));
+        }
+    }
+
+    function clearMistakes() {
+        if (confirm('弱点リストをリセットしますか？')) {
+            mistakes = [];
+            localStorage.setItem('color_quiz_mistakes', JSON.stringify(mistakes));
+            if (currentMode === 'mistakes' || currentMode === 'review_quiz') render();
+        }
+    }
+
+    function exportMistakes() {
+        if (mistakes.length === 0) return alert('保存された間違いはありません。');
+        
+        let csvContent = "\uFEFF\"問題\",\"解答・解説\"\n";
+        mistakes.forEach(name => {
+            const data = allColorData.find(c => c.name === name);
+            if (data) {
+                csvContent += `"${data.name}のPCCS値と特徴は？","${data.pccs} / ${data.origin.replace(/"/g, '""')}"\n`;
+            }
+        });
+
+        const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+        const link = document.createElement("a");
+        const url = URL.createObjectURL(blob);
+        link.setAttribute("href", url);
+        link.setAttribute("download", "色彩検定_弱点リスト.csv");
+        link.style.visibility = 'hidden';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }
+
+    function jumpTo(index) {
+        document.getElementById('search-input').value = '';
+        filteredData = [...allColorData];
+        currentIndex = index;
+        setMode('list');
+    }
+
+    function determineQuizType() {
+        if (quizFormatPref === 'random') {
+            const types = ['color2name', 'origin2name', 'name2origin'];
+            currentActiveQuizType = types[Math.floor(Math.random() * types.length)];
+        } else {
+            currentActiveQuizType = quizFormatPref;
+        }
+    }
+
+    function changeQuizFormat(format) {
+        quizFormatPref = format;
+        quizAnswered = false;
+        determineQuizType(); // 形式を変更したら即座に決定し直す
+        generateQuizChoices();
+        render();
+    }
+
+    function setMode(mode) {
+        currentMode = mode;
+        document.getElementById('tab-grid').classList.toggle('active', mode === 'grid');
+        document.getElementById('tab-list').classList.toggle('active', mode === 'list');
+        document.getElementById('tab-quiz').classList.toggle('active', mode === 'quiz');
+        document.getElementById('tab-mistakes').classList.toggle('active', mode === 'mistakes');
+        document.getElementById('tab-review-quiz').classList.toggle('active', mode === 'review_quiz');
+        
+        document.getElementById('search-container').style.display = (mode === 'grid' || mode === 'list' ? 'block' : 'none');
+        
+        if (mode === 'grid') {
+            currentIndex = 0;
+        } else if (mode === 'quiz') {
+            currentIndex = Math.floor(Math.random() * filteredData.length);
+            quizAnswered = false;
+            determineQuizType();
+            generateQuizChoices();
+        } else if (mode === 'review_quiz') {
+            reviewQuizData = allColorData.filter(c => mistakes.includes(c.name));
+            if (reviewQuizData.length > 0) {
+                currentIndex = Math.floor(Math.random() * reviewQuizData.length);
+            }
+            quizAnswered = false;
+            determineQuizType();
+            generateQuizChoices();
+        }
+        
+        render();
+    }
+
+    function filterList() {
+        const query = document.getElementById('search-input').value.toLowerCase();
+        filteredData = allColorData.filter(item => 
+            item.name.toLowerCase().includes(query) || 
+            item.pccs.toLowerCase().includes(query)
+        );
+        currentIndex = 0;
+        render();
+    }
+
+    function generateQuizChoices() {
+        const isReview = (currentMode === 'review_quiz');
+        const targetData = isReview ? reviewQuizData : filteredData;
+        
+        if (isReview && targetData.length === 0) {
+            currentQuizChoices = [];
+            return;
+        }
+
+        const correctColor = targetData[currentIndex];
+        currentQuizChoices = [correctColor];
+
+        while(currentQuizChoices.length < 4) {
+            let r = Math.floor(Math.random() * allColorData.length);
+            let randomColor = allColorData[r];
+            
+            // すでに選択肢にある色（名前）は避ける
+            if (!currentQuizChoices.find(c => c.name === randomColor.name)) {
+                currentQuizChoices.push(randomColor);
+            }
+        }
+        currentQuizChoices.sort(() => Math.random() - 0.5);
+    }
+
+    function render() {
+        const area = document.getElementById('view-area');
+        const controls = document.getElementById('controls');
+        const stats = document.getElementById('stats-area');
+        
+        if (currentMode === 'mistakes') {
+            controls.style.display = 'none';
+            stats.innerHTML = `弱点リスト: ${mistakes.length} 色`;
+            
+            if (mistakes.length === 0) {
+                area.innerHTML = "<p style='text-align:center; padding:40px; color:#999;'>まだ間違えた色はありません。クイズに挑戦しましょう！</p>";
+                return;
+            }
+
+            let html = `
+                <div style="margin-bottom:20px; display:flex; gap:10px;">
+                    <button class="nav-btn" onclick="exportMistakes()" style="background:#42b72a;">CSVで書き出し</button>
+                    <button class="nav-btn" onclick="clearMistakes()" style="background:#fa3e3e;">リストをクリア</button>
+                </div>
+                <div class="grid-container">
+            `;
+            
+            mistakes.forEach(name => {
+                const data = allColorData.find(c => c.name === name);
+                const originalIndex = allColorData.findIndex(c => c.name === name);
+                if (data) {
+                    html += `
+                        <div class="grid-item" onclick="jumpTo(${originalIndex})">
+                            <div class="grid-color" style="background-color: ${data.hex}"></div>
+                            ${data.name.split(' ')[0]}
+                        </div>
+                    `;
+                }
+            });
+            html += `</div>`;
+            area.innerHTML = html;
+            return;
+        }
+
+        const isReview = (currentMode === 'review_quiz');
+        const targetData = isReview ? reviewQuizData : filteredData;
+
+        if (targetData.length === 0 && (currentMode === 'quiz' || isReview)) {
+            area.innerHTML = `<p style='text-align:center; padding:40px; color:#999;'>${isReview ? '復習する色がありません。' : '該当する色が見つかりません。'}</p>`;
+            stats.innerHTML = "0 / 0";
+            return;
+        } else if (filteredData.length === 0 && currentMode !== 'quiz' && !isReview) {
+            area.innerHTML = "<p style='text-align:center;'>該当する色が見つかりません。</p>";
+            stats.innerHTML = "0 / 0";
+            return;
+        }
+
+        const data = targetData[currentIndex];
+
+        if (currentMode === 'grid') {
+            // ... (grid display logic remains unchanged)
+            controls.style.display = 'none';
+            stats.innerHTML = `全 ${filteredData.length} 色`;
+
+            const groups = [
+                { label: "赤・黄赤系 (Hue: 1-4)", filter: h => h >= 1 && h <= 4 },
+                { label: "黄赤・黄系 (Hue: 5-8)", filter: h => h >= 5 && h <= 8 },
+                { label: "黄緑・緑系 (Hue: 9-14)", filter: h => h >= 9 && h <= 14 },
+                { label: "青緑・青系 (Hue: 15-19)", filter: h => h >= 15 && h <= 19 },
+                { label: "青紫・紫・赤紫系 (Hue: 20-24)", filter: h => h >= 20 && h <= 24 },
+                { label: "無彩色", filter: h => h === 99 }
+            ];
+
+            let html = '';
+            groups.forEach(g => {
+                const items = allColorData.map((d, i) => ({...d, originalIndex: i})).filter(d => g.filter(getHue(d.pccs)));
+                if(items.length > 0) {
+                    html += `<div class="group-title">${g.label}</div><div class="grid-container">`;
+                    items.forEach(item => {
+                        html += `
+                            <div class="grid-item" onclick="jumpTo(${item.originalIndex})">
+                                <div class="grid-color" style="background-color: ${item.hex}"></div>
+                                ${item.name.split(' ')[0]}
+                            </div>
+                        `;
+                    });
+                    html += `</div>`;
+                }
+            });
+            area.innerHTML = html;
+
+        } else if (currentMode === 'list') {
+            // ... (list display logic remains unchanged)
+            controls.style.display = 'flex';
+            stats.innerHTML = `${currentIndex + 1} / ${filteredData.length} (全127色中)`;
+
+            const currentHue = getHue(data.pccs);
+            let similarHtml = '';
+            
+            const allWithIndex = allColorData.map((d, i) => ({...d, originalIndex: i}));
+            
+            if (currentHue !== 99) {
+                const similar = allWithIndex.filter(d => 
+                    d.name !== data.name && 
+                    getHue(d.pccs) !== 99 && 
+                    Math.abs(getHue(d.pccs) - currentHue) <= 1
+                ).slice(0, 6);
+
+                if(similar.length > 0) {
+                    similarHtml = `
+                        <div class="similar-colors-wrapper">
+                            <div class="similar-title">似た色 (近い色相):</div>
+                            <div class="similar-colors">
+                                ${similar.map(s => `
+                                    <div class="similar-item" onclick="jumpTo(${s.originalIndex})">
+                                        <div class="similar-color-box" style="background-color: ${s.hex}"></div>
+                                        ${s.name.split(' ')[0]}
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+                    `;
+                }
+            } else {
+                const similar = allWithIndex.filter(d => d.name !== data.name && getHue(d.pccs) === 99).slice(0, 6);
+                if(similar.length > 0) {
+                    similarHtml = `
+                        <div class="similar-colors-wrapper">
+                            <div class="similar-title">他の無彩色:</div>
+                            <div class="similar-colors">
+                                ${similar.map(s => `
+                                    <div class="similar-item" onclick="jumpTo(${s.originalIndex})">
+                                        <div class="similar-color-box" style="background-color: ${s.hex}"></div>
+                                        ${s.name.split(' ')[0]}
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+                    `;
+                }
+            }
+
+            area.innerHTML = `
+                <div class="color-card">
+                    <div class="color-sample" style="background-color: ${data.hex}"></div>
+                    <div class="color-name">${data.name}</div>
+                    <div class="pccs-info">PCCS近似値: ${data.pccs}</div>
+                    <div class="origin-text"><strong>由来・特徴:</strong><br>${data.origin}</div>
+                    ${similarHtml}
+                </div>
+            `;
+        } else {
+            // --- クイズ / 復習クイズ モード ---
+            controls.style.display = 'none';
+            stats.innerHTML = isReview ? `復習クイズ (弱点: ${targetData.length}色)` : `クイズモード (全127色からランダム)`;
+            
+            if (currentQuizChoices.length === 0) {
+                 determineQuizType();
+                 generateQuizChoices();
+            }
+
+            let questionHtml = '';
+            let optionsHtml = '';
+            const gridStyle = currentActiveQuizType === 'name2origin' ? 'grid-template-columns: 1fr;' : '';
+
+            if (currentActiveQuizType === 'color2name') {
+                questionHtml = `
+                    <div id="quiz-color-sample" class="color-sample" style="background-color: ${data.hex}"></div>
+                    <div class="pccs-info">PCCS近似値: ${data.pccs}</div>
+                    <p>この色の名前は何？</p>
+                `;
+                optionsHtml = currentQuizChoices.map((choiceData) => {
+                    const isCorrectChoice = (choiceData.name === data.name);
+                    return `<button class="btn" onclick="checkQuiz(${isCorrectChoice}, this)" data-name="${choiceData.name}">${choiceData.name}</button>`;
+                }).join('');
+            } else if (currentActiveQuizType === 'origin2name') {
+                questionHtml = `
+                    <div id="quiz-color-sample" class="color-sample" style="background-color: #eee; display:flex; align-items:center; justify-content:center; font-size:4rem; color:#ccc; transition: background-color 0.3s;">?</div>
+                    <p style="font-weight:bold; margin: 15px 0 5px 0;">以下の由来・特徴を持つ色はどれ？</p>
+                    <div class="origin-text" style="margin-bottom:15px;">${data.origin}</div>
+                `;
+                optionsHtml = currentQuizChoices.map((choiceData) => {
+                    const isCorrectChoice = (choiceData.name === data.name);
+                    return `<button class="btn" onclick="checkQuiz(${isCorrectChoice}, this)" data-name="${choiceData.name}">${choiceData.name}</button>`;
+                }).join('');
+            } else if (currentActiveQuizType === 'name2origin') {
+                questionHtml = `
+                    <div id="quiz-color-sample" class="color-sample" style="background-color: ${data.hex}"></div>
+                    <div class="color-name">${data.name}</div>
+                    <p>この色の由来・特徴はどれ？</p>
+                `;
+
+                optionsHtml = currentQuizChoices.map((choiceData) => {
+                    const isCorrectChoice = (choiceData.name === data.name);
+                    return `<button class="btn" onclick="checkQuiz(${isCorrectChoice}, this)" data-name="${choiceData.name}" style="text-align:left; font-size:0.8rem; padding:10px; line-height:1.4;">${choiceData.origin}</button>`;
+                }).join('');
+            }
+
+            area.innerHTML = `
+                <div style="text-align: right; margin-bottom: 10px;">
+                    <select id="quiz-format" class="search-box" style="width:auto; padding:5px; margin-bottom:0;" onchange="changeQuizFormat(this.value)">
+                        <option value="random" ${quizFormatPref === 'random' ? 'selected' : ''}>出題形式: ランダム</option>
+                        <option value="color2name" ${quizFormatPref === 'color2name' ? 'selected' : ''}>形式: 色 → 名前</option>
+                        <option value="origin2name" ${quizFormatPref === 'origin2name' ? 'selected' : ''}>形式: 由来 → 名前</option>
+                        <option value="name2origin" ${quizFormatPref === 'name2origin' ? 'selected' : ''}>形式: 名前 → 由来</option>
+                    </select>
+                </div>
+                <div class="color-card">
+                    ${questionHtml}
+                    <div class="quiz-options" style="${gridStyle}">
+                        ${optionsHtml}
+                    </div>
+                    <div id="quiz-result" style="margin-top:20px; min-height:60px;"></div>
+                    <button id="next-quiz" class="nav-btn" style="display:none; width:100%; margin-top:15px;" onclick="nextQuiz()">次の問題へ</button>
+                </div>
+            `;
+        }
+    }
+
+    function checkQuiz(isCorrect, btn) {
+        if(quizAnswered) return;
+        quizAnswered = true;
+        
+        const result = document.getElementById('quiz-result');
+        let quizTargetData = currentMode === 'review_quiz' ? reviewQuizData : filteredData;
+        const correctData = quizTargetData[currentIndex];
+        
+        let correctText = currentActiveQuizType === 'name2origin' ? correctData.origin : correctData.name;
+        let explanationText = currentActiveQuizType === 'name2origin' ? correctData.name : correctData.origin;
+
+        if(isCorrect) {
+            btn.classList.add('correct');
+            result.innerHTML = `<span style="color:#42b72a; font-weight:bold;">正解！</span><br><small style="color:#666">${explanationText}</small>`;
+            
+            if (currentMode === 'review_quiz') {
+                 mistakes = mistakes.filter(m => m !== correctData.name);
+                 localStorage.setItem('color_quiz_mistakes', JSON.stringify(mistakes));
+                 result.innerHTML += `<br><small style="color:#4a90e2">弱点リストから削除しました</small>`;
+            }
+        } else {
+            btn.classList.add('incorrect');
+            result.innerHTML = `<span style="color:#fa3e3e; font-weight:bold;">残念... 正解は：<br>「${correctText}」</span><br><small style="color:#666">${explanationText}</small>`;
+            
+            if (currentMode !== 'review_quiz') {
+                result.innerHTML += `<br><small style="color:#fa3e3e">弱点リストに保存しました</small>`;
+                saveMistake(correctData.name);
+            }
+            
+            const btns = document.querySelectorAll('.btn');
+            btns.forEach(b => { 
+                if(b.getAttribute('data-name') === correctData.name) {
+                    b.classList.add('correct');
+                }
+            });
+        }
+        
+        // 由来から名前を当てる形式の場合、回答後に正解の色を表示する
+        if (currentActiveQuizType === 'origin2name') {
+            const sample = document.getElementById('quiz-color-sample');
+            if (sample) {
+                sample.style.backgroundColor = correctData.hex;
+                sample.innerHTML = ''; // 「?」を消す
+            }
+        }
+        
+        document.getElementById('next-quiz').style.display = 'block';
+    }
+
+    // クイズ用の「次へ」
+    function nextQuiz() {
+        const isReview = (currentMode === 'review_quiz');
+        if (isReview) {
+            reviewQuizData = allColorData.filter(c => mistakes.includes(c.name));
+            if (reviewQuizData.length === 0) {
+                render(); // もう問題がない場合の表示
+                return;
+            }
+            currentIndex = Math.floor(Math.random() * reviewQuizData.length);
+        } else {
+            currentIndex = Math.floor(Math.random() * filteredData.length);
+        }
+        
+        quizAnswered = false;
+        generateQuizChoices();
+        render();
+    }
+
+    // 図鑑用の「次へ」「前へ」
+    function next() {
+        if (filteredData.length === 0) return;
+        currentIndex = (currentIndex + 1) % filteredData.length;
+        render();
+    }
+
+    function prev() {
+        if (filteredData.length === 0) return;
+        currentIndex = (currentIndex - 1 + filteredData.length) % filteredData.length;
+        render();
+    }
+
+    render();
+</script>
+
+</body>
+</html>
