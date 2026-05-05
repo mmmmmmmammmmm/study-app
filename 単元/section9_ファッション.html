@@ -245,7 +245,7 @@ pre { padding: 15px; overflow-x: auto; border: 1px solid #eaecef; }
 </ul>
 <hr />
 <p><a href="../index.html?tab=tab-course" class="back-btn">⬅ 教材一覧へ戻る</a></p>
-        <div style="text-align: center;">
+        <div style="text-align: center; margin-top: 30px;">
             <a href="../index.html?tab=tab-course" class="back-button">⬅ 教材一覧へ戻る</a>
         </div>
     </div>
@@ -290,7 +290,7 @@ pre { padding: 15px; overflow-x: auto; border: 1px solid #eaecef; }
             const nodesToReplace = [];
             let node;
             while (node = treeWalker.nextNode()) {
-                if (node.parentNode.tagName === 'STYLE' || node.parentNode.tagName === 'SCRIPT' || node.parentNode.className === 'color-chip') continue;
+                if (node.parentNode.tagName === 'STYLE' || node.parentNode.tagName === 'SCRIPT' || node.parentNode.className === 'color-chip' || node.parentNode.className === 'back-button' || node.parentNode.className === 'back-btn') continue;
                 
                 let text = node.nodeValue;
                 let found = false;
@@ -326,6 +326,12 @@ pre { padding: 15px; overflow-x: auto; border: 1px solid #eaecef; }
                 span.innerHTML = html;
                 node.parentNode.replaceChild(span, node);
             });
+            
+            // Markdownの元ファイルに直書きされている古い戻るボタン(.back-btn)を削除する
+            const oldBackBtns = document.querySelectorAll('.back-btn');
+            oldBackBtns.forEach(btn => btn.remove());
+            const oldHrs = document.querySelectorAll('hr');
+            oldHrs.forEach(hr => hr.remove());
         }
         
         document.addEventListener('DOMContentLoaded', addColorChips);

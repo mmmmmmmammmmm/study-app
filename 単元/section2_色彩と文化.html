@@ -243,7 +243,7 @@ pre { padding: 15px; overflow-x: auto; border: 1px solid #eaecef; }
 <li><strong>明治維新と色彩教育:</strong> 化学合成染料が輸入される。明治初期には小学校のカリキュラムに「色図（色彩教育）」が組み込まれ、水彩画ブームが起こった。</li>
 <li><strong>融合の文化:</strong> 現在の日本の色彩文化は、古代の自然由来の色、中国の五色、西洋の理論や合成染料が融合した多層的なものである。</li>
 </ul>
-        <div style="text-align: center;">
+        <div style="text-align: center; margin-top: 30px;">
             <a href="../index.html?tab=tab-course" class="back-button">⬅ 教材一覧へ戻る</a>
         </div>
     </div>
@@ -288,7 +288,7 @@ pre { padding: 15px; overflow-x: auto; border: 1px solid #eaecef; }
             const nodesToReplace = [];
             let node;
             while (node = treeWalker.nextNode()) {
-                if (node.parentNode.tagName === 'STYLE' || node.parentNode.tagName === 'SCRIPT' || node.parentNode.className === 'color-chip') continue;
+                if (node.parentNode.tagName === 'STYLE' || node.parentNode.tagName === 'SCRIPT' || node.parentNode.className === 'color-chip' || node.parentNode.className === 'back-button' || node.parentNode.className === 'back-btn') continue;
                 
                 let text = node.nodeValue;
                 let found = false;
@@ -324,6 +324,12 @@ pre { padding: 15px; overflow-x: auto; border: 1px solid #eaecef; }
                 span.innerHTML = html;
                 node.parentNode.replaceChild(span, node);
             });
+            
+            // Markdownの元ファイルに直書きされている古い戻るボタン(.back-btn)を削除する
+            const oldBackBtns = document.querySelectorAll('.back-btn');
+            oldBackBtns.forEach(btn => btn.remove());
+            const oldHrs = document.querySelectorAll('hr');
+            oldHrs.forEach(hr => hr.remove());
         }
         
         document.addEventListener('DOMContentLoaded', addColorChips);
