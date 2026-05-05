@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+    
+body {
+    font-family: 'Helvetica Neue', Arial, 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', Meiryo, sans-serif;
+    font-size: 15px;
+    line-height: 1.8;
+    word-wrap: break-word;
+    background-color: #f4f7f6;
+    color: #333;
+    margin: 0;
+    padding: 20px 10px;
+}
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    background-color: #fff;
+    padding: 30px 40px;
+    border-radius: 15px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+}
+@media (max-width: 600px) {
+    .container { padding: 20px; }
+}
+h1 {
+    font-size: 1.8em;
+    color: #2c3e50;
+    text-align: center;
+    border-bottom: 3px solid #f0f2f5;
+    padding-bottom: 15px;
+    margin-bottom: 30px;
+    position: relative;
+}
+h1::after {
+    content: '';
+    position: absolute;
+    bottom: -3px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60px;
+    height: 3px;
+    background: #e74c3c;
+}
+h2 {
+    font-size: 1.4em;
+    color: #2c3e50;
+    background: #f8f9fa;
+    padding: 10px 15px;
+    border-left: 5px solid #3498db;
+    border-radius: 0 8px 8px 0;
+    margin-top: 40px;
+    margin-bottom: 20px;
+}
+h3 {
+    font-size: 1.2em;
+    color: #34495e;
+    margin-top: 30px;
+    display: flex;
+    align-items: center;
+}
+h3::before {
+    content: '🔶';
+    font-size: 0.8em;
+    margin-right: 8px;
+}
+ul {
+    padding-left: 20px;
+    background: #fafbfc;
+    padding: 15px 15px 15px 35px;
+    border-radius: 8px;
+    border: 1px solid #f0f2f5;
+}
+li { margin-bottom: 8px; }
+strong {
+    background: linear-gradient(transparent 60%, #ffeaa7 60%);
+    padding: 0 4px;
+    color: #d35400;
+}
+a {
+    color: #3498db;
+    text-decoration: none;
+    font-weight: bold;
+}
+a:hover { text-decoration: underline; }
+pre, code {
+    font-family: Consolas, monospace;
+    background-color: #f6f8fa;
+    border-radius: 4px;
+}
+code { padding: 2px 5px; color: #e83e8c; }
+pre { padding: 15px; overflow-x: auto; border: 1px solid #eaecef; }
+.back-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 40px;
+    padding: 12px 25px;
+    background-color: #2c3e50;
+    color: white !important;
+    text-decoration: none;
+    border-radius: 30px;
+    font-weight: bold;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
+    width: 100%;
+    max-width: 300px;
+}
+.back-button:hover {
+    background-color: #34495e;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+    text-decoration: none;
+}
+.color-chip {
+    display: inline-block;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    margin-left: 5px;
+    vertical-align: middle;
+    border: 1px solid rgba(0,0,0,0.15);
+    box-shadow: 1px 1px 3px rgba(0,0,0,0.1);
+}
+
+    </style>
+    <title>section7_色彩心理</title>
+</head>
+<body>
+    <div class="container">
+        <h1>【Section 7】色彩心理</h1>
+<p>公式テキスト（72〜88ページ）に基づき、色の印象を数値化する心理評価法、感覚の大きさを測る心理物理学的測定法、および光と色の複雑な見え方の現象についてまとめます。</p>
+<hr />
+<h2>1. 心理評価法と尺度構成</h2>
+<p>主観的な反応（デザインの良さ、色のイメージなど）を客観的に評価するために数値化することを<strong>定量化</strong>といい、そのための物差しを<strong>心理尺度</strong>と呼びます。</p>
+<h3>心理尺度の4種類</h3>
+<p>尺度の水準（数値が持つ意味）によって4つに分類されます。<br />
+1.  <strong>名義尺度:</strong> 単なる区別・分類のための数値。大小や順序に意味はない。（例：男性=1、女性=2）<br />
+2.  <strong>順序尺度:</strong> 数値の大小が順位を表す尺度。間隔は等しくない。（例：デザインの好ましさ 1位, 2位, 3位）<br />
+3.  <strong>感覚尺度:</strong> 数値の差（間隔）に意味があり、等間隔である尺度。足し算・引き算、平均値の算出が可能。（例：5段階評価、マンセルの明度V）<br />
+4.  <strong>比率尺度:</strong> 間隔が等しいことに加え、「絶対的なゼロ点」が存在する尺度。比率（何倍か）を計算できる。（例：長さ、重さ、NCSの色表示の％）</p>
+<h3>主な調査手法</h3>
+<ul>
+<li><strong>一対比較法:</strong> 2つをペアにして優劣を判断させる手法。微細な差異を明らかにするのに向くが、対象が増えると回数が膨大になる。<ul>
+<li><em>サーストン法:</em> 「優劣のみ」を判断させる。</li>
+<li><em>シェッフェ法:</em> 「どちらがどの程度優れているか」まで回答させる。</li>
+</ul>
+</li>
+<li><strong>SD法 (Semantic Differential法):</strong> アメリカのオズグッドが考案。反対の意味を持つ形容詞（例：明るい⇔暗い）を両極に置いた5〜7段階の評定尺度を用いて、対象のイメージを多角的に測定する。</li>
+</ul>
+<hr />
+<h2>2. 因子分析と色のイメージ</h2>
+<p>SD法で得られたデータを<strong>因子分析</strong>という統計手法で処理することで、評価の背後にある共通の基準（<strong>因子</strong>）を抽出できます。</p>
+<ul>
+<li><strong>イメージプロフィール:</strong> 評定尺度の平均値を図式化した折れ線グラフ。</li>
+<li><strong>イメージマップ:</strong> 抽出された因子を座標軸とし、調査対象がどこに位置するかをプロットした空間図。</li>
+</ul>
+<h3>単色イメージにおける3つの因子</h3>
+<p>世界共通の基本的な印象判断の基準として、以下の3つの因子が抽出されやすいとされています。<br />
+1.  <strong>評価性 (Evaluation):</strong> 良い/悪い、好き/嫌いなど価値に関する因子。個人差が大きい。（例：青や高彩度色は評価性が高い）<br />
+2.  <strong>活動性 (Activity):</strong> 暖かい/冷たい、動的/静的など迫力や躍動感に関する因子。（例：暖色系、高彩度色で高い）<br />
+3.  <strong>力量性 (Potency):</strong> 強い/弱い、重い/軽いなど質量や力強さに関する因子。色相との関連は弱い。（例：暗い色ほど高い）</p>
+<hr />
+<h2>3. 心理物理学的測定法</h2>
+<p>刺激の物理的な量と、人間の感覚量との関係を測定・定量化する方法です。</p>
+<h3>閾（いき：境界）</h3>
+<p>知覚できるかできないかの境界値を閾値（いきち）と呼びます。<br />
+*   <strong>弁別閾（丁度可知差異）:</strong> 2つの刺激の違いが「区別できる」最小の差。<br />
+*   <strong>絶対閾（刺激閾）:</strong> 刺激（感覚）が存在するかしないかの境界。光を感じる絶対閾を「光覚閾」と呼ぶ。</p>
+<h3>測定の手法</h3>
+<ul>
+<li><strong>調整法:</strong> 実験者が自分で機器を操作して調整する（例：等色実験）。</li>
+<li><strong>極限法:</strong> 刺激を一定方向に少しずつ増やしたり減らしたりして境界を求める。閾値の測定に適している。</li>
+<li><strong>恒常法:</strong> 様々な刺激をランダムに提示して判断させる。精度は高いが負担が大きい。</li>
+</ul>
+<h3>ウェーバーの法則とフェヒナーの法則</h3>
+<ul>
+<li><strong>ウェーバーの法則:</strong> 基準となる刺激量と、弁別閾（違いがわかる最小の差）の<strong>比は常に一定</strong>である。</li>
+<li><strong>フェヒナーの法則:</strong> <strong>感覚量は刺激量の対数に比例する。</strong>（刺激を掛け算で増やしていくと、感覚は足し算で一定量ずつ増えていく）。※オストワルト表色系の無彩色段階（1.6倍ずつ増加）はこの法則に基づいている。</li>
+</ul>
+<hr />
+<h2>4. 色知覚の複雑性と様々な現象</h2>
+<p>光の物理的特性と色の見え方は単純な関係ではなく、複雑に変化します。</p>
+<h3>代表的な現象</h3>
+<ul>
+<li><strong>ベゾルト・ブリュッケ現象:</strong> 同じ波長でも、光の強度が変わると色相が変化して見える現象。（※青・緑・黄には変化しない「不変波長」が存在する）。ナチュラルハーモニーの根拠ともなる。</li>
+<li><strong>アブニー効果:</strong> 白色光を混ぜて純度（彩度）を低下させると、色相も変化して見える現象。（例：青が紫みやピンクに変わる）。</li>
+<li><strong>ヘルムホルツ・コールラウシュ効果:</strong> 輝度（物理的な光の強さ）が同じでも、彩度が高くなるほど明るく感じられる現象。</li>
+<li><strong>ヘルソン・ジャッド効果:</strong> 高彩度の色照明下で灰色の色票を見ると、背景より明るい灰色は照明色を帯び、暗い灰色は照明の「補色」を帯びて見える現象。</li>
+<li><strong>ハント効果 (カラフルネス):</strong> 照明光の照度が高くなる（明るくなる）につれて、物体の色の彩度（鮮やかさ）が増して見える現象。</li>
+</ul>
+<h3>記憶と恒常性</h3>
+<ul>
+<li><strong>記憶色:</strong> リンゴの赤、空の青など、対象物から一般に連想される記憶の中の色。実際の色より彩度が高く（鮮やかに）、好ましい方向に記憶されやすい。</li>
+<li><strong>色記憶:</strong> 個別の色を見た直後の記憶。これも元の色より彩度がやや高く記憶される傾向がある。</li>
+<li><strong>明るさの恒常性:</strong> 照明の強さが変わっても、白い紙は白として安定して見え続ける知覚の特性。<ul>
+<li><strong>ゲルブ効果:</strong> 暗室で黒い円盤だけに光を当てると白く見えるが、手前に白い紙を置くと本来の黒に見え、その後は光を強くしても黒のまま見える現象。恒常性が働くには視野内に複数の対象が必要であることを示す。</li>
+</ul>
+</li>
+</ul>
+<hr />
+<p><a href="../index.html?tab=tab-course" class="back-btn">⬅ 教材一覧へ戻る</a></p>
+        <div style="text-align: center;">
+            <a href="../index.html?tab=tab-course" class="back-button">⬅ 教材一覧へ戻る</a>
+        </div>
+    </div>
+    
+    <script>
+        // 色名とHEXコードのマッピング
+        const colorMap = {
+            'ウルトラマリン': '#120a8f',
+            'プルシアンブルー': '#003153',
+            'ベロ藍': '#003153',
+            'コチニールレッド': '#ce2029',
+            'マゼンタ': '#e4007f',
+            'モーブ': '#e0b0ff',
+            'アリザリン': '#e32636',
+            'インディゴ': '#1e315b',
+            '黄櫨染': '#d66a35',
+            '黄丹': '#f05b26',
+            '濃紫': '#3a243b',
+            '黒橡': '#3b3c36',
+            '似紫': '#513743',
+            'ティリアンパープル': '#66023c',
+            'アズライト': '#003153',
+            '赤色': '#e60033',
+            '青色': '#0071c0',
+            '黄色': '#ffd900',
+            '緑色': '#00a960',
+            '黒色': '#000000',
+            '白色': '#ffffff',
+            '赤': '#e60033',
+            '青': '#0071c0',
+            '緑': '#00a960',
+            '黄': '#ffd900',
+            '黒': '#000000',
+            '白': '#ffffff'
+        };
+
+        // DOMのテキストノードを検索して色名にカラーチップを付与する
+        function addColorChips() {
+            const container = document.querySelector('.container');
+            const treeWalker = document.createTreeWalker(container, NodeFilter.SHOW_TEXT, null, false);
+            
+            const nodesToReplace = [];
+            let node;
+            while (node = treeWalker.nextNode()) {
+                if (node.parentNode.tagName === 'STYLE' || node.parentNode.tagName === 'SCRIPT' || node.parentNode.className === 'color-chip') continue;
+                
+                let text = node.nodeValue;
+                let found = false;
+                
+                // 長い色名から順にマッチさせる（例：「赤色」が「赤」に先にマッチしないように）
+                const sortedColors = Object.keys(colorMap).sort((a, b) => b.length - a.length);
+                
+                for (const colorName of sortedColors) {
+                    if (text.includes(colorName)) {
+                        found = true;
+                        break;
+                    }
+                }
+                
+                if (found) {
+                    nodesToReplace.push(node);
+                }
+            }
+            
+            nodesToReplace.forEach(node => {
+                let html = node.nodeValue;
+                const sortedColors = Object.keys(colorMap).sort((a, b) => b.length - a.length);
+                
+                // 一度マーカーで置き換えてから、後でHTMLとして挿入
+                sortedColors.forEach(colorName => {
+                    const regex = new RegExp(colorName, 'g');
+                    const hex = colorMap[colorName];
+                    const chipHtml = `<span class="color-chip" style="background-color: ${hex};" title="${colorName}"></span>`;
+                    html = html.replace(regex, colorName + chipHtml);
+                });
+                
+                const span = document.createElement('span');
+                span.innerHTML = html;
+                node.parentNode.replaceChild(span, node);
+            });
+        }
+        
+        document.addEventListener('DOMContentLoaded', addColorChips);
+    </script>
+</body>
+</html>
