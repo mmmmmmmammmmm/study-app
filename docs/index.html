@@ -1759,6 +1759,176 @@
             margin-top: 4px;
         }
 
+        /* 大問1 等色相面グリッド演習スタイル */
+        .q1-container {
+            max-width: 680px;
+            margin: 0 auto;
+            text-align: left;
+        }
+        .q1-sample-box {
+            background: #fff;
+            border: 2px solid #e2e8f0;
+            border-radius: 14px;
+            padding: 16px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 14px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+        }
+        .q1-color-patch {
+            width: 80px;
+            height: 80px;
+            border-radius: 10px;
+            border: 1px solid rgba(0,0,0,0.15);
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.06);
+            flex-shrink: 0;
+        }
+        .q1-grid-wrapper {
+            background: #fff;
+            border: 1px solid #cbd5e1;
+            border-radius: 12px;
+            padding: 16px 14px;
+            overflow-x: auto;
+            margin-bottom: 14px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .q1-grid-table {
+            border-collapse: separate;
+            border-spacing: 4px 3px;
+            font-size: 0.72rem;
+            margin: 0 auto;
+            user-select: none;
+        }
+        .q1-grid-table th {
+            color: #475569;
+            font-weight: 800;
+            padding: 2px 4px;
+            font-size: 0.75rem;
+        }
+        .q1-grid-table td {
+            padding: 0;
+            text-align: center;
+        }
+        .q1-chip-slot {
+            width: 32px;
+            height: 22px;
+            border-radius: 3px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.72rem;
+            font-weight: 900;
+            cursor: pointer;
+            transition: transform 0.15s, box-shadow 0.15s;
+            box-sizing: border-box;
+            position: relative;
+        }
+        .q1-chip-colored {
+            border: 1px solid rgba(0,0,0,0.18);
+            box-shadow: inset 0 1px 1px rgba(255,255,255,0.25), 0 1px 2px rgba(0,0,0,0.08);
+        }
+        .q1-chip-empty {
+            background-color: #ffffff;
+            border: 1px solid #cbd5e1;
+            cursor: pointer;
+        }
+        .q1-chip-empty:hover {
+            border-color: #94a3b8;
+            background-color: #f8fafc;
+        }
+        .q1-chip-slot:hover {
+            transform: scale(1.22);
+            z-index: 10;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+        }
+        .q1-chip-slot.selected {
+            box-shadow: 0 0 0 3px #0f172a, inset 0 0 0 2px #fff !important;
+            transform: scale(1.18);
+            z-index: 15;
+        }
+        .q1-chip-slot.correct {
+            box-shadow: 0 0 0 3px #10b981, inset 0 0 0 2px #fff !important;
+            transform: scale(1.18);
+            z-index: 20;
+        }
+        .q1-chip-slot.wrong {
+            box-shadow: 0 0 0 3px #ef4444, inset 0 0 0 2px #fff !important;
+            transform: scale(1.18);
+            z-index: 18;
+        }
+        .q1-input-panel {
+            background: #fff;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 14px;
+            margin-bottom: 14px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.03);
+        }
+        .q1-munsell-input {
+            width: 100%;
+            padding: 10px 14px;
+            font-size: 1.1rem;
+            font-family: monospace;
+            font-weight: 800;
+            border: 2px solid #cbd5e1;
+            border-radius: 8px;
+            color: #0f172a;
+            letter-spacing: 0.05em;
+            box-sizing: border-box;
+        }
+        .q1-munsell-input:focus {
+            outline: none;
+            border-color: #4f46e5;
+            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.15);
+        }
+
+        /* 大問5 景観色彩スタイル */
+        .q5-container {
+            max-width: 680px;
+            margin: 0 auto;
+            text-align: left;
+        }
+        .q5-guideline-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.76rem;
+            margin-top: 8px;
+        }
+        .q5-guideline-table th, .q5-guideline-table td {
+            border: 1px solid #e2e8f0;
+            padding: 6px 8px;
+        }
+        .q5-guideline-table th {
+            background: #f1f5f9;
+            color: #334155;
+            font-weight: 800;
+        }
+        .q5-option-card {
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 8px 12px;
+            background: #fff;
+            cursor: pointer;
+            transition: all 0.15s;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            user-select: none;
+        }
+        .q5-option-card:hover {
+            border-color: #0d9488;
+            background: #f0fdfa;
+        }
+        .q5-option-card.selected {
+            border-color: #0d9488;
+            background: #ccfbf1;
+            box-shadow: 0 0 0 2px #0f766e;
+        }
+
         html, body {
             overflow-x: hidden;
             width: 100%;
@@ -1778,6 +1948,12 @@
     
     <!-- 最上部常設 クイック演習ボタン群 (図鑑関係なく即アクセス可能) -->
     <div class="top-action-bar">
+        <button onclick="setMode('exam_q1')" class="top-action-btn" style="background:#7c3aed; color:#fff;" title="大問1(等色相面・マンセル記述演習)を開始">
+            大問1(等色相面)
+        </button>
+        <button onclick="setMode('exam_q5')" class="top-action-btn" style="background:#0d9488; color:#fff;" title="大問5(景観色彩・環境色彩演習)を開始">
+            大問5(景観色彩)
+        </button>
         <button onclick="openFlashcards()" class="top-action-btn" style="background:#059669; color:#fff;" title="暗記カード学習を開始">
             暗記カード
         </button>
@@ -1798,6 +1974,8 @@
     <!-- タブ一覧 -->
     <div class="tabs">
         <div id="tab-list" class="tab active" onclick="setMode('list')">色の図鑑</div>
+        <div id="tab-exam-q1" class="tab" onclick="setMode('exam_q1')">大問1(等色相面)</div>
+        <div id="tab-exam-q5" class="tab" onclick="setMode('exam_q5')">大問5(景観色彩)</div>
         <div id="tab-flashcards" class="tab" onclick="openFlashcards()">暗記カード</div>
         <div id="tab-practical" class="tab" onclick="setMode('practical')">実戦記述</div>
         <div id="tab-practical-harmony" class="tab" onclick="setMode('practical_harmony')">実戦記述＋配色</div>
@@ -8414,6 +8592,332 @@
     }
   }
 ];
+    const landscapeExamData = [
+  {
+    "id": "landscape-1",
+    "title": "第1問 歴史的町並み保存地区における店舗併用住宅の色彩計画",
+    "scenario": "伝統的な町並みが残る歴史的景観地区において、新築される店舗併用住宅の色彩計画を行う。景観法に基づく以下のガイドライン表を満たすよう計画を立案しなさい。",
+    "guideline": {
+      "title": "歴史的町並み保存地区 色彩基準ガイドライン",
+      "rules": [
+        {
+          "part": "基本色 (外壁など)",
+          "areaRatio": "4/5 (80%) 以上",
+          "allowedHue": "10R〜2.5Y (YR系中心)",
+          "allowedVal": "6.0 〜 8.0",
+          "allowedChr": "2.0 以下",
+          "desc": "しっくい壁や落ち着いた土壁調を基調とする。"
+        },
+        {
+          "part": "強調色 (柱・梁・格子など)",
+          "areaRatio": "1/5 (20%) 以下",
+          "allowedHue": "10R〜2.5Y (同系色)",
+          "allowedVal": "3.0 〜 5.0",
+          "allowedChr": "4.0 以下",
+          "desc": "伝統的な木部色（弁柄、柿渋、古色など）。"
+        },
+        {
+          "part": "アクセント色 (のれん・看板)",
+          "areaRatio": "1/20 (5%) 以下",
+          "allowedHue": "制限なし",
+          "allowedVal": "制限なし",
+          "allowedChr": "6.0 以下",
+          "desc": "景観のアクセントとなる彩度制限。"
+        }
+      ]
+    },
+    "blanks": [
+      {
+        "id": "b1",
+        "label": "空欄 [ ① ]",
+        "prompt": "地方自治体が地域の良好な景観形成を図るために定める計画を [ ① ] という。",
+        "answer": "景観計画",
+        "choices": [
+          "景観計画",
+          "都市計画",
+          "地域計画",
+          "建築協定"
+        ]
+      },
+      {
+        "id": "b2",
+        "label": "空欄 [ ② ]",
+        "prompt": "建築物の外壁において、街並みの連続性を保つために最も広い面積を占める [ ② ] は、全体の 4/5 以上の面積比率が推奨される。",
+        "answer": "基本色",
+        "choices": [
+          "基本色",
+          "強調色",
+          "アクセント色",
+          "対比色"
+        ]
+      },
+      {
+        "id": "b3",
+        "label": "空欄 [ ③ ]",
+        "prompt": "視点場から街並み全体を見渡す [ ③ ] においては、周辺の山並みや空などの背景との調和が重視される。",
+        "answer": "中景",
+        "choices": [
+          "中景",
+          "近景",
+          "遠景",
+          "超遠景"
+        ]
+      }
+    ],
+    "colorQuestion": {
+      "prompt": "以下のマンセル値候補 A〜E の中から、ガイドラインの【基本色】として適合するものをすべて選びなさい。",
+      "options": [
+        {
+          "code": "A",
+          "munsell": "10YR 7/1.5",
+          "hex": "#C7B299",
+          "desc": "明るい灰みの黄赤（ベージュ調）"
+        },
+        {
+          "code": "B",
+          "munsell": "5Y 8/4",
+          "hex": "#D6C780",
+          "desc": "明るい黄（やや高彩度）"
+        },
+        {
+          "code": "C",
+          "munsell": "2.5YR 4/6",
+          "hex": "#8A4932",
+          "desc": "暗い黄赤（低明度・中彩度）"
+        },
+        {
+          "code": "D",
+          "munsell": "5YR 7/2",
+          "hex": "#BF9F86",
+          "desc": "穏やかな黄赤（土壁調）"
+        },
+        {
+          "code": "E",
+          "munsell": "5PB 6/2",
+          "hex": "#8E9BB5",
+          "desc": "灰みの青紫（寒色系）"
+        }
+      ],
+      "correctCodes": [
+        "A",
+        "D"
+      ],
+      "explanation": "【基本色の適合条件】色相: 10R〜2.5Y、明度: 6.0〜8.0、彩度: 2.0以下。\n・A (10YR 7/1.5): 色相10YR(適合)、明度7(適合)、彩度1.5(適合) → ◯ 適合\n・B (5Y 8/4): 彩度4.0が上限2.0を超過 → ✕ 不適合\n・C (2.5YR 4/6): 明度4.0が下限6.0未満、彩度6.0が上限2.0を超過 → ✕ 不適合\n・D (5YR 7/2): 色相5YR(適合)、明度7(適合)、彩度2.0(上限適合) → ◯ 適合\n・E (5PB 6/2): 色相5PBが許容範囲外（寒色系） → ✕ 不適合"
+    }
+  },
+  {
+    "id": "landscape-2",
+    "title": "第2問 住宅市街地景観形成地区における集合住宅の色彩基準判定",
+    "scenario": "緑豊かな住宅市街地において、中層集合住宅の外壁色彩計画を検討している。自治体の景観形成基準に適合する配色を選定しなさい。",
+    "guideline": {
+      "title": "住宅市街地景観形成基準",
+      "rules": [
+        {
+          "part": "基調色 (外壁の主たる部分)",
+          "areaRatio": "70% (約3/4) 以上",
+          "allowedHue": "YR系またはY系",
+          "allowedVal": "6.5 以上",
+          "allowedChr": "3.0 以下",
+          "desc": "街並みの落ち着きを損なわない明るく穏やかな色彩。"
+        },
+        {
+          "part": "配合色 (バルコニー・マリオン)",
+          "areaRatio": "30% (約1/4) 以下",
+          "allowedHue": "基調色と同系色または無彩色",
+          "allowedVal": "4.0 以上",
+          "allowedChr": "4.0 以下",
+          "desc": "基調色と明度差をつけて陰影とリズムをつくる。"
+        },
+        {
+          "part": "添景色 (エントランスサイン・庇)",
+          "areaRatio": "5% (約1/20) 以下",
+          "allowedHue": "制限なし",
+          "allowedVal": "制限なし",
+          "allowedChr": "6.0 以下",
+          "desc": "視認性を確保しつつ突出した印象を避ける。"
+        }
+      ]
+    },
+    "blanks": [
+      {
+        "id": "b1",
+        "label": "空欄 [ ① ]",
+        "prompt": "景観法に基づき、地域の景観形成に関する行政事務を行う地方自治体を [ ① ] 行政団体という。",
+        "answer": "景観",
+        "choices": [
+          "景観",
+          "都市",
+          "環境",
+          "建築"
+        ]
+      },
+      {
+        "id": "b2",
+        "label": "空欄 [ ② ]",
+        "prompt": "外壁の大部分を占める基調色は、低彩度色（彩度3以下）とし、建築物の圧迫感を低減するために [ ② ] 度の色彩（明度6.5以上）が推奨される。",
+        "answer": "高明",
+        "choices": [
+          "高明",
+          "中明",
+          "低明",
+          "高彩"
+        ]
+      },
+      {
+        "id": "b3",
+        "label": "空欄 [ ③ ]",
+        "prompt": "強調色（アソートカラー）の面積比率は、全体の概ね [ ③ ] 以下に抑えることが原則である。",
+        "answer": "1/5",
+        "choices": [
+          "1/5",
+          "1/2",
+          "1/10",
+          "1/20"
+        ]
+      }
+    ],
+    "colorQuestion": {
+      "prompt": "以下の候補から、ガイドラインの【基調色】として適合するものをすべて選びなさい。",
+      "options": [
+        {
+          "code": "A",
+          "munsell": "5YR 8/2",
+          "hex": "#DBBC9E",
+          "desc": "明るい黄赤（ベージュ）"
+        },
+        {
+          "code": "B",
+          "munsell": "2.5Y 7/2.5",
+          "hex": "#C5B98A",
+          "desc": "明るい灰みの黄"
+        },
+        {
+          "code": "C",
+          "munsell": "5YR 5.5/2",
+          "hex": "#917764",
+          "desc": "中明度の黄赤（明度不足）"
+        },
+        {
+          "code": "D",
+          "munsell": "10YR 8/4",
+          "hex": "#E8CA83",
+          "desc": "明るい黄赤（彩度オーバー）"
+        }
+      ],
+      "correctCodes": [
+        "A",
+        "B"
+      ],
+      "explanation": "【基調色の適合条件】色相: YR系またはY系、明度: 6.5以上、彩度: 3.0以下。\n・A (5YR 8/2): 色相YR(適合)、明度8.0(適合)、彩度2.0(適合) → ◯ 適合\n・B (2.5Y 7/2.5): 色相Y(適合)、明度7.0(適合)、彩度2.5(適合) → ◯ 適合\n・C (5YR 5.5/2): 明度5.5が下限6.5未満 → ✕ 不適合\n・D (10YR 8/4): 彩度4.0が上限3.0を超過 → ✕ 不適合"
+    }
+  },
+  {
+    "id": "landscape-3",
+    "title": "第3問 自然景観隣接地区における公共建築物の環境色彩基準",
+    "scenario": "丘陵地や樹林地に隣接する文教地区において、公民館の外壁・屋根色彩を計画する。自然景観への埋没と調和を図るための色彩基準判定を行いなさい。",
+    "guideline": {
+      "title": "自然景観調和地区 基準ガイドライン",
+      "rules": [
+        {
+          "part": "外壁基調色",
+          "areaRatio": "80% (4/5) 以上",
+          "allowedHue": "YR系・Y系・GY系",
+          "allowedVal": "5.0 〜 7.5",
+          "allowedChr": "2.0 以下",
+          "desc": "木々の緑や土の自然色と親和性のあるアースカラー。"
+        },
+        {
+          "part": "屋根色",
+          "areaRatio": "見えがかり面",
+          "allowedHue": "N (無彩色) または 低彩度暖色",
+          "allowedVal": "2.0 〜 4.0",
+          "allowedChr": "2.0 以下",
+          "desc": "大地や瓦、屋根の落ち着きを保つ低明度色。"
+        },
+        {
+          "part": "木部・自然素材",
+          "areaRatio": "適用除外",
+          "allowedHue": "天然素材の素地色",
+          "allowedVal": "制限なし",
+          "allowedChr": "制限なし",
+          "desc": "無塗装または透明保護塗料の木材等は基準適用除外。"
+        }
+      ]
+    },
+    "blanks": [
+      {
+        "id": "b1",
+        "label": "空欄 [ ① ]",
+        "prompt": "建築物の色彩が周囲の自然環境に溶け込み、突出した対比を生じさせない手法を [ ① ] 調和という。",
+        "answer": "環境",
+        "choices": [
+          "環境",
+          "形態",
+          "対照",
+          "幾何"
+        ]
+      },
+      {
+        "id": "b2",
+        "label": "空欄 [ ② ]",
+        "prompt": "景観計画において、木材・石材・漆喰などの自然素材を用いる場合、素材本来の風合いを生かすため色彩基準の [ ② ] とされることが多い。",
+        "answer": "適用除外",
+        "choices": [
+          "適用除外",
+          "加算対象",
+          "厳格制限",
+          "禁止規定"
+        ]
+      },
+      {
+        "id": "b3",
+        "label": "空欄 [ ③ ]",
+        "prompt": "建物の最上部である屋根色は、景観全体の重心を安定させるため、外壁よりも [ ③ ] 明度の色が推奨される。",
+        "answer": "低",
+        "choices": [
+          "低",
+          "高",
+          "同等",
+          "純"
+        ]
+      }
+    ],
+    "colorQuestion": {
+      "prompt": "以下の候補から、ガイドラインの【外壁基調色】として適合するものをすべて選びなさい。",
+      "options": [
+        {
+          "code": "A",
+          "munsell": "7.5GY 6/2",
+          "hex": "#979B7F",
+          "desc": "灰みの黄緑（モスグリーン調）"
+        },
+        {
+          "code": "B",
+          "munsell": "10YR 6.5/1.5",
+          "hex": "#B0A292",
+          "desc": "落ち着いたベージュ灰"
+        },
+        {
+          "code": "C",
+          "munsell": "2.5G 6/4",
+          "hex": "#5D9E74",
+          "desc": "中彩度の緑（彩度オーバー）"
+        },
+        {
+          "code": "D",
+          "munsell": "5Y 8.5/1",
+          "hex": "#E4DFD0",
+          "desc": "高明度の白黄（明度オーバー）"
+        }
+      ],
+      "correctCodes": [
+        "A",
+        "B"
+      ],
+      "explanation": "【外壁基調色の適合条件】色相: YR・Y・GY系、明度: 5.0〜7.5、彩度: 2.0以下。\n・A (7.5GY 6/2): 色相GY(適合)、明度6.0(適合)、彩度2.0(適合) → ◯ 適合\n・B (10YR 6.5/1.5): 色相YR(適合)、明度6.5(適合)、彩度1.5(適合) → ◯ 適合\n・C (2.5G 6/4): 色相Gが範囲外（GYまで）、彩度4.0が上限2.0を超過 → ✕ 不適合\n・D (5Y 8.5/1): 明度8.5が上限7.5を超過（白浮き制限） → ✕ 不適合"
+    }
+  }
+];
             // 新・実践総合配色問題 (全26技法動的生成) 用変数
     let dynamicHarmonyExam = null;
     let selectedHarmonyTechniqueFilter = 'random'; // 'random' または全26技法ID
@@ -8450,6 +8954,22 @@
 
     // 図鑑詳細 配色パターンカテゴリタブ用変数
     let colorCardHarmonyTab = 'all'; // 'all': すべて, 'image': イメージ系, 'tone': トーン技法系, 'hue': 色相分割系
+
+    // 大問1 (視感測色・等色相面・マンセル記述) 用変数
+    let q1Exam = null;
+    let q1SelectedVal = null;
+    let q1SelectedChr = null;
+    let q1Answered = false;
+    let q1Result = null;
+    let q1GradeFilter = 'all';
+    let q1ShowPccsHint = false;
+
+    // 大問5 (景観色彩・環境色彩基準・マンセル値適否判定) 用変数
+    let q5CurrentIndex = 0;
+    let q5BlankAnswers = {};
+    let q5SelectedOptions = new Set();
+    let q5Answered = false;
+    let q5Result = null;
     let quizAnswered = false;
     let currentQuizChoices = [];
     let mistakes = JSON.parse(localStorage.getItem('color_quiz_mistakes') || '[]');
@@ -8791,9 +9311,10 @@
 
     function setMode(mode) {
         currentMode = mode;
-        const tabs = ['list', 'flashcards', 'practical', 'practical_harmony', 'harmony', 'mistakes', 'materials'];
+        const tabs = ['list', 'exam_q1', 'exam_q5', 'flashcards', 'practical', 'practical_harmony', 'harmony', 'mistakes', 'materials'];
         tabs.forEach(t => {
-            const el = document.getElementById(t === 'practical_harmony' ? 'tab-practical-harmony' : 'tab-' + t);
+            const tabId = (t === 'practical_harmony') ? 'tab-practical-harmony' : (t === 'exam_q1' ? 'tab-exam-q1' : (t === 'exam_q5' ? 'tab-exam-q5' : 'tab-' + t));
+            const el = document.getElementById(tabId);
             if (el) el.classList.toggle('active', mode === t);
         });
         
@@ -8801,7 +9322,11 @@
         const filterArea = document.getElementById('color-filters-area');
         if (filterArea) filterArea.style.display = isColorBrowsing ? 'flex' : 'none';
         
-        if (mode === 'practical' || mode === 'practical_harmony') {
+        if (mode === 'exam_q1') {
+            if (!q1Exam) resetQ1Exam();
+        } else if (mode === 'exam_q5') {
+            resetQ5Exam(q5CurrentIndex);
+        } else if (mode === 'practical' || mode === 'practical_harmony') {
             resetPracticalQuiz();
         } else if (mode === 'harmony') {
             resetBuilderChallenge();
@@ -10934,6 +11459,772 @@
         render();
     }
 
+    // --- 大問1 (視感測色・等色相面・マンセル記述) ロジック ---
+    function parseMunsellString(munsellStr) {
+        if (!munsellStr || munsellStr === '不明') return null;
+        const clean = munsellStr.trim();
+        if (clean.startsWith('N')) {
+            const valMatch = clean.match(/N\s*([\d\.]+)/i);
+            const val = valMatch ? parseFloat(valMatch[1]) : 5.0;
+            return { hue: 'N', val: val, chr: 0, isAchromatic: true, raw: clean };
+        }
+        const parts = clean.split(/\s+/);
+        if (parts.length >= 2) {
+            const hue = parts[0];
+            const vc = parts[1].split('/');
+            const val = parseFloat(vc[0]);
+            const chr = vc[1] ? parseFloat(vc[1]) : 0;
+            return { hue: hue, val: val, chr: chr, isAchromatic: false, raw: clean };
+        }
+        return null;
+    }
+
+    function resetQ1Exam() {
+        let pool = allColorData.filter(c => c.munsell && c.munsell !== '不明' && parseMunsellString(c.munsell) !== null);
+        if (q1GradeFilter !== 'all') {
+            pool = pool.filter(c => c.grade === q1GradeFilter);
+        }
+        if (pool.length === 0) pool = allColorData;
+        const randomColor = pool[Math.floor(Math.random() * pool.length)];
+        const parsed = parseMunsellString(randomColor.munsell);
+
+        q1Exam = {
+            color: randomColor,
+            parsed: parsed,
+            hex: randomColor.hex,
+            pccs: randomColor.pccs,
+            name: randomColor.clean_name,
+            ruby: randomColor.ruby,
+            category: randomColor.category,
+            grade: randomColor.grade
+        };
+        q1SelectedVal = null;
+        q1SelectedChr = null;
+        q1Answered = false;
+        q1Result = null;
+        q1ShowPccsHint = false;
+    }
+
+    function selectQ1Grid(val, chr) {
+        if (q1Answered) return;
+        q1SelectedVal = val;
+        q1SelectedChr = chr;
+        render();
+    }
+
+    function toggleQ1PccsHint() {
+        q1ShowPccsHint = !q1ShowPccsHint;
+        render();
+    }
+
+    function submitQ1Answer() {
+        if (!q1Exam || q1Answered) return;
+
+        const inputEl = document.getElementById('q1-text-input');
+        const userText = inputEl ? inputEl.value.trim() : '';
+
+        // 1. グリッド判定
+        const targetVal = q1Exam.parsed.val;
+        const targetChr = q1Exam.parsed.chr;
+        const isGridSelected = (q1SelectedVal !== null && q1SelectedChr !== null);
+        const isGridCorrect = isGridSelected && (Math.abs(q1SelectedVal - targetVal) <= 0.25) && (Math.abs(q1SelectedChr - targetChr) <= 0.25);
+
+        // 2. テキスト記述判定
+        let normalizedUser = userText
+            .replace(/[０-９]/g, s => String.fromCharCode(s.charCodeAt(0) - 0xFEE0))
+            .replace(/[Ａ-Ｚａ-ｚ]/g, s => String.fromCharCode(s.charCodeAt(0) - 0xFEE0))
+            .replace(/／/g, '/')
+            .replace(/\s+/g, ' ')
+            .trim();
+
+        const userParsed = parseMunsellString(normalizedUser);
+        let isTextCorrect = false;
+        if (userParsed) {
+            if (q1Exam.parsed.isAchromatic) {
+                isTextCorrect = userParsed.isAchromatic && (Math.abs(userParsed.val - targetVal) <= 0.25);
+            } else {
+                const isHueMatch = userParsed.hue.toUpperCase() === q1Exam.parsed.hue.toUpperCase();
+                const isValMatch = Math.abs(userParsed.val - targetVal) <= 0.25;
+                const isChrMatch = Math.abs(userParsed.chr - targetChr) <= 0.25;
+                isTextCorrect = isHueMatch && isValMatch && isChrMatch;
+            }
+        }
+
+        const isAllCorrect = isGridCorrect && isTextCorrect;
+
+        q1Answered = true;
+        q1Result = {
+            isGridCorrect: isGridCorrect,
+            isTextCorrect: isTextCorrect,
+            isAllCorrect: isAllCorrect,
+            userText: userText,
+            selectedVal: q1SelectedVal,
+            selectedChr: q1SelectedChr,
+            targetVal: targetVal,
+            targetChr: targetChr,
+            officialMunsell: q1Exam.parsed.raw
+        };
+
+        render();
+    }
+
+    function nextQ1Exam() {
+        resetQ1Exam();
+        render();
+    }
+
+    function setQ1GradeFilter(grade) {
+        q1GradeFilter = grade;
+        resetQ1Exam();
+        render();
+    }
+
+    // 10基本色相の各明度における最大彩度マップ (IMG_1832.JPG / IMG_1833.JPG 公式テキスト完全準拠)
+    const munsellSurfacesMap = {
+        '5R':  { 9.5: 0, 9: 0, 8: 2, 7: 4, 6: 8, 5: 14, 4: 14, 3: 10, 2: 6, 1: 0 },
+        '5YR': { 9.5: 0, 9: 0, 8: 4, 7: 12, 6: 14, 5: 10, 4: 8, 3: 6, 2: 4, 1: 0 },
+        '5Y':  { 9.5: 0, 9: 4, 8: 14, 7: 10, 6: 8, 5: 6, 4: 6, 3: 4, 2: 0, 1: 0 },
+        '5GY': { 9.5: 0, 9: 0, 8: 6, 7: 10, 6: 10, 5: 8, 4: 6, 3: 6, 2: 4, 1: 0 },
+        '5G':  { 9.5: 0, 9: 2, 8: 4, 7: 8, 6: 10, 5: 10, 4: 8, 3: 6, 2: 4, 1: 0 },
+        '5BG': { 9.5: 0, 9: 0, 8: 2, 7: 4, 6: 8, 5: 8, 4: 8, 3: 6, 2: 4, 1: 0 },
+        '5B':  { 9.5: 0, 9: 2, 8: 4, 7: 6, 6: 8, 5: 8, 4: 8, 3: 6, 2: 4, 1: 0 },
+        '5PB': { 9.5: 0, 9: 0, 8: 2, 7: 4, 6: 8, 5: 10, 4: 12, 3: 12, 2: 6, 1: 0 },
+        '5P':  { 9.5: 0, 9: 0, 8: 2, 7: 4, 6: 8, 5: 10, 4: 10, 3: 8, 2: 6, 1: 0 },
+        '5RP': { 9.5: 0, 9: 0, 8: 4, 7: 8, 6: 12, 5: 12, 4: 10, 3: 8, 2: 6, 1: 0 }
+    };
+
+    function getMunsellHueFamily(hueStr) {
+        if (!hueStr || hueStr.startsWith('N')) return '5R';
+        const u = hueStr.toUpperCase();
+        if (u.includes('RP')) return '5RP';
+        if (u.includes('YR') || u.includes('10R') || u.includes('7.5R') || u.includes('8R')) return '5YR';
+        if (u.includes('GY')) return '5GY';
+        if (u.includes('BG')) return '5BG';
+        if (u.includes('PB')) return '5PB';
+        if (u.includes('R')) return '5R';
+        if (u.includes('Y')) return '5Y';
+        if (u.includes('G')) return '5G';
+        if (u.includes('B')) return '5B';
+        if (u.includes('P')) return '5P';
+        return '5R';
+    }
+
+    function handleQ1ChartClick(event) {
+        if (q1Answered) return;
+        const svg = document.getElementById('q1-interactive-chart-svg');
+        if (!svg) return;
+        const rect = svg.getBoundingClientRect();
+        const clickX = event.clientX - rect.left;
+        const clickY = event.clientY - rect.top;
+
+        const scaleX = 460 / rect.width;
+        const scaleY = 340 / rect.height;
+        const x = clickX * scaleX;
+        const y = clickY * scaleY;
+
+        // 明度 V の判定 (0.5刻み・マスの境目対応)
+        let v = 1.0 + (288 - y) / 30;
+        let snapV = Math.round(v * 2) / 2;
+        if (y < 40) snapV = 9.5;
+        snapV = Math.max(1.0, Math.min(9.5, snapV));
+
+        // 彩度 C の判定 (1刻み・マスの境目対応)
+        let snapC = 0;
+        if (x > 75) {
+            let c = 2.0 + (x - 100) / 22.5;
+            snapC = Math.round(c);
+            snapC = Math.max(1, Math.min(16, snapC));
+        }
+
+        q1SelectedVal = snapV;
+        q1SelectedChr = snapC;
+        render();
+    }
+
+    function adjustQ1Position(deltaVal, deltaChr) {
+        if (q1Answered) return;
+        let curV = q1SelectedVal !== null ? q1SelectedVal : 5.0;
+        let curC = q1SelectedChr !== null ? q1SelectedChr : 4;
+        
+        let newV = Math.round((curV + deltaVal) * 10) / 10;
+        newV = Math.max(1.0, Math.min(9.5, newV));
+        
+        let newC = curC + deltaChr;
+        newC = Math.max(0, Math.min(16, newC));
+        
+        q1SelectedVal = newV;
+        q1SelectedChr = newC;
+        render();
+    }
+
+    // マンセル等色相面の各実色カラーチップの色を算出するヘルパー (IMG_1832.JPG / IMG_1833.JPG 準拠 - 等色相面固有の標準色を使用)
+    function getMunsellChartChipColor(actualHue, v, c) {
+        if (c === 0) {
+            // 無彩色 (N) 軸: 明度 1〜9.5 の正確なグレースケール
+            const grayVal = Math.round(255 * (v / 10));
+            return `rgb(${grayVal}, ${grayVal}, ${grayVal})`;
+        }
+
+        const lum = v / 10;
+        const sat = Math.min(c / 14, 1.0);
+        let r = 128, g = 128, b = 128;
+        const hUpper = (actualHue || '5R').toUpperCase();
+
+        if (hUpper.includes('RP')) {
+            r = Math.round((255 * lum) * (0.75 + 0.25 * sat));
+            g = Math.round((255 * lum) * (1 - 0.75 * sat));
+            b = Math.round((255 * lum) * (0.65 + 0.35 * sat));
+        } else if (hUpper.includes('YR') || hUpper.includes('10R') || hUpper.includes('7.5R') || hUpper.includes('8R')) {
+            r = Math.round((255 * lum) * (0.75 + 0.25 * sat));
+            g = Math.round((255 * lum) * (0.45 + 0.35 * sat));
+            b = Math.round((255 * lum) * (1 - 0.75 * sat));
+        } else if (hUpper.includes('Y')) {
+            r = Math.round((255 * lum) * (0.7 + 0.3 * sat));
+            g = Math.round((255 * lum) * (0.65 + 0.35 * sat));
+            b = Math.round((255 * lum) * (1 - 0.9 * sat));
+        } else if (hUpper.includes('GY')) {
+            r = Math.round((255 * lum) * (0.5 + 0.25 * sat));
+            g = Math.round((255 * lum) * (0.7 + 0.3 * sat));
+            b = Math.round((255 * lum) * (1 - 0.75 * sat));
+        } else if (hUpper.includes('G')) {
+            r = Math.round((255 * lum) * (1 - 0.7 * sat));
+            g = Math.round((255 * lum) * (0.65 + 0.35 * sat));
+            b = Math.round((255 * lum) * (0.45 + 0.25 * sat));
+        } else if (hUpper.includes('BG')) {
+            r = Math.round((255 * lum) * (1 - 0.8 * sat));
+            g = Math.round((255 * lum) * (0.65 + 0.35 * sat));
+            b = Math.round((255 * lum) * (0.6 + 0.35 * sat));
+        } else if (hUpper.includes('B') && !hUpper.includes('PB')) {
+            r = Math.round((255 * lum) * (1 - 0.8 * sat));
+            g = Math.round((255 * lum) * (0.5 + 0.3 * sat));
+            b = Math.round((255 * lum) * (0.75 + 0.25 * sat));
+        } else if (hUpper.includes('PB')) {
+            r = Math.round((255 * lum) * (0.4 + 0.3 * sat));
+            g = Math.round((255 * lum) * (0.45 + 0.25 * sat));
+            b = Math.round((255 * lum) * (0.8 + 0.2 * sat));
+        } else if (hUpper.includes('P')) {
+            r = Math.round((255 * lum) * (0.6 + 0.35 * sat));
+            g = Math.round((255 * lum) * (1 - 0.7 * sat));
+            b = Math.round((255 * lum) * (0.8 + 0.2 * sat));
+        } else {
+            // R系
+            r = Math.round((255 * lum) * (0.8 + 0.2 * sat));
+            g = Math.round((255 * lum) * (1 - 0.8 * sat));
+            b = Math.round((255 * lum) * (1 - 0.8 * sat));
+        }
+
+        r = Math.max(0, Math.min(255, r));
+        g = Math.max(0, Math.min(255, g));
+        b = Math.max(0, Math.min(255, b));
+
+        return `rgb(${r}, ${g}, ${b})`;
+    }
+
+    // --- 大問1 画面レンダリング (IMG_1832.JPG / IMG_1833.JPG 完全準拠 & マスの境目直接タップ対応) ---
+    function renderQ1View() {
+        if (!q1Exam) resetQ1Exam();
+        const exam = q1Exam;
+        const parsed = exam.parsed;
+
+        // 出題色の正確なマンセル色相（例: 8YR, 4R, 2.5Y, 10RP 等）
+        const exactHue = parsed.isAchromatic ? '無彩色 (N)' : parsed.hue;
+        const hueFamily = getMunsellHueFamily(parsed.hue);
+        const maxMap = munsellSurfacesMap[hueFamily] || munsellSurfacesMap['5R'];
+
+        // 縦軸（明度: 9.5, 9, 8, 7, 6, 5, 4, 3, 2, 1）公式テキスト図4〜13と完全一致
+        const valRows = [9.5, 9, 8, 7, 6, 5, 4, 3, 2, 1];
+        
+        // 横軸（彩度: 0, 2, 4, 6, 8, 10, 12, 14）公式テキスト図4〜13と完全一致
+        const chrCols = [0, 2, 4, 6, 8, 10, 12, 14];
+
+        // 座標計算関数
+        function getSvgCoord(v, c) {
+            const x = (c === 0) ? 50 : 100 + (c - 2) * 22.5;
+            let y = 288 - (v - 1.0) * 30;
+            if (v === 9.5) y = 30;
+            return { x, y };
+        }
+
+        // 選択中ピンの座標
+        let selCoord = null;
+        if (q1SelectedVal !== null && q1SelectedChr !== null) {
+            selCoord = getSvgCoord(q1SelectedVal, q1SelectedChr);
+        }
+
+        // 正解位置の座標
+        let targetCoord = null;
+        if (q1Answered && parsed) {
+            targetCoord = getSvgCoord(parsed.val, parsed.chr);
+        }
+
+        return `
+            <div class="q1-container">
+                <!-- 上部コントロールバー -->
+                <div style="background:#fff; border:1px solid #e2e8f0; border-radius:12px; padding:12px 16px; margin-bottom:14px; box-shadow:0 2px 4px rgba(0,0,0,0.03);">
+                    <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
+                        <div>
+                            <span class="badge" style="background:#7c3aed; color:#fff;">1級2次 実戦演習</span>
+                            <strong style="font-size:1rem; color:#1e293b; margin-left:6px;">大問1: 視感測色 ＆ マンセル記述</strong>
+                        </div>
+                        <div style="display:flex; gap:6px;">
+                            <button class="filter-btn ${q1GradeFilter === 'all' ? 'active' : ''}" onclick="setQ1GradeFilter('all')">全色</button>
+                            <button class="filter-btn ${q1GradeFilter === '3級' ? 'active' : ''}" onclick="setQ1GradeFilter('3級')">3級</button>
+                            <button class="filter-btn ${q1GradeFilter === '2級' ? 'active' : ''}" onclick="setQ1GradeFilter('2級')">2級</button>
+                            <button onclick="nextQ1Exam()" class="flashcard-btn" style="padding:4px 10px; font-size:0.75rem;">別の色 ↻</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 出題エリア (問題用紙 印刷色見本の再現) -->
+                <div class="q1-sample-box">
+                    <div class="q1-color-patch" style="background-color: ${exam.hex};"></div>
+                    <div style="flex:1;">
+                        <div style="font-size:0.75rem; font-weight:800; color:#6366f1; margin-bottom:2px;">【問題用紙 印刷色見本】</div>
+                        <div style="font-size:0.92rem; font-weight:800; color:#0f172a; line-height:1.4;">
+                            提示された色を見て、等色相面上の位置（カラーチップ／マスの境目）をタップし、マンセル値を記述しなさい。
+                        </div>
+                        <div style="font-size:0.76rem; color:#475569; margin-top:4px;">
+                            提示色相: <strong style="color:#1e293b; font-size:0.85rem;">${exactHue} の等色相面</strong>
+                        </div>
+                        ${q1ShowPccsHint ? `
+                            <div style="font-size:0.75rem; color:#7c3aed; font-weight:700; margin-top:4px;">
+                                [PCCSヒント] ${exam.pccs} (${exam.name})
+                            </div>
+                        ` : ''}
+                    </div>
+                    <button type="button" onclick="toggleQ1PccsHint()" class="hint-btn" style="align-self:flex-start;">
+                        ${q1ShowPccsHint ? 'ヒントを隠す' : 'PCCSヒント'}
+                    </button>
+                </div>
+
+                <!-- 解答ステップ1: 等色相面チャート (IMG_1832.JPG / IMG_1833.JPG 完全再現 & マスの境目直接タップ対応) -->
+                <div class="q1-grid-wrapper">
+                    <div style="width:100%; display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+                        <div style="font-size:0.82rem; font-weight:800; color:#1e293b;">
+                            ① 等色相面チャートで位置を指定（マス目やマスの境目を直接タップできます）:
+                        </div>
+                        <div style="font-size:0.78rem; font-weight:800; color:${q1SelectedVal !== null ? '#4f46e5' : '#94a3b8'}; background:#f1f5f9; padding:3px 10px; border-radius:12px;">
+                            ${q1SelectedVal !== null ? `選択位置: 明度 V=${q1SelectedVal} / 彩度 C=${q1SelectedChr}` : '（チャート上をタップ）'}
+                        </div>
+                    </div>
+
+                    <!-- チャートタイトル (公式テキスト準拠) -->
+                    <div style="font-size:0.88rem; font-weight:900; color:#0f172a; text-align:center; margin-bottom:4px; letter-spacing:0.02em;">
+                        色相(Hue) ${exactHue}
+                    </div>
+
+                    <!-- インタラクティブSVG等色相面チャート (マスの境目も直接押せる！) -->
+                    <div style="position:relative; max-width:100%; overflow-x:auto;">
+                        <svg id="q1-interactive-chart-svg" viewBox="0 0 460 340" style="width:460px; height:340px; display:block; margin:0 auto; cursor:crosshair; user-select:none;" onclick="handleQ1ChartClick(event)">
+                            <!-- 縦軸ラベル -->
+                            <text x="12" y="165" font-size="11" font-weight="800" fill="#64748b" text-anchor="middle" transform="rotate(-90 12 165)">明度 (Value)</text>
+
+                            <!-- 明度目盛りテキスト (縦軸) -->
+                            ${valRows.map(v => {
+                                const pt = getSvgCoord(v, 0);
+                                return `<text x="32" y="${pt.y + 4}" font-size="10" font-weight="800" fill="#475569" text-anchor="end">${v}</text>`;
+                            }).join('')}
+
+                            <!-- 彩度目盛りテキスト (横軸) -->
+                            ${chrCols.map(c => {
+                                const pt = getSvgCoord(1, c);
+                                return `<text x="${pt.x}" y="315" font-size="10" font-weight="800" fill="#475569" text-anchor="middle">${c}</text>`;
+                            }).join('')}
+                            <text x="210" y="332" font-size="11" font-weight="800" fill="#64748b" text-anchor="middle">彩度 (Chroma)</text>
+
+                            <!-- 等色相面のマス目 (カラーチップ / 白い空枠) -->
+                            ${valRows.map(v => {
+                                const maxC = parsed.isAchromatic ? 0 : (maxMap[v] !== undefined ? maxMap[v] : (maxMap[Math.round(v)] || 0));
+
+                                return chrCols.map(c => {
+                                    const pt = getSvgCoord(v, c);
+                                    const isColored = (c === 0) || (c <= maxC);
+                                    
+                                    if (isColored) {
+                                        const cellColor = getMunsellChartChipColor(parsed.hue, v, c);
+                                        return `
+                                            <rect x="${pt.x - 17}" y="${pt.y - 11}" width="34" height="22" rx="2" ry="2" 
+                                                fill="${cellColor}" stroke="rgba(0,0,0,0.18)" stroke-width="1" />
+                                        `;
+                                    } else {
+                                        // 非実在領域 (白い空枠)
+                                        return `
+                                            <rect x="${pt.x - 17}" y="${pt.y - 11}" width="34" height="22" rx="2" ry="2" 
+                                                fill="#ffffff" stroke="#cbd5e1" stroke-width="1" />
+                                        `;
+                                    }
+                                }).join('');
+                            }).join('')}
+
+                            <!-- ユーザーが選択したピン / カラーカード (境界線上にもジャスト描画！) -->
+                            ${selCoord ? `
+                                <g transform="translate(${selCoord.x}, ${selCoord.y})">
+                                    <!-- 境界線上・マス目上のピンカード -->
+                                    <rect x="-14" y="-9" width="28" height="18" rx="3" ry="3" 
+                                        fill="#0f172a" stroke="#ffffff" stroke-width="2" 
+                                        filter="drop-shadow(0px 2px 4px rgba(0,0,0,0.4))" />
+                                    <circle cx="0" cy="0" r="3.5" fill="#ffffff" />
+                                </g>
+                            ` : ''}
+
+                            <!-- 解答後の正解マーカー (正解が境目でも境目上に★が表示される！) -->
+                            ${q1Answered && targetCoord ? `
+                                <g transform="translate(${targetCoord.x}, ${targetCoord.y})">
+                                    <rect x="-17" y="-12" width="34" height="24" rx="4" ry="4" 
+                                        fill="none" stroke="#10b981" stroke-width="3" stroke-dasharray="3,2" />
+                                    <circle cx="0" cy="0" r="10" fill="#10b981" />
+                                    <text x="0" y="4" font-size="11" font-weight="900" fill="#ffffff" text-anchor="middle">★</text>
+                                </g>
+                            ` : ''}
+                        </svg>
+                    </div>
+
+                    <!-- マスの境目・位置微調整コントロール (タップでもボタンでも操作可能！) -->
+                    <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:10px; padding:8px 12px; margin-top:8px; width:100%; box-sizing:border-box;">
+                        <div style="font-size:0.75rem; color:#475569; font-weight:700; margin-bottom:6px; text-align:center;">
+                            ※チャートを直接タップして選択できます。ボタンで0.5刻みの微調整も可能です:
+                        </div>
+                        <div style="display:flex; justify-content:center; align-items:center; gap:14px; flex-wrap:wrap;">
+                            <div style="display:flex; align-items:center; gap:4px;">
+                                <span style="font-size:0.78rem; font-weight:800; color:#1e293b;">明度(V):</span>
+                                <button type="button" class="flashcard-btn" onclick="adjustQ1Position(-0.5, 0)" style="padding:3px 7px; font-size:0.74rem;">-0.5</button>
+                                <span style="font-size:0.9rem; font-family:monospace; font-weight:900; min-width:30px; text-align:center; color:#0f172a;">
+                                    ${q1SelectedVal !== null ? q1SelectedVal : '-'}
+                                </span>
+                                <button type="button" class="flashcard-btn" onclick="adjustQ1Position(0.5, 0)" style="padding:3px 7px; font-size:0.74rem;">+0.5</button>
+                            </div>
+                            <div style="display:flex; align-items:center; gap:4px;">
+                                <span style="font-size:0.78rem; font-weight:800; color:#1e293b;">彩度(C):</span>
+                                <button type="button" class="flashcard-btn" onclick="adjustQ1Position(0, -1)" style="padding:3px 7px; font-size:0.74rem;">-1</button>
+                                <span style="font-size:0.9rem; font-family:monospace; font-weight:900; min-width:30px; text-align:center; color:#0f172a;">
+                                    ${q1SelectedChr !== null ? q1SelectedChr : '-'}
+                                </span>
+                                <button type="button" class="flashcard-btn" onclick="adjustQ1Position(0, 1)" style="padding:3px 7px; font-size:0.74rem;">+1</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 解答ステップ2: マンセル値の筆記記述 (手入力) -->
+                <div class="q1-input-panel">
+                    <div style="font-size:0.82rem; font-weight:800; color:#1e293b; margin-bottom:6px;">
+                        ② マンセル値を記述（手入力）:
+                    </div>
+                    <div style="display:flex; gap:8px;">
+                        <input type="text" id="q1-text-input" class="q1-munsell-input" 
+                            placeholder="" 
+                            value="${q1Answered ? q1Result.userText : ''}" 
+                            ${q1Answered ? 'readonly' : ''}
+                            onkeydown="if(event.key === 'Enter') submitQ1Answer();">
+                    </div>
+                </div>
+
+                <!-- 判定ボタン -->
+                ${!q1Answered ? `
+                    <button type="button" class="submit-answer-btn" onclick="submitQ1Answer()">解答を判定する</button>
+                ` : ''}
+
+                <!-- 解答結果・解説パネル -->
+                ${q1Answered && q1Result ? `
+                    <div style="background:#fff; border:2px solid ${q1Result.isAllCorrect ? '#10b981' : '#f59e0b'}; border-radius:12px; padding:16px; margin-top:14px; box-shadow:0 4px 12px rgba(0,0,0,0.06);">
+                        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+                            <span style="font-size:1.1rem; font-weight:900; color:${q1Result.isAllCorrect ? '#047857' : '#b45309'};">
+                                ${q1Result.isAllCorrect ? '◎ 完全正解！' : (q1Result.isGridCorrect || q1Result.isTextCorrect ? '△ おしい！部分正解' : '× 不正解')}
+                            </span>
+                            <button onclick="nextQ1Exam()" class="flashcard-btn primary" style="padding:6px 14px;">次の問題へ ＞</button>
+                        </div>
+
+                        <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:12px; font-size:0.8rem;">
+                            <div style="background:#f8fafc; padding:8px 10px; border-radius:6px; border:1px solid #e2e8f0;">
+                                <strong>① チャート位置判定:</strong> ${q1Result.isGridCorrect ? '<span style=\"color:#047857; font-weight:800;\">正解 ◯</span>' : '<span style=\"color:#dc2626; font-weight:800;\">不正解 ✕</span>'}<br>
+                                <span style=\"font-size:0.72rem; color:#64748b;\">正解位置: V=${parsed.val} / C=${parsed.chr} (★印)</span>
+                            </div>
+                            <div style="background:#f8fafc; padding:8px 10px; border-radius:6px; border:1px solid #e2e8f0;">
+                                <strong>② マンセル記述判定:</strong> ${q1Result.isTextCorrect ? '<span style=\"color:#047857; font-weight:800;\">正解 ◯</span>' : '<span style=\"color:#dc2626; font-weight:800;\">不正解 ✕</span>'}<br>
+                                <span style=\"font-size:0.72rem; color:#64748b;\">公式正解: <code>${parsed.raw}</code></span>
+                            </div>
+                        </div>
+
+                        <div style="background:#eff6ff; border:1px solid #bfdbfe; border-radius:8px; padding:10px 12px; font-size:0.78rem; color:#1e293b; line-height:1.5;">
+                            <strong>【色の正体と対応関係】</strong><br>
+                            色名: <strong>${exam.name}</strong>（${exam.ruby || ''}）<br>
+                            PCCS記号: <strong>${exam.pccs}</strong> ｜ マンセル値: <strong>${parsed.raw}</strong> ｜ 系統色名: ${exam.category}<br>
+                            ※等色相面上での明度（縦軸）と彩度（横軸）の位置関係をしっかり確認しましょう。
+                        </div>
+
+                        <button onclick="nextQ1Exam()" class="nav-btn" style="width:100%; margin-top:12px;">次の問題へ ＞</button>
+                    </div>
+                ` : ''}
+            </div>
+        `;
+    }
+
+    // --- 大問5 (景観色彩・環境色彩基準・マンセル値適否判定) ロジック ---
+    function resetQ5Exam(index = 0) {
+        if (!landscapeExamData || landscapeExamData.length === 0) return;
+        q5CurrentIndex = (index + landscapeExamData.length) % landscapeExamData.length;
+        q5BlankAnswers = {};
+        q5SelectedOptions = new Set();
+        q5Answered = false;
+        q5Result = null;
+    }
+
+    function setQ5BlankText(blankId, text) {
+        if (q5Answered) return;
+        q5BlankAnswers[blankId] = text;
+        const el = document.getElementById(`q5-blank-${blankId}`);
+        if (el) el.value = text;
+        render();
+    }
+
+    function toggleQ5Option(code) {
+        if (q5Answered) return;
+        if (q5SelectedOptions.has(code)) {
+            q5SelectedOptions.delete(code);
+        } else {
+            q5SelectedOptions.add(code);
+        }
+        render();
+    }
+
+    function submitQ5Answer() {
+        if (q5Answered) return;
+        const exam = landscapeExamData[q5CurrentIndex];
+        if (!exam) return;
+
+        // 1. 穴埋め判定
+        let blanksCorrectCount = 0;
+        const blankResults = exam.blanks.map(b => {
+            const inputEl = document.getElementById(`q5-blank-${b.id}`);
+            const userVal = inputEl ? inputEl.value.trim() : (q5BlankAnswers[b.id] || '');
+            q5BlankAnswers[b.id] = userVal;
+            const isMatch = (userVal.replace(/\s+/g, '') === b.answer.replace(/\s+/g, ''));
+            if (isMatch) blanksCorrectCount++;
+            return { id: b.id, label: b.label, userVal, expected: b.answer, isMatch };
+        });
+        const isBlanksAllCorrect = (blanksCorrectCount === exam.blanks.length);
+
+        // 2. マンセル値候補判定
+        const userSet = q5SelectedOptions;
+        const correctSet = new Set(exam.colorQuestion.correctCodes);
+        const isColorMatch = (userSet.size === correctSet.size) && [...userSet].every(code => correctSet.has(code));
+
+        const isAllCorrect = isBlanksAllCorrect && isColorMatch;
+
+        q5Answered = true;
+        q5Result = {
+            isAllCorrect,
+            isBlanksAllCorrect,
+            isColorMatch,
+            blanksCorrectCount,
+            totalBlanks: exam.blanks.length,
+            blankResults,
+            userSelectedCodes: [...userSet].sort(),
+            correctCodes: exam.colorQuestion.correctCodes
+        };
+
+        render();
+    }
+
+    function nextQ5Exam() {
+        resetQ5Exam(q5CurrentIndex + 1);
+        render();
+    }
+
+    function prevQ5Exam() {
+        resetQ5Exam(q5CurrentIndex - 1);
+        render();
+    }
+
+    // --- 大問5 画面レンダリング ---
+    function renderQ5View() {
+        if (!landscapeExamData || landscapeExamData.length === 0) {
+            return `<div class="q5-container"><p>大問5の演習問題データがありません。</p></div>`;
+        }
+        const exam = landscapeExamData[q5CurrentIndex];
+
+        return `
+            <div class="q5-container">
+                <!-- 上部コントロールバー -->
+                <div style="background:#fff; border:1px solid #e2e8f0; border-radius:12px; padding:12px 16px; margin-bottom:14px; box-shadow:0 2px 4px rgba(0,0,0,0.03);">
+                    <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
+                        <div>
+                            <span class="badge" style="background:#0d9488; color:#fff;">1級2次 実戦演習</span>
+                            <strong style="font-size:1rem; color:#1e293b; margin-left:6px;">大問5: 景観色彩・環境色彩基準演習</strong>
+                        </div>
+                        <div style="display:flex; align-items:center; gap:8px;">
+                            <span style="font-size:0.85rem; font-weight:800; color:#1e293b;">第 ${q5CurrentIndex + 1} / ${landscapeExamData.length} 問</span>
+                            <button onclick="prevQ5Exam()" class="flashcard-btn" style="padding:4px 10px; font-size:0.75rem;" ${q5CurrentIndex === 0 ? 'disabled style="opacity:0.4;"' : ''}>◀ 前の問題</button>
+                            <button onclick="nextQ5Exam()" class="flashcard-btn" style="padding:4px 10px; font-size:0.75rem;">次の問題 ▶</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- テーマ・シナリオ -->
+                <div style="background:#fff; border:2px solid #e2e8f0; border-radius:14px; padding:16px 18px; margin-bottom:14px; box-shadow:0 2px 6px rgba(0,0,0,0.04);">
+                    <h3 style="font-size:1.05rem; font-weight:800; color:#0f172a; margin:0 0 8px 0;">${exam.title}</h3>
+                    <p style="font-size:0.85rem; color:#334155; line-height:1.6; margin:0 0 12px 0;">
+                        ${exam.scenario}
+                    </p>
+
+                    <!-- 自治体の景観ガイドライン表 -->
+                    <div style="background:#f8fafc; border:1px solid #cbd5e1; border-radius:10px; padding:12px 14px;">
+                        <div style="font-size:0.78rem; font-weight:800; color:#0d9488; margin-bottom:6px;">
+                            【${exam.guideline.title}】
+                        </div>
+                        <div style="overflow-x:auto;">
+                            <table class="q5-guideline-table">
+                                <thead>
+                                    <tr>
+                                        <th style="min-width:110px;">部位 / 役割</th>
+                                        <th style="min-width:90px;">面積比率</th>
+                                        <th style="min-width:110px;">許容色相(H)</th>
+                                        <th style="min-width:90px;">明度(V)</th>
+                                        <th style="min-width:80px;">彩度(C)</th>
+                                        <th style="min-width:140px;">備考・方針</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    ${exam.guideline.rules.map(r => `
+                                        <tr>
+                                            <td><strong>${r.part}</strong></td>
+                                            <td style="color:#0f766e; font-weight:800;">${r.areaRatio}</td>
+                                            <td>${r.allowedHue}</td>
+                                            <td>${r.allowedVal}</td>
+                                            <td>${r.allowedChr}</td>
+                                            <td style="font-size:0.72rem; color:#64748b;">${r.desc}</td>
+                                        </tr>
+                                    `).join('')}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 【問1】専門用語・面積比率の穴埋め記述 -->
+                <div style="background:#fff; border:1px solid #e2e8f0; border-radius:12px; padding:16px 18px; margin-bottom:14px; box-shadow:0 2px 4px rgba(0,0,0,0.03);">
+                    <div style="font-size:0.82rem; font-weight:800; color:#0d9488; margin-bottom:8px;">
+                        【問1】景観法および色彩基準に関する空欄補充:
+                    </div>
+                    ${exam.blanks.map(b => {
+                        const currentVal = q5BlankAnswers[b.id] || '';
+                        return `
+                            <div style="margin-bottom:12px; padding-bottom:10px; border-bottom:1px dashed #e2e8f0;">
+                                <div style="font-size:0.82rem; color:#1e293b; line-height:1.5; margin-bottom:6px;">
+                                    ${b.prompt}
+                                </div>
+                                <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
+                                    <input type="text" id="q5-blank-${b.id}" class="q1-munsell-input" 
+                                        style="max-width:160px; padding:6px 10px; font-size:0.88rem;" 
+                                        placeholder="${b.label}" 
+                                        value="${currentVal}" 
+                                        ${q5Answered ? 'readonly' : ''}
+                                        oninput="q5BlankAnswers['${b.id}'] = this.value">
+                                    ${!q5Answered ? `
+                                        <div style="display:flex; gap:4px; flex-wrap:wrap;">
+                                            ${b.choices.map(ch => `
+                                                <button type="button" class="flashcard-btn" style="padding:3px 8px; font-size:0.74rem;" 
+                                                    onclick="setQ5BlankText('${b.id}', '${ch}')">
+                                                    ${ch}
+                                                </button>
+                                            `).join('')}
+                                        </div>
+                                    ` : ''}
+                                </div>
+                            </div>
+                        `;
+                    }).join('')}
+                </div>
+
+                <!-- 【問2】マンセル値候補の適否判定 -->
+                <div style="background:#fff; border:1px solid #e2e8f0; border-radius:12px; padding:16px 18px; margin-bottom:14px; box-shadow:0 2px 4px rgba(0,0,0,0.03);">
+                    <div style="font-size:0.82rem; font-weight:800; color:#0d9488; margin-bottom:4px;">
+                        【問2】マンセル値の適否判定（複数選択可）:
+                    </div>
+                    <div style="font-size:0.85rem; font-weight:800; color:#0f172a; margin-bottom:10px;">
+                        ${exam.colorQuestion.prompt}
+                    </div>
+
+                    <div style="display:grid; grid-template-columns:1fr; gap:8px;">
+                        ${exam.colorQuestion.options.map(opt => {
+                            const isSelected = q5SelectedOptions.has(opt.code);
+                            const isCorrectOpt = exam.colorQuestion.correctCodes.includes(opt.code);
+                            let cardClass = 'q5-option-card';
+                            if (isSelected) cardClass += ' selected';
+                            if (q5Answered) {
+                                if (isCorrectOpt) cardClass += ' correct-border';
+                                else if (isSelected && !isCorrectOpt) cardClass += ' wrong-border';
+                            }
+
+                            return `
+                                <div class="${cardClass}" onclick="toggleQ5Option('${opt.code}')">
+                                    <div style="width:24px; height:24px; border-radius:6px; background:${isSelected ? '#0d9488' : '#e2e8f0'}; color:#fff; display:flex; align-items:center; justify-content:center; font-weight:900; font-size:0.85rem; flex-shrink:0;">
+                                        ${opt.code}
+                                    </div>
+                                    <div style="width:50px; height:32px; border-radius:6px; background:${opt.hex}; border:1px solid rgba(0,0,0,0.15); flex-shrink:0;"></div>
+                                    <div style="flex:1;">
+                                        <div style="font-size:0.95rem; font-weight:900; font-family:monospace; color:#0f172a;">
+                                            ${opt.munsell}
+                                        </div>
+                                        <div style="font-size:0.75rem; color:#64748b;">
+                                            ${opt.desc}
+                                        </div>
+                                    </div>
+                                    <div style="font-size:0.85rem; font-weight:800; color:${isSelected ? '#0d9488' : '#94a3b8'};">
+                                        ${isSelected ? '✔ 選択中' : 'タップで選択'}
+                                    </div>
+                                </div>
+                            `;
+                        }).join('')}
+                    </div>
+                </div>
+
+                <!-- 判定ボタン -->
+                ${!q5Answered ? `
+                    <button type="button" class="submit-answer-btn" style="background:#0d9488;" onclick="submitQ5Answer()">
+                        大問5の解答を判定する
+                    </button>
+                ` : ''}
+
+                <!-- 解答結果・詳細解説パネル -->
+                ${q5Answered && q5Result ? `
+                    <div style="background:#fff; border:2px solid ${q5Result.isAllCorrect ? '#10b981' : '#f59e0b'}; border-radius:12px; padding:16px; margin-top:14px; box-shadow:0 4px 12px rgba(0,0,0,0.06);">
+                        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+                            <span style="font-size:1.15rem; font-weight:900; color:${q5Result.isAllCorrect ? '#047857' : '#b45309'};">
+                                ${q5Result.isAllCorrect ? '◎ 完全正解！' : (q5Result.isBlanksAllCorrect || q5Result.isColorMatch ? '△ おしい！部分正解' : '× 不正解')}
+                            </span>
+                            <button onclick="nextQ5Exam()" class="flashcard-btn primary" style="background:#0d9488; border-color:#0d9488; padding:6px 14px;">次の問題へ ＞</button>
+                        </div>
+
+                        <!-- 穴埋め結果一覧 -->
+                        <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:8px; padding:10px 12px; margin-bottom:10px; font-size:0.8rem;">
+                            <strong>【問1 穴埋め判定】</strong> (${q5Result.blanksCorrectCount} / ${q5Result.totalBlanks} 問正解)<br>
+                            ${q5Result.blankResults.map(r => `
+                                <div style="margin-top:4px;">
+                                    ${r.label}: あなたの回答「<strong>${r.userVal || '未入力'}</strong>」 ${r.isMatch ? '<span style=\"color:#047857; font-weight:800;\">◯ 正解</span>' : `<span style=\"color:#dc2626; font-weight:800;\">✕ 不正解 (正解: ${r.expected})</span>`}
+                                </div>
+                            `).join('')}
+                        </div>
+
+                        <!-- マンセル候補判定結果 -->
+                        <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:8px; padding:10px 12px; margin-bottom:12px; font-size:0.8rem;">
+                            <strong>【問2 マンセル選定判定】</strong> ${q5Result.isColorMatch ? '<span style=\"color:#047857; font-weight:800;\">◯ 完全合致</span>' : '<span style=\"color:#dc2626; font-weight:800;\">✕ 不一致</span>'}<br>
+                            選択した候補: <strong>${q5Result.userSelectedCodes.length > 0 ? q5Result.userSelectedCodes.join(', ') : '未選択'}</strong> ｜ 正解候補: <strong>${q5Result.correctCodes.join(', ')}</strong>
+                        </div>
+
+                        <!-- 詳細解説文 -->
+                        <div style="background:#eff6ff; border:1px solid #bfdbfe; border-radius:8px; padding:12px 14px; font-size:0.8rem; color:#1e293b; line-height:1.6; white-space:pre-wrap;">
+<strong>【景観ガイドライン判定の解説】</strong>
+${exam.colorQuestion.explanation}
+                        </div>
+
+                        <button onclick="nextQ5Exam()" class="nav-btn" style="width:100%; margin-top:12px;">次の問題へ ＞</button>
+                    </div>
+                ` : ''}
+            </div>
+        `;
+    }
+
     // 基準色データから作ることができる代表的な色彩調和パターンHTMLを生成する (全配色網羅版)
     function generateColorHarmonyPatternsHtml(data) {
         if (!data) return '';
@@ -11715,6 +13006,22 @@
         const area = document.getElementById('view-area');
         const controls = document.getElementById('controls');
         const stats = document.getElementById('stats-area');
+
+        // --- 大問1 (視感測色・等色相面・マンセル記述) モード ---
+        if (currentMode === 'exam_q1') {
+            controls.style.display = 'none';
+            stats.innerHTML = `大問1対策: 視感測色 ＆ マンセル記述演習 (${q1GradeFilter === 'all' ? '全色' : q1GradeFilter})`;
+            area.innerHTML = renderQ1View();
+            return;
+        }
+
+        // --- 大問5 (景観色彩・環境色彩基準) モード ---
+        if (currentMode === 'exam_q5') {
+            controls.style.display = 'none';
+            stats.innerHTML = `大問5対策: 景観色彩・環境色彩基準演習 (第 ${q5CurrentIndex + 1} / ${landscapeExamData ? landscapeExamData.length : 0} 問)`;
+            area.innerHTML = renderQ5View();
+            return;
+        }
 
         // --- 暗記カードモード ---
         if (currentMode === 'flashcards') {
