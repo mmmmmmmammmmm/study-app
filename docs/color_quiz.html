@@ -1500,6 +1500,265 @@
             align-items: center;
         }
 
+        /* 暗記カードスタイル */
+        .flashcard-entry-btn {
+            background: linear-gradient(135deg, #059669, #047857);
+            color: #fff;
+            border: none;
+            padding: 6px 14px;
+            font-size: 0.8rem;
+            font-weight: 800;
+            border-radius: 8px;
+            cursor: pointer;
+            box-shadow: 0 2px 4px rgba(5, 150, 105, 0.25);
+            transition: all 0.2s;
+        }
+        .flashcard-entry-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 8px rgba(5, 150, 105, 0.35);
+        }
+        .flashcard-container {
+            max-width: 640px;
+            margin: 0 auto;
+        }
+        .flashcard-menu-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-top: 14px;
+        }
+        @media (max-width: 600px) {
+            .flashcard-menu-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        .flashcard-menu-card {
+            background: #fff;
+            border: 2px solid #e2e8f0;
+            border-radius: 14px;
+            padding: 20px 16px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            transition: all 0.2s;
+            cursor: pointer;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+        }
+        .flashcard-menu-card:hover {
+            border-color: #059669;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 16px rgba(5, 150, 105, 0.12);
+        }
+        .flashcard-card-box {
+            background: #fff;
+            border: 2px solid #e2e8f0;
+            border-radius: 16px;
+            padding: 22px 20px;
+            min-height: 380px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+            cursor: pointer;
+            user-select: none;
+            transition: border-color 0.2s, box-shadow 0.2s;
+            position: relative;
+        }
+        .flashcard-card-box:hover {
+            border-color: #059669;
+            box-shadow: 0 6px 20px rgba(5, 150, 105, 0.15);
+        }
+        .flashcard-step-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            background: #ecfdf5;
+            color: #047857;
+            font-size: 0.72rem;
+            font-weight: 800;
+            padding: 4px 10px;
+            border-radius: 20px;
+            border: 1px solid #a7f3d0;
+        }
+        .flashcard-tap-guide {
+            text-align: center;
+            font-size: 0.75rem;
+            color: #64748b;
+            font-weight: 700;
+            padding-top: 10px;
+            border-top: 1px dashed #e2e8f0;
+            margin-top: 12px;
+        }
+        .flashcard-reveal-box {
+            animation: flashcardFadeIn 0.25s ease;
+        }
+        @keyframes flashcardFadeIn {
+            from { opacity: 0; transform: translateY(6px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .flashcard-color-tile {
+            width: 100%;
+            height: 90px;
+            border-radius: 10px;
+            border: 1px solid rgba(0,0,0,0.12);
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.06);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 1.1rem;
+            margin: 10px 0;
+        }
+        .flashcard-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+            margin-top: 14px;
+        }
+        .flashcard-btn {
+            background: #f8fafc;
+            border: 1px solid #cbd5e1;
+            padding: 9px 15px;
+            border-radius: 10px;
+            font-size: 0.82rem;
+            font-weight: 800;
+            color: #1e293b;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .flashcard-btn:hover {
+            background: #f1f5f9;
+            border-color: #94a3b8;
+        }
+        .flashcard-btn.primary {
+            background: #059669;
+            color: #fff;
+            border-color: #059669;
+        }
+        .flashcard-btn.primary:hover {
+            background: #047857;
+            border-color: #047857;
+        }
+
+        /* 図鑑用 配色パターン表示スタイル */
+        .color-harmony-section {
+            background: #fff;
+            border: 1px solid #e2e8f0;
+            border-radius: 14px;
+            padding: 16px 14px;
+            margin-top: 14px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.03);
+            text-align: left;
+        }
+        .harmony-category-tabs {
+            display: flex;
+            gap: 6px;
+            margin: 10px 0 12px 0;
+            border-bottom: 1px solid #e2e8f0;
+            padding-bottom: 8px;
+            overflow-x: auto;
+        }
+        .harmony-category-tab {
+            background: #f1f5f9;
+            border: 1px solid #cbd5e1;
+            color: #475569;
+            padding: 6px 12px;
+            font-size: 0.76rem;
+            font-weight: 800;
+            border-radius: 20px;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: all 0.2s;
+        }
+        .harmony-category-tab:hover {
+            background: #e2e8f0;
+        }
+        .harmony-category-tab.active {
+            background: #4338ca;
+            color: #fff;
+            border-color: #4338ca;
+            box-shadow: 0 2px 4px rgba(67, 56, 202, 0.25);
+        }
+        .color-harmony-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-top: 10px;
+        }
+        @media (max-width: 600px) {
+            .color-harmony-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        .harmony-pattern-box {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 12px 10px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        .harmony-pattern-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+        .harmony-pattern-title {
+            font-size: 0.85rem;
+            font-weight: 800;
+            color: #1e293b;
+        }
+        .harmony-pattern-tag {
+            font-size: 0.68rem;
+            font-weight: 800;
+            padding: 2px 8px;
+            border-radius: 12px;
+            background: #ede9fe;
+            color: #6d28d9;
+        }
+        .harmony-swatches-row {
+            display: flex;
+            gap: 6px;
+            margin-bottom: 8px;
+        }
+        .harmony-swatch-chip {
+            flex: 1;
+            border-radius: 6px;
+            padding: 4px;
+            text-align: center;
+            border: 1px solid rgba(0,0,0,0.08);
+            background: #fff;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+        }
+        .harmony-swatch-color {
+            height: 38px;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            font-weight: 800;
+            border: 1px solid rgba(0,0,0,0.1);
+        }
+        .harmony-swatch-label {
+            font-size: 0.68rem;
+            font-weight: 700;
+            color: #334155;
+            margin-top: 4px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .harmony-pattern-rule {
+            font-size: 0.73rem;
+            color: #64748b;
+            line-height: 1.45;
+            margin-top: 4px;
+        }
+
         html, body {
             overflow-x: hidden;
             width: 100%;
@@ -1519,6 +1778,9 @@
     
     <!-- 最上部常設 クイック演習ボタン群 (図鑑関係なく即アクセス可能) -->
     <div class="top-action-bar">
+        <button onclick="openFlashcards()" class="top-action-btn" style="background:#059669; color:#fff;" title="暗記カード学習を開始">
+            暗記カード
+        </button>
         <button onclick="startQuickPractical()" class="top-action-btn practical" title="実戦記述問題を開始">
             実戦記述
         </button>
@@ -1536,6 +1798,7 @@
     <!-- タブ一覧 -->
     <div class="tabs">
         <div id="tab-list" class="tab active" onclick="setMode('list')">色の図鑑</div>
+        <div id="tab-flashcards" class="tab" onclick="openFlashcards()">暗記カード</div>
         <div id="tab-practical" class="tab" onclick="setMode('practical')">実戦記述</div>
         <div id="tab-practical-harmony" class="tab" onclick="setMode('practical_harmony')">実戦記述＋配色</div>
         <div id="tab-harmony" class="tab" onclick="setMode('harmony')">配色問題</div>
@@ -1545,10 +1808,13 @@
 
     <!-- 慣用色名用のフィルター群 -->
     <div id="color-filters-area" class="filters-container" style="display: flex;">
-        <div class="grade-filter-row">
-            <button class="filter-btn active" id="grade-all" onclick="setGradeFilter('all')">全127色</button>
-            <button class="filter-btn" id="grade-3" onclick="setGradeFilter('3級')">3級 (64色)</button>
-            <button class="filter-btn" id="grade-2" onclick="setGradeFilter('2級')">2級 (63色)</button>
+        <div class="grade-filter-row" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
+            <div style="display: flex; gap: 6px;">
+                <button class="filter-btn active" id="grade-all" onclick="setGradeFilter('all')">全127色</button>
+                <button class="filter-btn" id="grade-3" onclick="setGradeFilter('3級')">3級 (64色)</button>
+                <button class="filter-btn" id="grade-2" onclick="setGradeFilter('2級')">2級 (63色)</button>
+            </div>
+            <button class="flashcard-entry-btn" onclick="openFlashcards()" title="暗記カード学習を開始">暗記カード</button>
         </div>
 
         <div id="tone-filter-row" class="tone-filter-row" style="display: flex;">
@@ -2490,7 +2756,7 @@
     "clean_name": "アップルグリーン",
     "ruby": "",
     "category": "やわらかい黄みの緑",
-    "pccs": "sf12 は12+",
+    "pccs": "sf12 lt12+",
     "munsell": "10GY 8/5",
     "hex": "#A2CC89",
     "origin": "日本でリンゴといえば赤だが、英語のアップルはグリーンの色名になっている。この色名が使われ始めた頃は、リンゴといえば緑だったのだろう。アダムとイヴが蛇の誘惑に負けて手にすあるリンゴも、絵画作品では青リンゴになっているものが多い。",
@@ -2498,14 +2764,14 @@
     "file": "IMG_1694.PNG",
     "tones": [
       "sf",
-      "は12+"
+      "lt"
     ],
     "hues": [
       "12"
     ],
     "pccsTokens": [
       "sf12",
-      "は12+"
+      "lt12+"
     ]
   },
   {
@@ -2513,7 +2779,7 @@
     "clean_name": "ミントグリーン",
     "ruby": "",
     "category": "明るい緑",
-    "pccs": "b12 は12+",
+    "pccs": "b12 lt12+",
     "munsell": "2.5G 7.5/8",
     "hex": "#98CE97",
     "origin": "ミントとはハッカのこと。この色はハッカの油からっくった酒の色といわれている。西洋ハッ力のペバーミントや緑ハッカのスペアミントといった色名もあるが、どちらも緑色を表す。すべて20世紀初頭の色名で歴史は浅",
@@ -2521,14 +2787,14 @@
     "file": "IMG_1695.PNG",
     "tones": [
       "b",
-      "は12+"
+      "lt"
     ],
     "hues": [
       "12"
     ],
     "pccsTokens": [
       "b12",
-      "は12+"
+      "lt12+"
     ]
   },
   {
@@ -2579,7 +2845,7 @@
     "name": "鉄色 (てついろ)",
     "clean_name": "鉄色",
     "ruby": "てついろ",
-    "category": "く暗い青緑",
+    "category": "ごく暗い青緑",
     "pccs": "dk14 dkg14",
     "munsell": "2.5BG 2.5/2.5",
     "hex": "#244440",
@@ -2849,7 +3115,7 @@
     "clean_name": "ライラック",
     "ruby": "",
     "category": "やわらかい紫",
-    "pccs": "lt2+",
+    "pccs": "lt22+",
     "munsell": "6P 7/6",
     "hex": "#D2BADA",
     "origin": "ライラックの花の色からとられた薄紫の色名。英語の色名として定着したのは1775年前後とされているが、この時代は紫や赤紫の化学染料がまだ発見されていない。単にライラックの花のような色という一般的な色名だったと考えられる。",
@@ -2859,10 +3125,10 @@
       "lt"
     ],
     "hues": [
-      "2+"
+      "22"
     ],
     "pccsTokens": [
-      "lt2+"
+      "lt22+"
     ]
   },
   {
@@ -2977,7 +3243,7 @@
     "name": "ランプブラック",
     "clean_name": "ランプブラック",
     "ruby": "",
-    "category": "里",
+    "category": "黒",
     "pccs": "Bk",
     "munsell": "N1",
     "hex": "#24130D",
@@ -3020,7 +3286,7 @@
     "clean_name": "ローズピンク",
     "ruby": "",
     "category": "明るい紫みの赤",
-    "pccs": "lt4+",
+    "pccs": "lt24+",
     "munsell": "10RP 7/8",
     "hex": "#F29C9F",
     "origin": "紫みを帯びたピンク色のバラの花にちなむ色名。ローズという色名は、花の名からとられた英語の色名として最古のものとされ、最初はレッドとピンクの両方を表していた。引Sにはローズレッドという色名もある。",
@@ -3030,10 +3296,10 @@
       "lt"
     ],
     "hues": [
-      "4+"
+      "24"
     ],
     "pccsTokens": [
-      "lt4+"
+      "lt24+"
     ]
   },
   {
@@ -3488,7 +3754,7 @@
     "name": "セピア",
     "clean_name": "セピア",
     "ruby": "",
-    "category": "ごく暗い赤いみの黄",
+    "category": "ごく暗い赤みの黄",
     "pccs": "dkg6",
     "munsell": "10YR 2.5/2",
     "hex": "#6F4E27",
@@ -4174,7 +4440,7 @@
     "clean_name": "ラベンダー",
     "ruby": "",
     "category": "灰みの青みを帯びた紫",
-    "pccs": "sf22 は22+",
+    "pccs": "sf22 lt22+",
     "munsell": "5P 6/3",
     "hex": "#C4B3D3",
     "origin": "19世紀後半にできた、ラベンダーの花のような色を表す色名。この花は水浴の際の香水に用いられたのでラテン語の洗うという意味のラバレ、青みのあることを表すリべレなどから名前がついたとのことである。",
@@ -4182,14 +4448,14 @@
     "file": "IMG_1774.PNG",
     "tones": [
       "sf",
-      "は22+"
+      "lt"
     ],
     "hues": [
       "22"
     ],
     "pccsTokens": [
       "sf22",
-      "は22+"
+      "lt22+"
     ]
   },
   {
@@ -4284,7 +4550,7 @@
     "name": "生成り色 (きなりいろ)",
     "clean_name": "生成り色",
     "ruby": "きなりいろ",
-    "category": "赤みの帯びた黄みの白",
+    "category": "赤みを帯びた黄みの白",
     "pccs": "p6+ ltg6",
     "munsell": "10YR 9/1",
     "hex": "#F7EFE3",
@@ -4530,7 +4796,7 @@
   {
     "tone": "dp",
     "name": "deep (ディープ)",
-    "japanese": "濃い",
+    "japanese": "深い",
     "features": "暗清色 (純色+黒)",
     "keywords": [
       "深い",
@@ -4575,7 +4841,7 @@
   {
     "tone": "d",
     "name": "dull (ダル)",
-    "japanese": "くすんだ",
+    "japanese": "鈍い",
     "features": "中間色 (濁色)",
     "keywords": [
       "くすんだ",
@@ -5208,7 +5474,7 @@
       "hex": "#EB6100",
       "isPsychPrimary": false,
       "oppNum": 15,
-      "oppName": "緑みの青"
+      "oppName": "青緑"
     },
     {
       "num": 4,
@@ -5217,7 +5483,7 @@
       "hex": "#F08300",
       "isPsychPrimary": false,
       "oppNum": 16,
-      "oppName": "青緑"
+      "oppName": "緑みの青"
     },
     {
       "num": 5,
@@ -5266,8 +5532,8 @@
     },
     {
       "num": 10,
-      "symbol": "yG",
-      "name": "黄みの緑",
+      "symbol": "YG",
+      "name": "黄緑",
       "hex": "#8FC31F",
       "isPsychPrimary": false,
       "oppNum": 22,
@@ -5276,7 +5542,7 @@
     {
       "num": 11,
       "symbol": "yG",
-      "name": "黄緑",
+      "name": "黄みの緑",
       "hex": "#4EA228",
       "isPsychPrimary": false,
       "oppNum": 23,
@@ -5379,7 +5645,7 @@
       "hex": "#920783",
       "isPsychPrimary": false,
       "oppNum": 10,
-      "oppName": "黄みの緑"
+      "oppName": "黄緑"
     },
     {
       "num": 23,
@@ -5388,7 +5654,7 @@
       "hex": "#A3007E",
       "isPsychPrimary": false,
       "oppNum": 11,
-      "oppName": "黄緑"
+      "oppName": "黄みの緑"
     },
     {
       "num": 24,
@@ -5515,7 +5781,7 @@
         },
         {
           "pccs": "ltg16",
-          "name": "明灰青緑",
+          "name": "明灰緑みの青",
           "hex": "#8DA5A0"
         }
       ],
@@ -5770,7 +6036,7 @@
         },
         {
           "pccs": "v15",
-          "name": "緑みの青(15)",
+          "name": "青緑(15)",
           "hex": "#00A0C6"
         }
       ],
@@ -5912,7 +6178,7 @@
       "swatches": [
         {
           "pccs": "p16",
-          "name": "薄い青緑",
+          "name": "薄い緑みの青",
           "hex": "#CBE8E4"
         },
         {
@@ -7139,7 +7405,7 @@
           "dp14"
         ],
         "defaultDisplay": "dp14",
-        "desc": "色相差12の補色(14:bG)で同一のdpトーン"
+        "desc": "色相差12の補色(14:BG)で同一のdpトーン"
       },
       "color3": {
         "label": "色③",
@@ -7197,7 +7463,7 @@
           "v10"
         ],
         "defaultDisplay": "v10",
-        "desc": "色相差8となる黄緑(10:yG)"
+        "desc": "色相差8となる黄緑(10:YG)"
       },
       "color3": {
         "label": "色③",
@@ -8166,13 +8432,24 @@
     let materialSelectedMunsellHue = '5R';
     let materialSelectedMunsellSurface = '5RP';
 
-let currentGradeFilter = 'all';
+    let currentGradeFilter = 'all';
     let currentToneFilter = 'all';
     let currentGridGrouping = 'tone';
     let currentMode = 'list'; // 初期表示は色の図鑑！
     let colorViewFormat = 'card'; // 'card': カード詳細, 'grid': タイル一覧
     let currentIndex = 0;
     let filteredData = [...allColorData];
+
+    // 暗記カード機能用変数
+    let flashcardMode = 'menu'; // 'menu': 選択画面, 'session': 暗記学習中
+    let flashcardType = 'color'; // 'color': ①色名・PCCS・由来, 'harmony': ②配色の暗記カード
+    let flashcardDeck = []; // 現在のカードリスト
+    let flashcardIndex = 0; // 現在のインデックス
+    let flashcardStep = 0; // 0: 初期表示, 1: 1回目タップ, 2: 2回目タップ
+    let flashcardGradeFilter = 'all'; // 'all', '3級', '2級'
+
+    // 図鑑詳細 配色パターンカテゴリタブ用変数
+    let colorCardHarmonyTab = 'all'; // 'all': すべて, 'image': イメージ系, 'tone': トーン技法系, 'hue': 色相分割系
     let quizAnswered = false;
     let currentQuizChoices = [];
     let mistakes = JSON.parse(localStorage.getItem('color_quiz_mistakes') || '[]');
@@ -8342,12 +8619,21 @@ let currentGradeFilter = 'all';
         return (yiq >= 150) ? '#0f172a' : '#ffffff';
     }
 
-    // キーボードの左右キーで移動 (図鑑モード時 / 教材モーダル時)
+    // キーボードの左右キーで移動 (図鑑モード時 / 教材モーダル時 / 暗記カード時)
     document.addEventListener('keydown', (e) => {
         if (activeMaterialModalIndex >= 0) {
             if (e.key === 'ArrowLeft') prevMaterialModal();
             else if (e.key === 'ArrowRight') nextMaterialModal();
             else if (e.key === 'Escape') closeMaterialModal();
+            return;
+        }
+        if (currentMode === 'flashcards' && flashcardMode === 'session') {
+            if (e.key === 'ArrowLeft') prevFlashcard();
+            else if (e.key === 'ArrowRight') nextFlashcard();
+            else if (e.key === ' ' || e.key === 'Enter') {
+                e.preventDefault();
+                handleFlashcardTap();
+            }
             return;
         }
         if (currentMode === 'list') {
@@ -8505,7 +8791,7 @@ let currentGradeFilter = 'all';
 
     function setMode(mode) {
         currentMode = mode;
-        const tabs = ['list', 'practical', 'practical_harmony', 'harmony', 'mistakes', 'materials'];
+        const tabs = ['list', 'flashcards', 'practical', 'practical_harmony', 'harmony', 'mistakes', 'materials'];
         tabs.forEach(t => {
             const el = document.getElementById(t === 'practical_harmony' ? 'tab-practical-harmony' : 'tab-' + t);
             if (el) el.classList.toggle('active', mode === t);
@@ -8522,6 +8808,93 @@ let currentGradeFilter = 'all';
         }
         
         render();
+    }
+
+    // --- 暗記カード機能 ロジック ---
+    function openFlashcards() {
+        flashcardMode = 'menu';
+        flashcardStep = 0;
+        setMode('flashcards');
+    }
+
+    function shuffleArray(arr) {
+        const copy = [...arr];
+        for (let i = copy.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [copy[i], copy[j]] = [copy[j], copy[i]];
+        }
+        return copy;
+    }
+
+    function startFlashcards(type, grade = 'all', shuffle = false) {
+        flashcardType = type;
+        flashcardMode = 'session';
+        flashcardIndex = 0;
+        flashcardStep = 0;
+        flashcardGradeFilter = grade;
+
+        if (type === 'color') {
+            let deck = [...allColorData];
+            if (grade !== 'all') {
+                deck = deck.filter(c => c.grade === grade);
+            }
+            if (shuffle) {
+                deck = shuffleArray(deck);
+            }
+            flashcardDeck = deck;
+        } else if (type === 'harmony') {
+            let deck = [...(studyMaterialsData && studyMaterialsData.techniques26Data ? studyMaterialsData.techniques26Data : [])];
+            if (shuffle) {
+                deck = shuffleArray(deck);
+            }
+            flashcardDeck = deck;
+        }
+        render();
+    }
+
+    function shuffleCurrentFlashcards() {
+        if (!flashcardDeck || flashcardDeck.length <= 1) return;
+        flashcardDeck = shuffleArray(flashcardDeck);
+        flashcardIndex = 0;
+        flashcardStep = 0;
+        render();
+    }
+
+    function handleFlashcardTap() {
+        if (flashcardType === 'color') {
+            // step 0: 由来 -> step 1: 色名 -> step 2: 実際の色とPCCS
+            if (flashcardStep < 2) {
+                flashcardStep++;
+            } else {
+                flashcardStep = 0;
+            }
+        } else if (flashcardType === 'harmony') {
+            // step 0: 技法名 -> step 1: 条件・解説・図解
+            if (flashcardStep < 1) {
+                flashcardStep = 1;
+            } else {
+                flashcardStep = 0;
+            }
+        }
+        render();
+    }
+
+    function nextFlashcard() {
+        if (!flashcardDeck || flashcardDeck.length === 0) return;
+        if (flashcardIndex < flashcardDeck.length - 1) {
+            flashcardIndex++;
+            flashcardStep = 0;
+            render();
+        }
+    }
+
+    function prevFlashcard() {
+        if (!flashcardDeck || flashcardDeck.length === 0) return;
+        if (flashcardIndex > 0) {
+            flashcardIndex--;
+            flashcardStep = 0;
+            render();
+        }
     }
 
     // 配色問題の入力方式設定 (PCCS選択 or 実色タイル選択)
@@ -10556,11 +10929,802 @@ let currentGradeFilter = 'all';
     function toggleMaterialCardAccordion() {}
 
 
+    function setColorCardHarmonyTab(tab) {
+        colorCardHarmonyTab = tab;
+        render();
+    }
+
+    // 基準色データから作ることができる代表的な色彩調和パターンHTMLを生成する (全配色網羅版)
+    function generateColorHarmonyPatternsHtml(data) {
+        if (!data) return '';
+
+        // 色相・トーンの抽出
+        let primaryHue = 99;
+        if (data.hues && data.hues.length > 0) {
+            primaryHue = parseInt(data.hues[0]);
+        } else {
+            primaryHue = getHue(data.pccs);
+        }
+
+        let primaryTone = 'v';
+        if (data.tones && data.tones.length > 0 && data.tones[0] !== '無彩色') {
+            primaryTone = data.tones[0];
+        } else {
+            const m = data.pccs.match(/^[a-zA-Z]+/);
+            if (m) primaryTone = m[0];
+        }
+
+        const isAchromatic = (primaryHue === 99 || data.category.includes('灰色') || data.category.includes('黒') || data.category.includes('白') || data.pccs.startsWith('Gy') || data.pccs === 'W' || data.pccs === 'Bk');
+
+        // チップ情報取得ヘルパー
+        function getChipInfo(tone, hue) {
+            const hex = getBuilderColorHex(tone, hue);
+            const pccs = (tone === 'W' || tone === 'Bk' || tone.startsWith('Gy')) ? tone : `${tone}${hue}`;
+            let label = pccs;
+            const match = allColorData.find(c => c.tones && c.tones.includes(tone) && c.hues && c.hues.includes(String(hue)));
+            if (match) {
+                label = match.clean_name;
+            } else if (studyMaterialsData && studyMaterialsData.hue24Data) {
+                const hMeta = studyMaterialsData.hue24Data.find(x => x.num === hue);
+                if (hMeta) label = `${tone} ${hMeta.name}`;
+            }
+            return { hex, pccs, label, textColor: getContrastTextColor(hex) };
+        }
+
+        const patterns = [];
+        const t = primaryTone;
+        const h = primaryHue;
+
+        if (isAchromatic) {
+            // ==========================================
+            // 【無彩色の場合の全配色】
+            // ==========================================
+            // 1. 配色イメージ系
+            patterns.push({
+                cat: 'image',
+                title: 'シック (洗練された・大人っぽい)',
+                tag: '公式イメージ',
+                swatches: [
+                    { hex: data.hex, pccs: data.pccs, label: data.clean_name, textColor: getContrastTextColor(data.hex) },
+                    getChipInfo('g', 12),
+                    getChipInfo('dkg', 22)
+                ],
+                rule: '無彩色と低彩度な濁色による、大人っぽく洗練された落ち着きのある配色。'
+            });
+
+            patterns.push({
+                cat: 'image',
+                title: 'モダン (現代的な・人工的な)',
+                tag: '公式イメージ',
+                swatches: [
+                    { hex: data.hex, pccs: data.pccs, label: data.clean_name, textColor: getContrastTextColor(data.hex) },
+                    { hex: '#FFFFFF', pccs: 'W', label: '白', textColor: '#0f172a' },
+                    getChipInfo('v', 18) // 青
+                ],
+                rule: '無彩色（白・灰・黒）と高彩度色のシャープなコントラストによる、都会的で現代的な配色。'
+            });
+
+            patterns.push({
+                cat: 'image',
+                title: 'クリア (さわやかな・透明感のある)',
+                tag: '公式イメージ',
+                swatches: [
+                    { hex: data.hex, pccs: data.pccs, label: data.clean_name, textColor: getContrastTextColor(data.hex) },
+                    getChipInfo('p', 16),
+                    { hex: '#FFFFFF', pccs: 'W', label: '白', textColor: '#0f172a' }
+                ],
+                rule: '白・明るい灰色と澄んだ明清色（ペール・ライト）による、清潔感と透明感のある配色。'
+            });
+
+            // 2. トーン技法系
+            patterns.push({
+                cat: 'tone',
+                title: 'モノトーン配色 (明度グラデーション)',
+                tag: 'トーン技法',
+                swatches: [
+                    { hex: '#FFFFFF', pccs: 'W', label: '白', textColor: '#0f172a' },
+                    { hex: data.hex, pccs: data.pccs, label: data.clean_name, textColor: getContrastTextColor(data.hex) },
+                    { hex: '#1e293b', pccs: 'Bk', label: '黒', textColor: '#ffffff' }
+                ],
+                rule: '無彩色のみで明度差を段階的につけた、シャープで洗練された濃淡配色。'
+            });
+
+            patterns.push({
+                cat: 'tone',
+                title: 'ビコロール配色 (2色コントラスト)',
+                tag: 'トーン技法',
+                swatches: [
+                    { hex: data.hex, pccs: data.pccs, label: data.clean_name, textColor: getContrastTextColor(data.hex) },
+                    getChipInfo('v', 2)
+                ],
+                rule: '無彩色とあざやかな純色（vトーン）を対比させた明快な2色配色。'
+            });
+
+            // 3. 色相分割・連鎖系
+            patterns.push({
+                cat: 'hue',
+                title: 'アクセントカラー配色 (強調技法)',
+                tag: '配色技法',
+                swatches: [
+                    { hex: data.hex, pccs: data.pccs, label: data.clean_name, textColor: getContrastTextColor(data.hex) },
+                    getChipInfo('v', 2),
+                    getChipInfo('v', 18)
+                ],
+                rule: '無彩色の広い面積に、少量の高彩度色をアクセントとして効かせて視線を集める配色。'
+            });
+
+            patterns.push({
+                cat: 'hue',
+                title: 'セパレーションカラー配色 (分離技法)',
+                tag: '配色技法',
+                swatches: [
+                    getChipInfo('v', 2),
+                    { hex: data.hex, pccs: data.pccs, label: data.clean_name, textColor: getContrastTextColor(data.hex) },
+                    getChipInfo('v', 8)
+                ],
+                rule: '対立する強い色同士の境界に無彩色を挟み、ハレーションを抑えて調和させる技法。'
+            });
+
+        } else {
+            // ==========================================
+            // 【有彩色の場合の全配色】
+            // ==========================================
+            const oppH = (h + 12 - 1) % 24 + 1;
+            const curRank = toneLightnessRank[t] || 3;
+            const baseSwatch = { hex: data.hex, pccs: data.pccs.split(' ')[0], label: data.clean_name, textColor: getContrastTextColor(data.hex) };
+
+            // ------------------------------------------
+            // 1. 【公式10大配色イメージ系】の適合判定
+            // ------------------------------------------
+            // 1-1. エレガント (優雅な・気品のある)
+            if (['p', 'lt', 'b', 'ltg', 'sf'].includes(t) && [19, 20, 21, 22, 23].includes(h)) {
+                patterns.push({
+                    cat: 'image',
+                    title: 'エレガント (優雅な・気品のある)',
+                    tag: '公式イメージ',
+                    swatches: [baseSwatch, getChipInfo('p', 20), getChipInfo('ltg', 22)],
+                    rule: 'パープル系を中心に、高明度の明清色や穏やかな中間色でまとめた気品のある優雅な配色。'
+                });
+            }
+
+            // 1-2. ロマンチック (可憐な・愛らしい)
+            if (['p', 'lt', 'sf'].includes(t) && [23, 24, 1, 2, 3].includes(h)) {
+                patterns.push({
+                    cat: 'image',
+                    title: 'ロマンチック (可憐な・愛らしい)',
+                    tag: '公式イメージ',
+                    swatches: [baseSwatch, getChipInfo('p', 24), getChipInfo('lt', 2)],
+                    rule: '高明度・低彩度のペールトーンを基調とした、ふんわりと愛らしく甘い配色。'
+                });
+            }
+
+            // 1-3. クラシック (重厚な・伝統的な)
+            if (['dk', 'dp', 'dkg', 'g', 'd'].includes(t) && [4, 5, 6, 7, 8].includes(h)) {
+                patterns.push({
+                    cat: 'image',
+                    title: 'クラシック (重厚な・伝統的な)',
+                    tag: '公式イメージ',
+                    swatches: [baseSwatch, getChipInfo('dk', 4), getChipInfo('g', 6)],
+                    rule: 'ブラウン系や暗い色調を中心に構成される、重厚で円熟味のある伝統的な配色。'
+                });
+            }
+
+            // 1-4. シック (洗練された・大人っぽい)
+            if (['d', 'g', 'ltg', 'dk', 'dkg'].includes(t)) {
+                patterns.push({
+                    cat: 'image',
+                    title: 'シック (洗練された・大人っぽい)',
+                    tag: '公式イメージ',
+                    swatches: [baseSwatch, getChipInfo('g', 12), getChipInfo('dkg', 22)],
+                    rule: '彩度を抑えた濁色と暗い灰色による、洗練された都会的で大人っぽい配色。'
+                });
+            }
+
+            // 1-5. カジュアル (明るい・活発な)
+            if (['v', 'b', 'lt', 's'].includes(t) && [3, 4, 5, 6, 7, 8, 9, 10, 11].includes(h)) {
+                patterns.push({
+                    cat: 'image',
+                    title: 'カジュアル (明るい・活発な)',
+                    tag: '公式イメージ',
+                    swatches: [baseSwatch, getChipInfo('b', 5), getChipInfo('b', 8)],
+                    rule: '明るく元気な高彩度トーンと暖色・黄緑系による、親しみやすく活発な配色。'
+                });
+            }
+
+            // 1-6. クリア (さわやかな・透明感のある)
+            if (['p', 'lt', 'b'].includes(t) && [12, 13, 14, 15, 16, 17, 18, 19].includes(h)) {
+                patterns.push({
+                    cat: 'image',
+                    title: 'クリア (さわやかな・透明感のある)',
+                    tag: '公式イメージ',
+                    swatches: [baseSwatch, getChipInfo('p', 16), { hex: '#FFFFFF', pccs: 'W', label: '白', textColor: '#0f172a' }],
+                    rule: '明清色の澄んだトーンと水・空を連想させる寒色・白による、清潔感と透明感のある配色。'
+                });
+            }
+
+            // 1-7. ダイナミック (力強い・躍動的な)
+            if (['v', 's', 'b'].includes(t)) {
+                patterns.push({
+                    cat: 'image',
+                    title: 'ダイナミック (力強い・躍動的な)',
+                    tag: '公式イメージ',
+                    swatches: [baseSwatch, getChipInfo('v', 2), getChipInfo('v', 18)],
+                    rule: '純色や高彩度トーンによる鮮烈なコントラスト。力強く躍動感のある配色。'
+                });
+            }
+
+            // 1-8. ウォームナチュラル (温もり・素朴な)
+            if (['sf', 'd', 'ltg', 'g'].includes(t) && [3, 4, 5, 6, 7, 8, 9, 10, 11, 12].includes(h)) {
+                patterns.push({
+                    cat: 'image',
+                    title: 'ウォームナチュラル (温もり・素朴な)',
+                    tag: '公式イメージ',
+                    swatches: [baseSwatch, getChipInfo('ltg', 6), getChipInfo('d', 10)],
+                    rule: '穏やかな濁色とアースカラーによる、素朴で温もりのある自然な配色。'
+                });
+            }
+
+            // 1-9. フレッシュナチュラル (新鮮な・若々しい)
+            if (['lt', 'b', 'p', 'v'].includes(t) && [8, 9, 10, 11, 12, 13].includes(h)) {
+                patterns.push({
+                    cat: 'image',
+                    title: 'フレッシュナチュラル (新鮮な・若々しい)',
+                    tag: '公式イメージ',
+                    swatches: [baseSwatch, getChipInfo('lt', 10), getChipInfo('b', 12)],
+                    rule: '若葉や新緑を想わせる黄緑・緑と明るいトーンによる、みずみずしく新鮮な配色。'
+                });
+            }
+
+            // 1-10. モダン (現代的な・人工的な)
+            if (['v', 'b', 's'].includes(t) || [16, 17, 18, 19, 20].includes(h)) {
+                patterns.push({
+                    cat: 'image',
+                    title: 'モダン (現代的な・人工的な)',
+                    tag: '公式イメージ',
+                    swatches: [baseSwatch, { hex: '#FFFFFF', pccs: 'W', label: '白', textColor: '#0f172a' }, { hex: '#1e293b', pccs: 'Bk', label: '黒', textColor: '#ffffff' }],
+                    rule: '無彩色（白・灰・黒）と高彩度色・寒色のシャープな対比による、都会的で現代的な配色。'
+                });
+            }
+
+            // 万一イメージ系が空の場合はトーンに応じた代表イメージを必ず1つ追加
+            if (!patterns.some(p => p.cat === 'image')) {
+                if (curRank >= 4) {
+                    patterns.push({
+                        cat: 'image',
+                        title: 'エレガント / クリア調',
+                        tag: '公式イメージ適合',
+                        swatches: [baseSwatch, getChipInfo('p', (h + 4) % 24 + 1), { hex: '#FFFFFF', pccs: 'W', label: '白', textColor: '#0f172a' }],
+                        rule: '明るく澄んだ高明度トーンを活かした、優雅で清涼感のある配色。'
+                    });
+                } else if (['sf', 'd', 'g', 'ltg'].includes(t)) {
+                    patterns.push({
+                        cat: 'image',
+                        title: 'シック / ウォームナチュラル調',
+                        tag: '公式イメージ適合',
+                        swatches: [baseSwatch, getChipInfo('d', (h + 3) % 24 + 1), getChipInfo('ltg', h)],
+                        rule: '穏やかな中間色調（濁色）による、落ち着いた上品で素朴な配色。'
+                    });
+                } else {
+                    patterns.push({
+                        cat: 'image',
+                        title: 'ダイナミック / クラシック調',
+                        tag: '公式イメージ適合',
+                        swatches: [baseSwatch, getChipInfo('dk', (h + 4) % 24 + 1), getChipInfo('v', oppH)],
+                        rule: '深みのあるコントラストを効かせた、力強く印象的な配色。'
+                    });
+                }
+            }
+
+            // ------------------------------------------
+            // 2. 【トーン技法系】の適合判定
+            // ------------------------------------------
+            // 2-1. トーナル配色 (濁色限定)
+            if (['ltg', 'sf', 'd', 'g'].includes(t)) {
+                const partnerT = (t === 'd') ? 'sf' : (t === 'sf' ? 'd' : 'g');
+                const partnerH1 = (h + 4 <= 24) ? h + 4 : h + 4 - 24;
+                const partnerH2 = (h - 4 > 0) ? h - 4 : 24 + (h - 4);
+                patterns.push({
+                    cat: 'tone',
+                    title: 'トーナル配色 (中間色調のみ)',
+                    tag: 'トーン技法',
+                    swatches: [baseSwatch, getChipInfo(partnerT, partnerH1), getChipInfo('ltg', partnerH2)],
+                    rule: `中間色調（濁色: ltg, sf, d, g）のみで構成される、穏やかでスモーキーな落ち着いた調和。純色や明清色は含めません。`
+                });
+            }
+
+            // 2-2. トーン・オン・トーン配色 (同色相濃淡)
+            const totPartnerTone = (curRank >= 4) ? 'dk' : (curRank <= 2 ? 'lt' : 'p');
+            patterns.push({
+                cat: 'tone',
+                title: 'トーン・オン・トーン配色 (濃淡配色)',
+                tag: 'トーン技法',
+                swatches: [baseSwatch, getChipInfo(totPartnerTone, h)],
+                rule: `同じ色相(${h})のまま明度差を大きく開けた濃淡配色。統一感を保ちながら、メリハリのある格調高い調和を表現。`
+            });
+
+            // 2-3. トーン・イン・トーン配色 (同一・類似トーン)
+            const titPartnerH = (h + 3 <= 24) ? h + 3 : h + 3 - 24;
+            patterns.push({
+                cat: 'tone',
+                title: 'トーン・イン・トーン配色 (トーン統一)',
+                tag: 'トーン技法',
+                swatches: [baseSwatch, getChipInfo(t, titPartnerH)],
+                rule: `同じトーン(${t})で揃えて調子を合わせ、色相の違い(${h}と${titPartnerH})による変化を楽しむ配色。`
+            });
+
+            // 2-4. ドミナント・トーン配色
+            const similarTonesMap = {
+                'v': ['b', 's'], 'b': ['v', 'lt'], 'lt': ['b', 'p'], 'p': ['lt', 'ltg'],
+                'dp': ['dk', 'd'], 'dk': ['dp', 'dkg'], 'dkg': ['dk', 'g'],
+                'sf': ['d', 'ltg'], 'd': ['sf', 'g'], 'ltg': ['p', 'sf'], 'g': ['d', 'dkg'], 's': ['v', 'd']
+            };
+            const simTone = (similarTonesMap[t] && similarTonesMap[t][0]) ? similarTonesMap[t][0] : t;
+            patterns.push({
+                cat: 'tone',
+                title: 'ドミナント・トーン配色',
+                tag: 'トーン技法',
+                swatches: [baseSwatch, getChipInfo(simTone, (h + 2) % 24 + 1)],
+                rule: `基準色のトーン(${t})または類似トーン(${simTone})を全体の主調として、色彩の雰囲気を統一する配色。`
+            });
+
+            // 2-5. カマイユ / フォ・カマイユ配色
+            const camH = (h + 1 <= 24) ? h + 1 : 1;
+            patterns.push({
+                cat: 'tone',
+                title: 'カマイユ / フォ・カマイユ配色 (微差配色)',
+                tag: 'トーン技法',
+                swatches: [baseSwatch, getChipInfo(t, camH)],
+                rule: `色相差0〜1（カマイユ）または差2〜3（フォ・カマイユ）で同一・類似トーンによる、溶け合うような繊細で曖昧なニュアンスの配色。`
+            });
+
+            // 2-6. ビコロール配色 (高彩度または対比)
+            if (['v', 'b', 's', 'dp'].includes(t)) {
+                patterns.push({
+                    cat: 'tone',
+                    title: 'ビコロール配色 (2色コントラスト)',
+                    tag: 'トーン技法',
+                    swatches: [baseSwatch, { hex: '#FFFFFF', pccs: 'W', label: '白', textColor: '#0f172a' }],
+                    rule: `高彩度色と白による、コントラストが明快で視認性の高い2色配色。標識やサインにも多用されます。`
+                });
+            }
+
+            // 2-7. トリコロール配色 (3色対比)
+            if (['v', 'b', 's'].includes(t)) {
+                patterns.push({
+                    cat: 'tone',
+                    title: 'トリコロール配色 (明快な3色対比)',
+                    tag: 'トーン技法',
+                    swatches: [baseSwatch, { hex: '#FFFFFF', pccs: 'W', label: '白', textColor: '#0f172a' }, getChipInfo('v', oppH)],
+                    rule: `高彩度色と白、および対照色による明快で躍動感ある3色配色（フランス国旗など）。`
+                });
+            }
+
+            // ------------------------------------------
+            // 3. 【色相分割・連鎖系】
+            // ------------------------------------------
+            // 3-1. ダイアード (補色色相配色: 差12)
+            patterns.push({
+                cat: 'hue',
+                title: 'ダイアード (補色色相配色)',
+                tag: '色相差12',
+                swatches: [baseSwatch, getChipInfo(t, oppH)],
+                rule: `基準色(${h})の向かい合う補色(${oppH})との組み合わせ。色相環で最大の対比となり、互いの色を最も引き立て合うダイナミックな調和。`
+            });
+
+            // 3-2. トライアド (3等分割配色: 差8)
+            const triH1 = (h + 8 - 1) % 24 + 1;
+            const triH2 = (h + 16 - 1) % 24 + 1;
+            patterns.push({
+                cat: 'hue',
+                title: 'トライアド (正三角形配色)',
+                tag: '色相差8',
+                swatches: [baseSwatch, getChipInfo(t, triH1), getChipInfo(t, triH2)],
+                rule: `色相環を3等分（色相差8）する正三角形の3色配色。動きと安定感のバランスが極めて優れた定番の幾何学分割配色。`
+            });
+
+            // 3-3. テトラード (4等分割配色: 差6)
+            const tetH1 = (h + 6 - 1) % 24 + 1;
+            const tetH2 = (h + 12 - 1) % 24 + 1;
+            const tetH3 = (h + 18 - 1) % 24 + 1;
+            patterns.push({
+                cat: 'hue',
+                title: 'テトラード (正方形4色配色)',
+                tag: '色相差6',
+                swatches: [baseSwatch, getChipInfo(t, tetH1), getChipInfo(t, tetH2), getChipInfo(t, tetH3)],
+                rule: `色相環を4等分（色相差6）する2組の補色対による4色配色。多色でありながら整然とした秩序ある調和。`
+            });
+
+            // 3-4. スプリット・コンプリメンタリー (分裂補色配色)
+            const splitH1 = (oppH - 2 > 0) ? oppH - 2 : 24 + (oppH - 2);
+            const splitH2 = (oppH + 2 <= 24) ? oppH + 2 : (oppH + 2) - 24;
+            patterns.push({
+                cat: 'hue',
+                title: 'スプリット・コンプリメンタリー (分裂補色)',
+                tag: '補色両隣',
+                swatches: [baseSwatch, getChipInfo(t, splitH1), getChipInfo(t, splitH2)],
+                rule: `基準色の補色の両隣2色(${splitH1}, ${splitH2})を用いた3色配色。補色対立の強さを適度に和らげ、洗練された動きを生み出します。`
+            });
+
+            // 3-5. ナチュラル・ハーモニー (自然連鎖配色)
+            const distYellow = getDistanceToYellow(h);
+            let natPartnerH = (h <= 8 || h >= 20) ? (h + 3) % 24 + 1 : (h - 3 > 0 ? h - 3 : 24 + (h - 3));
+            let natT2 = (distYellow <= 6) ? (['dk', 'dp', 'dkg', 'g'].includes(t) ? 'dk' : 'dp') : 'b';
+            patterns.push({
+                cat: 'hue',
+                title: 'ナチュラル・ハーモニー (自然連鎖)',
+                tag: '光と影の法則',
+                swatches: [baseSwatch, getChipInfo(natT2, natPartnerH)],
+                rule: `自然界の光と影の法則（黄に近い色相を明るく、青紫に近い色相を暗く）に従った配色。見慣れた安心感と心地よい親和性。`
+            });
+
+            // 3-6. コンプレックス・ハーモニー (不調和の調和)
+            let compT2 = (distYellow <= 6) ? 'b' : 'dk';
+            patterns.push({
+                cat: 'hue',
+                title: 'コンプレックス・ハーモニー (不調和の調和)',
+                tag: '逆光の法則',
+                swatches: [baseSwatch, getChipInfo(compT2, natPartnerH)],
+                rule: `自然界の法則とあえて逆転（黄に近い色を暗く、青紫に近い色を明るく）させ、個性的でモダン・人工的なニュアンスを生む配色。`
+            });
+        }
+
+        const imagePatterns = patterns.filter(p => p.cat === 'image');
+        const tonePatterns = patterns.filter(p => p.cat === 'tone');
+        const huePatterns = patterns.filter(p => p.cat === 'hue');
+
+        const visiblePatterns = (colorCardHarmonyTab === 'all')
+            ? patterns
+            : patterns.filter(p => p.cat === colorCardHarmonyTab);
+
+        let html = `
+            <div class="color-harmony-section">
+                <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px; margin-bottom:4px;">
+                    <div>
+                        <h4 style="margin:0; font-size:0.95rem; font-weight:800; color:#1e293b;">この色で作る代表的な配色パターン (全${patterns.length}種網羅)</h4>
+                        <div style="font-size:0.75rem; color:#64748b; margin-top:2px;">色彩検定公式のイメージ空間・トーン技法・色相分割に準拠した組み合わせ一覧です。</div>
+                    </div>
+                    <button type="button" onclick="startHarmonyWithColor(${currentIndex})" class="flashcard-btn primary" style="padding:5px 12px; font-size:0.74rem;" title="この色を基準色にして配色問題を解く">
+                        この色で配色演習を解く ▶
+                    </button>
+                </div>
+
+                <!-- カテゴリー切り替えタブ -->
+                <div class="harmony-category-tabs">
+                    <button type="button" class="harmony-category-tab ${colorCardHarmonyTab === 'all' ? 'active' : ''}" onclick="setColorCardHarmonyTab('all')">
+                        すべて表示 (${patterns.length})
+                    </button>
+                    <button type="button" class="harmony-category-tab ${colorCardHarmonyTab === 'image' ? 'active' : ''}" onclick="setColorCardHarmonyTab('image')">
+                        配色イメージ系 (${imagePatterns.length})
+                    </button>
+                    <button type="button" class="harmony-category-tab ${colorCardHarmonyTab === 'tone' ? 'active' : ''}" onclick="setColorCardHarmonyTab('tone')">
+                        トーン技法系 (${tonePatterns.length})
+                    </button>
+                    <button type="button" class="harmony-category-tab ${colorCardHarmonyTab === 'hue' ? 'active' : ''}" onclick="setColorCardHarmonyTab('hue')">
+                        色相分割・連鎖系 (${huePatterns.length})
+                    </button>
+                </div>
+
+                <div class="color-harmony-grid">
+                    ${visiblePatterns.map(p => `
+                        <div class="harmony-pattern-box">
+                            <div>
+                                <div class="harmony-pattern-header">
+                                    <span class="harmony-pattern-title">${p.title}</span>
+                                    <span class="harmony-pattern-tag">${p.tag}</span>
+                                </div>
+                                <div class="harmony-swatches-row">
+                                    ${p.swatches.map(sw => `
+                                        <div class="harmony-swatch-chip">
+                                            <div class="harmony-swatch-color" style="background-color:${sw.hex}; color:${sw.textColor};">
+                                                ${sw.pccs}
+                                            </div>
+                                            <div class="harmony-swatch-label" title="${sw.label}">
+                                                ${sw.label}
+                                            </div>
+                                        </div>
+                                    `).join('')}
+                                </div>
+                            </div>
+                            <div class="harmony-pattern-rule">
+                                ${p.rule}
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+            </div>
+        `;
+
+        return html;
+    }
+
+    // --- 暗記カード画面レンダリング ---
+    function renderFlashcards() {
+        // === 1. メニュー選択画面 ===
+        if (flashcardMode === 'menu') {
+            return `
+                <div class="flashcard-container">
+                    <div style="background:#fff; border:1px solid #e2e8f0; border-radius:14px; padding:18px 20px; margin-bottom:16px; box-shadow:0 2px 4px rgba(0,0,0,0.03);">
+                        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
+                            <div>
+                                <h2 style="font-size:1.15rem; font-weight:800; color:#1e293b; margin:0 0 4px 0;">暗記カード学習</h2>
+                                <div style="font-size:0.78rem; color:#64748b;">反復学習で色名・PCCSおよび色彩調和の条件を確実にマスターします。</div>
+                            </div>
+                            <button onclick="setMode('list')" class="flashcard-btn" style="padding:6px 12px; font-size:0.78rem;">← 図鑑に戻る</button>
+                        </div>
+                    </div>
+
+                    <div class="flashcard-menu-grid">
+                        <!-- ① 色名・PCCS・由来カード -->
+                        <div class="flashcard-menu-card" onclick="startFlashcards('color', 'all', false)">
+                            <div>
+                                <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:8px;">
+                                    <span class="flashcard-step-badge">全127色対応</span>
+                                    <span style="font-size:0.75rem; color:#64748b; font-weight:700;">タップ式 3段階開示</span>
+                                </div>
+                                <h3 style="font-size:1.05rem; font-weight:800; color:#0f172a; margin:0 0 8px 0;">① 色名・PCCS・由来の暗記カード</h3>
+                                <p style="font-size:0.8rem; color:#475569; line-height:1.5; margin:0 0 14px 0;">
+                                    <strong>由来</strong> をヒントに色名を想起し、タップで <strong>色名</strong>、さらにタップで <strong>実際の色とPCCS記号</strong> を開示して暗記します。
+                                </p>
+                            </div>
+                            <div>
+                                <div style="font-size:0.74rem; color:#64748b; margin-bottom:8px; font-weight:700;">開始オプション:</div>
+                                <div style="display:flex; gap:6px; flex-wrap:wrap;">
+                                    <button onclick="event.stopPropagation(); startFlashcards('color', 'all', true);" class="flashcard-btn primary" style="flex:1; padding:7px 10px; font-size:0.76rem;">全色シャッフル</button>
+                                    <button onclick="event.stopPropagation(); startFlashcards('color', '3級', true);" class="flashcard-btn" style="padding:7px 10px; font-size:0.76rem;">3級のみ</button>
+                                    <button onclick="event.stopPropagation(); startFlashcards('color', '2級', true);" class="flashcard-btn" style="padding:7px 10px; font-size:0.76rem;">2級のみ</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- ② 配色の暗記カード -->
+                        <div class="flashcard-menu-card" onclick="startFlashcards('harmony', 'all', false)">
+                            <div>
+                                <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:8px;">
+                                    <span class="flashcard-step-badge" style="background:#ede9fe; color:#6d28d9; border-color:#ddd6fe;">全26技法網羅</span>
+                                    <span style="font-size:0.75rem; color:#64748b; font-weight:700;">図解スウォッチ付き</span>
+                                </div>
+                                <h3 style="font-size:1.05rem; font-weight:800; color:#0f172a; margin:0 0 8px 0;">② 配色の暗記カード</h3>
+                                <p style="font-size:0.8rem; color:#475569; line-height:1.5; margin:0 0 14px 0;">
+                                    <strong>配色技法名</strong> から成立条件を想起し、タップで <strong>どういう色を選べばいいかの条件・定義</strong> と <strong>教材準拠の実例図解</strong> を確認します。
+                                </p>
+                            </div>
+                            <div>
+                                <div style="font-size:0.74rem; color:#64748b; margin-bottom:8px; font-weight:700;">開始オプション:</div>
+                                <div style="display:flex; gap:6px; flex-wrap:wrap;">
+                                    <button onclick="event.stopPropagation(); startFlashcards('harmony', 'all', true);" class="flashcard-btn primary" style="flex:1; padding:7px 10px; font-size:0.76rem;">全技法シャッフル</button>
+                                    <button onclick="event.stopPropagation(); startFlashcards('harmony', 'all', false);" class="flashcard-btn" style="flex:1; padding:7px 10px; font-size:0.76rem;">体系順で開始</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // === 2. 暗記カード学習セッション画面 ===
+        const deck = flashcardDeck;
+        const total = deck.length;
+        if (total === 0) {
+            return `
+                <div class="flashcard-container" style="text-align:center; padding:40px 20px;">
+                    <div style="font-size:1rem; font-weight:700; color:#475569; margin-bottom:12px;">カードが見つかりませんでした。</div>
+                    <button onclick="openFlashcards()" class="flashcard-btn primary">暗記カードメニューへ戻る</button>
+                </div>
+            `;
+        }
+
+        const currentItem = deck[flashcardIndex] || deck[0];
+
+        // --- ① 色名・PCCS・由来のカード ---
+        if (flashcardType === 'color') {
+            const step = flashcardStep; // 0: 由来のみ, 1: +色名, 2: +実際の色とPCCS
+            const gradeBadge = currentItem.grade === '3級' ? 'badge-grade-3' : 'badge-grade-2';
+
+            return `
+                <div class="flashcard-container">
+                    <!-- 上部コントロールバー -->
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; flex-wrap:wrap; gap:8px;">
+                        <button onclick="openFlashcards()" class="flashcard-btn" style="padding:6px 12px; font-size:0.78rem;">← 戻る</button>
+                        <div style="display:flex; align-items:center; gap:8px;">
+                            <span class="badge ${gradeBadge}">${currentItem.grade}</span>
+                            <span style="font-size:0.85rem; font-weight:800; color:#1e293b;">${flashcardIndex + 1} / ${total}</span>
+                        </div>
+                        <button onclick="shuffleCurrentFlashcards()" class="flashcard-btn" style="padding:6px 12px; font-size:0.78rem;">シャッフル</button>
+                    </div>
+
+                    <!-- カード本体 (タップでステップ進行) -->
+                    <div class="flashcard-card-box" onclick="handleFlashcardTap()">
+                        <div>
+                            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
+                                <span class="flashcard-step-badge">
+                                    ${step === 0 ? 'Step 1/3: 由来' : (step === 1 ? 'Step 2/3: 色名' : 'Step 3/3: 実際の色・PCCS')}
+                                </span>
+                                <span style="font-size:0.72rem; color:#94a3b8; font-weight:700;">タップでめくる</span>
+                            </div>
+
+                            <!-- 1. 由来 (常に表示) -->
+                            <div style="margin-bottom:14px;">
+                                <div style="font-size:0.74rem; font-weight:800; color:#64748b; margin-bottom:4px; letter-spacing:0.05em;">【由来・背景】</div>
+                                <div style="font-size:0.95rem; line-height:1.65; color:#1e293b; font-weight:500; background:#f8fafc; border:1px solid #e2e8f0; border-radius:10px; padding:14px;">
+                                    ${currentItem.origin || '由来情報がありません'}
+                                </div>
+                            </div>
+
+                            <!-- 2. 色名 (Step 1以上でオープン) -->
+                            ${step >= 1 ? `
+                                <div class="flashcard-reveal-box" style="margin-bottom:14px; text-align:center; padding:10px 0; border-top:1px dashed #e2e8f0;">
+                                    <div style="font-size:0.74rem; font-weight:800; color:#059669; margin-bottom:2px;">【色名】</div>
+                                    <div style="font-size:1.6rem; font-weight:900; color:#0f172a; letter-spacing:0.02em;">
+                                        ${currentItem.clean_name}
+                                    </div>
+                                    ${currentItem.ruby ? `<div style="font-size:0.85rem; color:#64748b; font-weight:700; margin-top:2px;">（${currentItem.ruby}）</div>` : ''}
+                                </div>
+                            ` : `
+                                <div style="text-align:center; padding:24px 0; color:#94a3b8; font-size:0.85rem; font-weight:700; border-top:1px dashed #e2e8f0;">
+                                    （タップすると色名が表示されます）
+                                </div>
+                            `}
+
+                            <!-- 3. 実際の色とPCCS (Step 2でオープン) -->
+                            ${step >= 2 ? `
+                                <div class="flashcard-reveal-box" style="margin-top:6px; border-top:1px dashed #e2e8f0; padding-top:12px;">
+                                    <div style="font-size:0.74rem; font-weight:800; color:#7c3aed; margin-bottom:4px;">【実際の色とPCCS】</div>
+                                    <div class="flashcard-color-tile" style="background-color:${currentItem.hex}; color:${getContrastTextColor(currentItem.hex)};">
+                                        PCCS: ${currentItem.pccs}
+                                    </div>
+                                    <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; font-size:0.78rem; margin-top:8px;">
+                                        <div style="background:#f8fafc; padding:8px; border-radius:6px; border:1px solid #e2e8f0;">
+                                            <span style="color:#64748b; font-weight:700;">系統色名:</span> <strong>${currentItem.category}</strong>
+                                        </div>
+                                        <div style="background:#f8fafc; padding:8px; border-radius:6px; border:1px solid #e2e8f0;">
+                                            <span style="color:#64748b; font-weight:700;">マンセル値:</span> <strong style="font-family:monospace;">${currentItem.munsell}</strong>
+                                        </div>
+                                    </div>
+                                </div>
+                            ` : (step >= 1 ? `
+                                <div style="text-align:center; padding:16px 0; color:#94a3b8; font-size:0.85rem; font-weight:700;">
+                                    （タップすると実際の色とPCCSが表示されます）
+                                </div>
+                            ` : '')}
+                        </div>
+
+                        <!-- 下部タップガイド -->
+                        <div class="flashcard-tap-guide">
+                            ${step === 0 ? 'カードをタップして色名を表示 ▼' : (step === 1 ? 'カードをタップして実際の色とPCCSを表示 ▼' : 'カードをタップして最初に戻す / 次のカードへ ＞')}
+                        </div>
+                    </div>
+
+                    <!-- 前後ナビゲーション -->
+                    <div class="flashcard-controls">
+                        <button onclick="prevFlashcard()" class="flashcard-btn" ${flashcardIndex === 0 ? 'disabled style="opacity:0.4; cursor:default;"' : ''}>＜ 前のカード</button>
+                        <button onclick="handleFlashcardTap()" class="flashcard-btn primary">
+                            ${step === 0 ? '色名を見る' : (step === 1 ? '色・PCCSを見る' : 'リセット')}
+                        </button>
+                        <button onclick="nextFlashcard()" class="flashcard-btn" ${flashcardIndex === total - 1 ? 'disabled style="opacity:0.4; cursor:default;"' : ''}>次のカード ＞</button>
+                    </div>
+                </div>
+            `;
+        }
+
+        // --- ② 配色の暗記カード ---
+        if (flashcardType === 'harmony') {
+            const step = flashcardStep; // 0: 技法名のみ, 1: 条件・解説・教材図解
+            const tech = currentItem;
+
+            return `
+                <div class="flashcard-container">
+                    <!-- 上部コントロールバー -->
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; flex-wrap:wrap; gap:8px;">
+                        <button onclick="openFlashcards()" class="flashcard-btn" style="padding:6px 12px; font-size:0.78rem;">← 戻る</button>
+                        <div style="display:flex; align-items:center; gap:8px;">
+                            <span class="badge" style="background:#6366f1; color:#fff;">${tech.group || '色彩調和'}</span>
+                            <span style="font-size:0.85rem; font-weight:800; color:#1e293b;">${flashcardIndex + 1} / ${total}</span>
+                        </div>
+                        <button onclick="shuffleCurrentFlashcards()" class="flashcard-btn" style="padding:6px 12px; font-size:0.78rem;">シャッフル</button>
+                    </div>
+
+                    <!-- カード本体 (タップでステップ進行) -->
+                    <div class="flashcard-card-box" onclick="handleFlashcardTap()">
+                        <div>
+                            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
+                                <span class="flashcard-step-badge" style="background:#ede9fe; color:#6d28d9; border-color:#ddd6fe;">
+                                    ${step === 0 ? 'Step 1/2: 配色技法名' : 'Step 2/2: 条件・図解（教材準拠）'}
+                                </span>
+                                <span style="font-size:0.72rem; color:#94a3b8; font-weight:700;">タップでめくる</span>
+                            </div>
+
+                            <!-- 1. 技法名 (常に表示) -->
+                            <div style="text-align:center; padding:14px 10px; margin-bottom:12px; background:#f8fafc; border:1px solid #e2e8f0; border-radius:12px;">
+                                <div style="font-size:0.74rem; font-weight:800; color:#6366f1; margin-bottom:4px;">【配色技法】</div>
+                                <div style="font-size:1.5rem; font-weight:900; color:#0f172a; margin-bottom:2px;">
+                                    ${tech.name}
+                                </div>
+                                <div style="font-size:0.8rem; color:#64748b; font-weight:700;">
+                                    ${tech.ruby ? tech.ruby + ' / ' : ''}${tech.en || ''}
+                                </div>
+                            </div>
+
+                            <!-- 2. 条件・定義・ポイント・図解スウォッチ (Step 1でオープン) -->
+                            ${step >= 1 ? `
+                                <div class="flashcard-reveal-box" style="margin-top:6px;">
+                                    <!-- どういう色を選べばいいかの記載 -->
+                                    <div style="background:#eff6ff; border:1px solid #bfdbfe; border-radius:10px; padding:12px 14px; margin-bottom:12px;">
+                                        <div style="font-size:0.75rem; font-weight:800; color:#1d4ed8; margin-bottom:4px;">【どういう色を選べばよいか（成立条件）】</div>
+                                        <div style="font-size:0.88rem; font-weight:800; color:#0f172a; line-height:1.5;">
+                                            ${tech.condition || ''}
+                                        </div>
+                                    </div>
+
+                                    <div style="margin-bottom:12px; font-size:0.82rem; color:#334155; line-height:1.6;">
+                                        <strong>【定義】</strong> ${tech.definition || ''}
+                                    </div>
+
+                                    <!-- 教材準拠の図解 (配色実例カラースウォッチ) -->
+                                    <div style="margin-bottom:12px;">
+                                        <div style="font-size:0.75rem; font-weight:800; color:#475569; margin-bottom:6px;">【教材図解: 配色実例スウォッチ】</div>
+                                        <div style="display:flex; gap:8px; flex-wrap:wrap;">
+                                            ${tech.swatches && tech.swatches.length > 0 ? tech.swatches.map(sw => `
+                                                <div style="flex:1; min-width:80px; background:#fff; border:1px solid #e2e8f0; border-radius:8px; padding:6px; text-align:center; box-shadow:0 1px 3px rgba(0,0,0,0.05);">
+                                                    <div style="height:48px; border-radius:6px; background:${sw.hex}; margin-bottom:6px; border:1px solid rgba(0,0,0,0.1); display:flex; align-items:center; justify-content:center; color:${getContrastTextColor(sw.hex)}; font-weight:800; font-size:0.85rem;">
+                                                        ${sw.pccs}
+                                                    </div>
+                                                    <div style="font-size:0.72rem; font-weight:700; color:#1e293b; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">
+                                                        ${sw.name}
+                                                    </div>
+                                                </div>
+                                            `).join('') : '<div style="font-size:0.75rem; color:#94a3b8;">図解データなし</div>'}
+                                        </div>
+                                    </div>
+
+                                    ${tech.examPoints ? `
+                                        <div style="background:#fffbeb; border:1px solid #fde68a; border-radius:8px; padding:8px 12px; font-size:0.76rem; color:#92400e; line-height:1.5;">
+                                            <strong>[試験ポイント]</strong> ${tech.examPoints}
+                                        </div>
+                                    ` : ''}
+                                </div>
+                            ` : `
+                                <div style="text-align:center; padding:36px 0; color:#94a3b8; font-size:0.85rem; font-weight:700;">
+                                    （タップすると成立条件・解説・教材図解が表示されます）
+                                </div>
+                            `}
+                        </div>
+
+                        <!-- 下部タップガイド -->
+                        <div class="flashcard-tap-guide">
+                            ${step === 0 ? 'カードをタップして条件・図解を表示 ▼' : 'カードをタップして隠す / 次の技法へ ＞'}
+                        </div>
+                    </div>
+
+                    <!-- 前後ナビゲーション -->
+                    <div class="flashcard-controls">
+                        <button onclick="prevFlashcard()" class="flashcard-btn" ${flashcardIndex === 0 ? 'disabled style="opacity:0.4; cursor:default;"' : ''}>＜ 前の技法</button>
+                        <button onclick="handleFlashcardTap()" class="flashcard-btn primary">
+                            ${step === 0 ? '条件・図解を見る' : '隠す'}
+                        </button>
+                        <button onclick="nextFlashcard()" class="flashcard-btn" ${flashcardIndex === total - 1 ? 'disabled style="opacity:0.4; cursor:default;"' : ''}>次の技法 ＞</button>
+                    </div>
+                </div>
+            `;
+        }
+
+        return '';
+    }
+
     // --- メインレンダリング ---
     function render() {
         const area = document.getElementById('view-area');
         const controls = document.getElementById('controls');
         const stats = document.getElementById('stats-area');
+
+        // --- 暗記カードモード ---
+        if (currentMode === 'flashcards') {
+            controls.style.display = 'none';
+            stats.innerHTML = flashcardMode === 'menu'
+                ? '暗記カード: モード選択'
+                : (flashcardType === 'color' ? `色名・PCCS暗記カード (${flashcardIndex + 1} / ${flashcardDeck.length})` : `配色技法暗記カード (${flashcardIndex + 1} / ${flashcardDeck.length})`);
+            area.innerHTML = renderFlashcards();
+            return;
+        }
 
         // --- 配色問題モード (実践総合問題の配色パート / 全26技法動的生成) ---
         if (currentMode === 'harmony' || currentMode === 'practical_harmony_step2') {
@@ -11103,6 +12267,9 @@ let currentGradeFilter = 'all';
                     </div>
 
                     ${similarHtml}
+
+                    <!-- この色で作る代表的な色彩調和 (配色パターン) -->
+                    ${generateColorHarmonyPatternsHtml(data)}
 
                     <!-- 全色パレット一覧 (カード詳細の下に常設) -->
                     <div style="font-size:0.75rem; font-weight:700; color:var(--text-sub); margin:14px 0 4px 0; text-align:left;">
