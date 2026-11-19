@@ -9518,14 +9518,29 @@
             if (flashcardStep < 2) {
                 flashcardStep++;
             } else {
-                flashcardStep = 0;
+                // step 2 (PCCS表示済み) でタップした時は次のカードへ遷移
+                if (flashcardIndex < flashcardDeck.length - 1) {
+                    flashcardIndex++;
+                    flashcardStep = 0;
+                } else {
+                    // 最後のカードの次は1枚目に戻る
+                    flashcardIndex = 0;
+                    flashcardStep = 0;
+                }
             }
         } else if (flashcardType === 'harmony') {
             // step 0: 技法名 -> step 1: 条件・解説・図解
             if (flashcardStep < 1) {
                 flashcardStep = 1;
             } else {
-                flashcardStep = 0;
+                // step 1 (条件・図解表示済み) でタップした時は次の技法へ遷移
+                if (flashcardIndex < flashcardDeck.length - 1) {
+                    flashcardIndex++;
+                    flashcardStep = 0;
+                } else {
+                    flashcardIndex = 0;
+                    flashcardStep = 0;
+                }
             }
         }
         render();
@@ -13011,7 +13026,7 @@ ${exam.colorQuestion.explanation}
 
                         <!-- 下部タップガイド -->
                         <div class="flashcard-tap-guide">
-                            ${step === 0 ? 'カードをタップして色名を表示 ▼' : (step === 1 ? 'カードをタップして実際の色とPCCSを表示 ▼' : 'カードをタップして最初に戻す / 次のカードへ ＞')}
+                            ${step === 0 ? 'カードをタップして色名を表示 ▼' : (step === 1 ? 'カードをタップして実際の色とPCCSを表示 ▼' : (flashcardIndex === total - 1 ? 'カードをタップして最初に戻る ↻' : 'カードをタップして次のカードへ ＞'))}
                         </div>
                     </div>
 
@@ -13019,7 +13034,7 @@ ${exam.colorQuestion.explanation}
                     <div class="flashcard-controls">
                         <button onclick="prevFlashcard()" class="flashcard-btn" ${flashcardIndex === 0 ? 'disabled style="opacity:0.4; cursor:default;"' : ''}>＜ 前のカード</button>
                         <button onclick="handleFlashcardTap()" class="flashcard-btn primary">
-                            ${step === 0 ? '色名を見る' : (step === 1 ? '色・PCCSを見る' : 'リセット')}
+                            ${step === 0 ? '色名を見る' : (step === 1 ? '色・PCCSを見る' : (flashcardIndex === total - 1 ? '最初に戻る ↻' : '次のカード ＞'))}
                         </button>
                         <button onclick="nextFlashcard()" class="flashcard-btn" ${flashcardIndex === total - 1 ? 'disabled style="opacity:0.4; cursor:default;"' : ''}>次のカード ＞</button>
                     </div>
@@ -13112,7 +13127,7 @@ ${exam.colorQuestion.explanation}
 
                         <!-- 下部タップガイド -->
                         <div class="flashcard-tap-guide">
-                            ${step === 0 ? 'カードをタップして条件・図解を表示 ▼' : 'カードをタップして隠す / 次の技法へ ＞'}
+                            ${step === 0 ? 'カードをタップして条件・図解を表示 ▼' : (flashcardIndex === total - 1 ? 'カードをタップして最初に戻る ↻' : 'カードをタップして次の技法へ ＞')}
                         </div>
                     </div>
 
@@ -13120,7 +13135,7 @@ ${exam.colorQuestion.explanation}
                     <div class="flashcard-controls">
                         <button onclick="prevFlashcard()" class="flashcard-btn" ${flashcardIndex === 0 ? 'disabled style="opacity:0.4; cursor:default;"' : ''}>＜ 前の技法</button>
                         <button onclick="handleFlashcardTap()" class="flashcard-btn primary">
-                            ${step === 0 ? '条件・図解を見る' : '隠す'}
+                            ${step === 0 ? '条件・図解を見る' : (flashcardIndex === total - 1 ? '最初に戻る ↻' : '次の技法 ＞')}
                         </button>
                         <button onclick="nextFlashcard()" class="flashcard-btn" ${flashcardIndex === total - 1 ? 'disabled style="opacity:0.4; cursor:default;"' : ''}>次の技法 ＞</button>
                     </div>
