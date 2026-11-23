@@ -1957,6 +1957,9 @@
         <button onclick="openFlashcards()" class="top-action-btn" style="background:#059669; color:#fff;" title="暗記カード学習を開始">
             暗記カード
         </button>
+        <button onclick="setMode('audio')" class="top-action-btn" style="background:#ea580c; color:#fff;" title="音声リスニング学習を開始">
+            🎧 音声学習
+        </button>
         <button onclick="startQuickPractical()" class="top-action-btn practical" title="実戦記述問題を開始">
             実戦記述
         </button>
@@ -1977,6 +1980,7 @@
         <div id="tab-exam-q1" class="tab" onclick="setMode('exam_q1')">大問1(等色相面)</div>
         <div id="tab-exam-q5" class="tab" onclick="setMode('exam_q5')">大問5(景観色彩)</div>
         <div id="tab-flashcards" class="tab" onclick="openFlashcards()">暗記カード</div>
+        <div id="tab-audio" class="tab" onclick="setMode('audio')">🎧 音声学習</div>
         <div id="tab-practical" class="tab" onclick="setMode('practical')">実戦記述</div>
         <div id="tab-practical-harmony" class="tab" onclick="setMode('practical_harmony')">実戦記述＋配色</div>
         <div id="tab-harmony" class="tab" onclick="setMode('harmony')">配色問題</div>
@@ -9220,6 +9224,26 @@
         }
     })();
 
+    // 音声リスニング学習用変数
+    let audioDeck = []; // 現在のリスニング対象色リスト (シャッフル済み)
+    let audioIndex = 0; // 現在のインデックス
+    let audioIsPlaying = false; // 再生中フラグ
+    let audioPhase = 'idle'; // 'idle', 'origin' (出題中), 'pause' (シンキングタイム), 'answer' (正解発表)
+    let audioTimer = null; // タイマー参照
+    let audioCurrentUtterance = null; // 現在のSpeechSynthesisUtterance
+    let audioMasteredColors = JSON.parse(localStorage.getItem('color_quiz_audio_mastered') || '[]'); // 覚えた色（除外リスト）
+    let audioGradeFilter = 'all'; // 'all', '3級', '2級'
+    let audioOriginFormat = (function() {
+        try {
+            return localStorage.getItem('color_quiz_audio_origin_format') || 'masked';
+        } catch(e) {
+            return 'masked';
+        }
+    })();
+    let audioPauseSeconds = 3; // シンキングタイム秒数 (2, 3, 5, 0)
+    let audioAutoAdvance = true; // 正解発表後に自動で次の色に進むか
+    let audioRate = 1.0; // 読み上げ速度 (0.8, 1.0, 1.2)
+
     // 図鑑詳細 配色パターンカテゴリタブ用変数
     let colorCardHarmonyTab = 'all'; // 'all': すべて, 'image': イメージ系, 'tone': トーン技法系, 'hue': 色相分割系
 
@@ -9598,8 +9622,11 @@
     }
 
     function setMode(mode) {
+        if (currentMode === 'audio' && mode !== 'audio') {
+            stopAudioPlay();
+        }
         currentMode = mode;
-        const tabs = ['list', 'exam_q1', 'exam_q5', 'flashcards', 'practical', 'practical_harmony', 'harmony', 'mistakes', 'materials'];
+        const tabs = ['list', 'exam_q1', 'exam_q5', 'flashcards', 'audio', 'practical', 'practical_harmony', 'harmony', 'mistakes', 'materials'];
         tabs.forEach(t => {
             const tabId = (t === 'practical_harmony') ? 'tab-practical-harmony' : (t === 'exam_q1' ? 'tab-exam-q1' : (t === 'exam_q5' ? 'tab-exam-q5' : 'tab-' + t));
             const el = document.getElementById(tabId);
@@ -9614,6 +9641,8 @@
             if (!q1Exam) resetQ1Exam();
         } else if (mode === 'exam_q5') {
             resetQ5Exam(q5CurrentIndex);
+        } else if (mode === 'audio') {
+            if (audioDeck.length === 0) initAudioDeck();
         } else if (mode === 'practical' || mode === 'practical_harmony') {
             resetPracticalQuiz();
         } else if (mode === 'harmony') {
@@ -9741,6 +9770,394 @@
             flashcardStep = 0;
             render();
         }
+    }
+
+    // --- 音声リスニング学習ロジック ---
+    function formatPccsForSpeech(pccs) {
+        if (!pccs) return '';
+        pccs = pccs.trim();
+        if (pccs === 'W') return 'ホワイト';
+        if (pccs === 'Bk') return 'ブラック';
+        if (pccs.startsWith('N')) return 'ニュートラル' + pccs.replace('N-', '').replace('N', '');
+
+        const toneMap = {
+            'v': 'ビビッド',
+            'b': 'ブライト',
+            'dp': 'ディープ',
+            'lt': 'ライト',
+            'sf': 'ソフト',
+            'd': 'ダル',
+            'dk': 'ダーク',
+            'p': 'ペール',
+            'ltg': 'ライトグレイッシュ',
+            'g': 'グレイッシュ',
+            'dkg': 'ダークグレイッシュ'
+        };
+
+        const match = pccs.match(/^([a-zA-Z]+)(\d+)(\+)?$/);
+        if (match) {
+            const toneKey = match[1].toLowerCase();
+            const toneName = toneMap[toneKey] || toneKey;
+            const hueNum = match[2];
+            const plus = match[3] ? 'プラス' : '';
+            return `${toneName}${hueNum}${plus}`;
+        }
+        return pccs;
+    }
+
+    // 由来文の読み上げテキスト正規化（ルビ括弧、OCR誤字、TTS誤読漢字の補正）
+    function normalizeTextForSpeech(text) {
+        if (!text) return '';
+        let s = text;
+
+        // 1. [ ？？ ] を「ブランク」に
+        s = s.replace(/\[\s*？？\s*\]/g, 'ブランク');
+
+        // 2. OCR表記揺れ・文字化け修正
+        s = s.replace(/工クル/g, 'エクル');
+        s = s.replace(/べイジュ/g, 'ベージュ');
+        s = s.replace(/工ッグプラント/g, 'エッグプラント');
+        s = s.replace(/第ニ/g, '第二');
+        s = s.replace(/ニつ/g, '二つ');
+        s = s.replace(/グレイツシュ/g, 'グレイッシュ');
+        s = s.replace(/ハッ力/g, 'ハッカ');
+        s = s.replace(/ペバーミント/g, 'ペパーミント');
+        s = s.replace(/サポテン/g, 'サボテン');
+        s = s.replace(/そしよく/g, 'そしょく');
+        s = s.replace(/せきりよく/g, 'せきりょく');
+        s = s.replace(/しよくさんじん/g, 'しょくさんじん');
+        s = s.replace(/ひやくねず/g, 'ひゃくねず');
+
+        // 3. ルビ括弧 漢字(ひらがな) をひらがなに置換
+        const rubyDict = {
+            '呉(くれ)': 'くれ',
+            '呉藍(くれない)': 'くれない',
+            '鶸色(ひわいろ)': 'ひわいろ',
+            '葡萄(ぶどう)': 'ぶどう',
+            'ヒナゲシ（コクリコ）': 'ヒナゲシ',
+            'チェスナットブラウン(chestnutbrown)': 'チェスナットブラウン',
+            '梔子(くちなし)': 'くちなし',
+            '禁色(きんじき)': 'きんじき',
+            '禁色（きんじき）': 'きんじき',
+            '桧(ひのき)': 'ひのき',
+            '赭土(あかつち)': 'あかつち',
+            '蜜柑色(みかんいろ)': 'みかんいろ',
+            '琥珀(こはく)': 'こはく',
+            '石緑(せきりよく)': 'せきりょく',
+            '孔雀(くじゃく)': 'くじゃく',
+            '孔雀石(くじゃくいし)': 'くじゃくいし',
+            '納戸(物置部屋)': 'なんど',
+            'のぞきいろ(覗き色)': 'のぞきいろ',
+            '一入染(ひとしおそめ)': 'ひとしおぞめ',
+            '武蔵野(現在の東京郊外)': 'むさしの',
+            '蜀山人(しよくさんじん)': 'しょくさんじん',
+            '蜀山人(しょくさんじん)': 'しょくさんじん',
+            '今紫(いまむらさき)': 'いまむらさき',
+            '四十八茶百鼠(しじゅうはっちゃひやくねず)': 'しじゅうはっちゃひゃくねず',
+            '四十八茶百鼠(しじゅうはっちゃひゃくねず)': 'しじゅうはっちゃひゃくねず',
+            '茶気鼠(ちやけねず)': 'ちゃけねず',
+            '煤(すす)': 'すす',
+            '珊瑚朱色(さんごしゅいろ)': 'さんごしゅいろ',
+            'クラレット(claret)': 'クラレット',
+            '介殻虫(かいがらむし)': 'かいがらむし',
+            '辰砂（しんしゃ）': 'しんしゃ',
+            '緋色(ひいろ)': 'ひいろ',
+            '緋色（ひいろ）': 'ひいろ',
+            '鮭(さけ)': 'さけ',
+            'ブリックレッド(brickred)': 'ブリックレッド',
+            '落栗(おちぐり)': 'おちぐり',
+            'ペッシュ(peche)': 'ペッシュ',
+            '墨汁嚢(のう)': 'ぼくじゅうのう',
+            '酥色(そしよく)': 'そしょく',
+            '老竹色(おいたけいろ)': 'おいたけいろ',
+            '秘色(ひそく)': 'ひそく',
+            '葱(ねぎ)': 'ねぎ',
+            'タデアイ(藍)': 'タデアイ',
+            '藍銅鉱(らんどうこう)': 'らんどうこう',
+            '文目(あやめ)': 'あやめ',
+            'アオイ(葵)': 'あおい',
+            'ポルフォラ(porphura)': 'ポルフォラ',
+            'プルプラ(purpura)': 'プルプラ',
+            '消炎色(けしずみいろ)': 'けしずみいろ',
+            '杜若(かきつばた)': 'かきつばた'
+        };
+
+        for (const [k, v] of Object.entries(rubyDict)) {
+            s = s.split(k).join(v);
+        }
+
+        // 一般的な 漢字(ひらがな) をひらがなに置換
+        s = s.replace(/[\u4e00-\u9faf]+[(（]([ぁ-んァ-ヶー]+)[)）]/g, '$1');
+
+        // 英字括弧 (alphabet) を除去
+        s = s.replace(/[(（][a-zA-Z\s]+[)）]/g, '');
+
+        // 4. 音声合成が誤読しやすい専門用語・漢字の修正
+        s = s.replace(/紅花/g, 'べにばな');
+        s = s.replace(/代赭/g, 'たいしゃ');
+        s = s.replace(/藍染め/g, 'あいぞめ');
+        s = s.replace(/藍染/g, 'あいぞめ');
+        s = s.replace(/納戸/g, 'なんど');
+        s = s.replace(/紫根/g, 'しこん');
+        s = s.replace(/七宝/g, 'しっぽう');
+        s = s.replace(/辰砂/g, 'しんしゃ');
+        s = s.replace(/藍銅鉱/g, 'らんどうこう');
+        s = s.replace(/水酸化第二鉄/g, 'すいさんかだいにてつ');
+        s = s.replace(/酸化第二鉄/g, 'さんかだいにてつ');
+        s = s.replace(/酸化鉄/g, 'さんかてつ');
+        s = s.replace(/介殻虫/g, 'かいがらむし');
+        s = s.replace(/墨汁嚢/g, 'ぼくじゅうのう');
+        s = s.replace(/酥色/g, 'そしょく');
+        s = s.replace(/消炎色/g, 'けしずみいろ');
+        s = s.replace(/生薬/g, 'しょうやく');
+        s = s.replace(/朝服/g, 'ちょうふく');
+        s = s.replace(/四十八茶百鼠/g, 'しじゅうはっちゃひゃくねず');
+        s = s.replace(/金翅雀/g, 'ひわ');
+        s = s.replace(/真紅/g, 'しんく');
+        s = s.replace(/煤/g, 'すす');
+        s = s.replace(/生の実/g, 'なまのみ');
+        s = s.replace(/一見/g, 'いっけん');
+        s = s.replace(/一入染/g, 'ひとしおぞめ');
+
+        return s;
+    }
+
+    function speakAudioText(text, onEnd) {
+        if (typeof window === 'undefined' || !('speechSynthesis' in window)) {
+            if (typeof onEnd === 'function') setTimeout(onEnd, 300);
+            return;
+        }
+
+        try {
+            window.speechSynthesis.cancel();
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.lang = 'ja-JP';
+            utterance.rate = audioRate;
+            utterance.onend = () => {
+                if (typeof onEnd === 'function') onEnd();
+            };
+            utterance.onerror = () => {
+                if (typeof onEnd === 'function') onEnd();
+            };
+            audioCurrentUtterance = utterance;
+            window.speechSynthesis.speak(utterance);
+        } catch(e) {
+            if (typeof onEnd === 'function') setTimeout(onEnd, 300);
+        }
+    }
+
+    function stopAudioPlay() {
+        audioIsPlaying = false;
+        audioPhase = 'idle';
+        if (audioTimer) {
+            clearTimeout(audioTimer);
+            audioTimer = null;
+        }
+        if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
+            try {
+                window.speechSynthesis.cancel();
+            } catch(e) {}
+        }
+    }
+
+    function initAudioDeck() {
+        stopAudioPlay();
+        let pool = allColorData.filter(c => !audioMasteredColors.includes(c.name) && !audioMasteredColors.includes(c.clean_name));
+        if (audioGradeFilter !== 'all') {
+            pool = pool.filter(c => c.grade === audioGradeFilter);
+        }
+        audioDeck = shuffleArray(pool);
+        audioIndex = 0;
+        audioPhase = 'idle';
+    }
+
+    function playCurrentAudioCard() {
+        if (!audioDeck || audioDeck.length === 0) return;
+        if (audioIndex >= audioDeck.length) audioIndex = 0;
+
+        stopAudioPlay();
+        audioIsPlaying = true;
+        const color = audioDeck[audioIndex];
+        if (!color) return;
+
+        // Phase 1: 由来の読み上げ
+        audioPhase = 'origin';
+        render();
+
+        let originText = '';
+        if (audioOriginFormat === 'masked') {
+            originText = color.masked_origin || color.origin || '';
+        } else if (audioOriginFormat === 'exam') {
+            originText = color.exam_origin || color.origin || '';
+        } else {
+            originText = color.origin || '';
+        }
+
+        const questionSpeech = normalizeTextForSpeech(originText);
+
+        speakAudioText(questionSpeech, () => {
+            if (!audioIsPlaying) return;
+
+            // Phase 2: シンキングタイム (ポーズ)
+            audioPhase = 'pause';
+            render();
+
+            const pauseMs = (audioPauseSeconds > 0) ? (audioPauseSeconds * 1000) : 500;
+            audioTimer = setTimeout(() => {
+                if (!audioIsPlaying) return;
+
+                // Phase 3: 正解発表
+                audioPhase = 'answer';
+                render();
+
+                const speechName = (color.ruby && color.ruby.trim()) ? color.ruby : color.clean_name;
+                const pccsSpeech = formatPccsForSpeech(color.pccs);
+                const answerSpeech = `${speechName}。${pccsSpeech}。`;
+
+                speakAudioText(answerSpeech, () => {
+                    if (!audioIsPlaying) return;
+
+                    if (audioAutoAdvance) {
+                        audioTimer = setTimeout(() => {
+                            if (!audioIsPlaying) return;
+                            nextAudioCard(true);
+                        }, 1800);
+                    } else {
+                        audioIsPlaying = false;
+                        render();
+                    }
+                });
+            }, pauseMs);
+        });
+    }
+
+    function toggleAudioPlay() {
+        if (audioIsPlaying) {
+            stopAudioPlay();
+            render();
+        } else {
+            playCurrentAudioCard();
+        }
+    }
+
+    function nextAudioCard(autoPlay = false) {
+        if (!audioDeck || audioDeck.length === 0) return;
+        stopAudioPlay();
+        if (audioIndex < audioDeck.length - 1) {
+            audioIndex++;
+        } else {
+            audioIndex = 0;
+            // 1周したら再シャッフル
+            audioDeck = shuffleArray(audioDeck);
+        }
+        audioPhase = 'idle';
+        if (autoPlay || audioAutoAdvance) {
+            playCurrentAudioCard();
+        } else {
+            render();
+        }
+    }
+
+    function prevAudioCard() {
+        if (!audioDeck || audioDeck.length === 0) return;
+        stopAudioPlay();
+        if (audioIndex > 0) {
+            audioIndex--;
+        } else {
+            audioIndex = audioDeck.length - 1;
+        }
+        audioPhase = 'idle';
+        render();
+    }
+
+    function revealAudioAnswerNow() {
+        if (!audioDeck || audioDeck.length === 0) return;
+        audioPhase = 'answer';
+        render();
+    }
+
+    function markCurrentAsMastered() {
+        if (!audioDeck || audioDeck.length === 0) return;
+        const color = audioDeck[audioIndex];
+        if (!color) return;
+
+        stopAudioPlay();
+        if (!audioMasteredColors.includes(color.name)) {
+            audioMasteredColors.push(color.name);
+            try {
+                localStorage.setItem('color_quiz_audio_mastered', JSON.stringify(audioMasteredColors));
+            } catch(e) {}
+        }
+
+        // デッキから削除
+        audioDeck.splice(audioIndex, 1);
+        if (audioIndex >= audioDeck.length && audioDeck.length > 0) {
+            audioIndex = 0;
+        }
+
+        audioPhase = 'idle';
+        render();
+        // 自動で次へ
+        if (audioDeck.length > 0) {
+            playCurrentAudioCard();
+        }
+    }
+
+    function unmarkMasteredColor(colorName) {
+        audioMasteredColors = audioMasteredColors.filter(n => n !== colorName);
+        try {
+            localStorage.setItem('color_quiz_audio_mastered', JSON.stringify(audioMasteredColors));
+        } catch(e) {}
+        initAudioDeck();
+        render();
+    }
+
+    function resetAudioMasteredColors() {
+        if (audioMasteredColors.length === 0) return;
+        if (!confirm('覚えた色の除外リストをリセットし、全色を再生リストに戻しますか？')) return;
+        audioMasteredColors = [];
+        try {
+            localStorage.setItem('color_quiz_audio_mastered', JSON.stringify(audioMasteredColors));
+        } catch(e) {}
+        initAudioDeck();
+        render();
+    }
+
+    function setAudioGradeFilter(grade) {
+        audioGradeFilter = grade;
+        initAudioDeck();
+        render();
+    }
+
+    function setAudioOriginFormat(fmt) {
+        audioOriginFormat = fmt;
+        try {
+            localStorage.setItem('color_quiz_audio_origin_format', fmt);
+        } catch(e) {}
+        render();
+    }
+
+    function setAudioPauseSeconds(sec) {
+        audioPauseSeconds = parseInt(sec, 10);
+        render();
+    }
+
+    function setAudioRate(rate) {
+        audioRate = parseFloat(rate);
+        render();
+    }
+
+    function setAudioAutoAdvance(val) {
+        audioAutoAdvance = !!val;
+        render();
+    }
+
+    function shuffleAudioDeck() {
+        stopAudioPlay();
+        audioDeck = shuffleArray(audioDeck);
+        audioIndex = 0;
+        audioPhase = 'idle';
+        render();
     }
 
     // 配色問題の入力方式設定 (PCCS選択 or 実色タイル選択)
@@ -13368,6 +13785,262 @@ ${exam.colorQuestion.explanation}
         return '';
     }
 
+    // --- 音声リスニング学習 画面レンダリング ---
+    function renderAudioView(area, stats) {
+        let pool = allColorData;
+        if (audioGradeFilter !== 'all') {
+            pool = pool.filter(c => c.grade === audioGradeFilter);
+        }
+        const totalInPool = pool.length;
+        const masteredInPool = pool.filter(c => audioMasteredColors.includes(c.name) || audioMasteredColors.includes(c.clean_name)).length;
+        const remainingCount = audioDeck.length;
+
+        stats.innerHTML = `音声リスニング学習: 残り ${remainingCount} 色 / 対象 ${totalInPool} 色 (覚えた色: ${masteredInPool} 色)`;
+
+        // すべて覚えた（残りゼロ）の場合
+        if (audioDeck.length === 0) {
+            area.innerHTML = `
+                <div style="background:#fff; border:1px solid #e2e8f0; border-radius:14px; padding:32px 20px; text-align:center; box-shadow:0 2px 4px rgba(0,0,0,0.03); max-width:640px; margin:0 auto;">
+                    <div style="font-size:3rem; margin-bottom:12px;">🎉</div>
+                    <h3 style="font-size:1.3rem; font-weight:900; color:#0f172a; margin:0 0 8px 0;">おめでとうございます！</h3>
+                    <p style="font-size:0.9rem; color:#475569; line-height:1.6; margin:0 0 20px 0;">
+                        ${audioGradeFilter === 'all' ? '全127色' : audioGradeFilter} のすべての色を「覚えた！」として除外しました。<br>
+                        完璧にマスターできています！
+                    </p>
+                    <div style="display:flex; justify-content:center; gap:10px; flex-wrap:wrap;">
+                        <button onclick="resetAudioMasteredColors()" class="flashcard-btn primary" style="padding:10px 20px; font-size:0.85rem; font-weight:800;">
+                            ↻ 覚えた色をリセットして再学習する
+                        </button>
+                        <button onclick="setMode('list')" class="flashcard-btn" style="padding:10px 16px; font-size:0.85rem;">
+                            図鑑に戻る
+                        </button>
+                    </div>
+                </div>
+            `;
+            return;
+        }
+
+        const current = audioDeck[audioIndex] || audioDeck[0];
+        const gradeBadge = current.grade === '3級' ? 'badge-grade-3' : 'badge-grade-2';
+        const isAnswerRevealed = (audioPhase === 'answer');
+
+        // 出題文の取得
+        let displayOrigin = '';
+        if (audioOriginFormat === 'masked') {
+            displayOrigin = current.masked_origin || current.origin || '';
+        } else if (audioOriginFormat === 'exam') {
+            displayOrigin = current.exam_origin || current.origin || '';
+        } else {
+            displayOrigin = current.origin || '';
+        }
+
+        // フェーズ表示情報
+        let phaseBadgeHtml = '';
+        if (audioPhase === 'origin') {
+            phaseBadgeHtml = `<span style="background:#dbeafe; color:#1d4ed8; border:1px solid #93c5fd; font-size:0.75rem; font-weight:800; padding:4px 10px; border-radius:20px; display:inline-flex; align-items:center; gap:4px;">
+                <span style="display:inline-block; width:8px; height:8px; border-radius:50%; background:#2563eb;"></span> 🔊 由来を出題中...
+            </span>`;
+        } else if (audioPhase === 'pause') {
+            phaseBadgeHtml = `<span style="background:#fef3c7; color:#b45309; border:1px solid #fde68a; font-size:0.75rem; font-weight:800; padding:4px 10px; border-radius:20px; display:inline-flex; align-items:center; gap:4px;">
+                ⏳ シンキングタイム (${audioPauseSeconds}秒)...
+            </span>`;
+        } else if (audioPhase === 'answer') {
+            phaseBadgeHtml = `<span style="background:#dcfce7; color:#15803d; border:1px solid #86efac; font-size:0.75rem; font-weight:800; padding:4px 10px; border-radius:20px; display:inline-flex; align-items:center; gap:4px;">
+                📢 正解発表中！
+            </span>`;
+        } else {
+            phaseBadgeHtml = `<span style="background:#f1f5f9; color:#64748b; border:1px solid #cbd5e1; font-size:0.75rem; font-weight:800; padding:4px 10px; border-radius:20px;">
+                ⏸ 待機中
+            </span>`;
+        }
+
+        area.innerHTML = `
+            <div class="flashcard-container" style="max-width:680px; margin:0 auto;">
+                <!-- 1. 最上部コントロールバー -->
+                <div style="background:#fff; border:1px solid #e2e8f0; border-radius:14px; padding:12px 16px; margin-bottom:14px; box-shadow:0 2px 4px rgba(0,0,0,0.03);">
+                    <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
+                        <!-- 級切り替え -->
+                        <div style="display:flex; gap:4px;">
+                            <button onclick="setAudioGradeFilter('all')" class="flashcard-btn ${audioGradeFilter === 'all' ? 'primary' : ''}" style="padding:5px 9px; font-size:0.74rem;">全127色</button>
+                            <button onclick="setAudioGradeFilter('3級')" class="flashcard-btn ${audioGradeFilter === '3級' ? 'primary' : ''}" style="padding:5px 9px; font-size:0.74rem;">3級のみ</button>
+                            <button onclick="setAudioGradeFilter('2級')" class="flashcard-btn ${audioGradeFilter === '2級' ? 'primary' : ''}" style="padding:5px 9px; font-size:0.74rem;">2級のみ</button>
+                        </div>
+
+                        <!-- 進捗ステータス -->
+                        <div style="display:flex; align-items:center; gap:8px; font-size:0.78rem; font-weight:800; color:#334155;">
+                            <span>残り: <strong style="color:#2563eb; font-size:0.95rem;">${remainingCount}</strong> / ${totalInPool}色</span>
+                            <span style="color:#cbd5e1;">|</span>
+                            <span style="color:#059669;">覚えた: ${masteredInPool}色</span>
+                        </div>
+
+                        <!-- 覚えた色リセットボタン -->
+                        ${audioMasteredColors.length > 0 ? `
+                            <button onclick="resetAudioMasteredColors()" class="flashcard-btn" style="padding:5px 8px; font-size:0.72rem; color:#dc2626; border-color:#fca5a5;" title="除外した色をすべて元に戻す">
+                                ↺ 除外リセット
+                            </button>
+                        ` : ''}
+                    </div>
+                </div>
+
+                <!-- 2. 音声プレーヤーカード本体 -->
+                <div class="flashcard-card-box" style="padding:20px; margin-bottom:14px; border:2px solid ${audioIsPlaying ? '#3b82f6' : '#e2e8f0'}; box-shadow:0 4px 12px rgba(0,0,0,0.05); transition:border-color 0.2s;">
+                    <!-- カードヘッダー -->
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; flex-wrap:wrap; gap:6px;">
+                        <div style="display:flex; align-items:center; gap:8px;">
+                            <span class="badge ${gradeBadge}">${current.grade}</span>
+                            <span style="font-size:0.85rem; font-weight:800; color:#1e293b;">
+                                問題 ${audioIndex + 1} / ${remainingCount}
+                            </span>
+                        </div>
+                        <div>${phaseBadgeHtml}</div>
+                    </div>
+
+                    <!-- 由来文 (出題) -->
+                    <div style="margin-bottom:16px;">
+                        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+                            <div style="font-size:0.75rem; font-weight:800; color:#64748b;">
+                                【出題：${audioOriginFormat === 'masked' ? '公式原文（ヒント伏字）' : (audioOriginFormat === 'exam' ? '試験仕様要約文' : '公式原文全文')}】
+                            </div>
+                            <div style="display:inline-flex; background:#f1f5f9; padding:2px; border-radius:6px; border:1px solid #e2e8f0; font-size:0.68rem;">
+                                <button type="button" onclick="setAudioOriginFormat('masked')" style="border:none; padding:2px 6px; border-radius:4px; font-weight:700; cursor:pointer; background:${audioOriginFormat === 'masked' ? '#2563eb' : 'transparent'}; color:${audioOriginFormat === 'masked' ? '#fff' : '#64748b'};">伏字</button>
+                                <button type="button" onclick="setAudioOriginFormat('exam')" style="border:none; padding:2px 6px; border-radius:4px; font-weight:700; cursor:pointer; background:${audioOriginFormat === 'exam' ? '#2563eb' : 'transparent'}; color:${audioOriginFormat === 'exam' ? '#fff' : '#64748b'};">要約</button>
+                                <button type="button" onclick="setAudioOriginFormat('full')" style="border:none; padding:2px 6px; border-radius:4px; font-weight:700; cursor:pointer; background:${audioOriginFormat === 'full' ? '#2563eb' : 'transparent'}; color:${audioOriginFormat === 'full' ? '#fff' : '#64748b'};">全文</button>
+                            </div>
+                        </div>
+                        <div style="font-size:0.95rem; line-height:1.65; color:#1e293b; font-weight:500; background:${audioPhase === 'origin' ? '#eff6ff' : '#f8fafc'}; border:1px solid ${audioPhase === 'origin' ? '#bfdbfe' : '#e2e8f0'}; border-radius:10px; padding:14px; transition:all 0.3s;">
+                            ${displayOrigin}
+                        </div>
+                    </div>
+
+                    <!-- 正解エリア (Phase === answer またはクリックで開示) -->
+                    <div style="margin-bottom:18px;">
+                        ${isAnswerRevealed ? `
+                            <div style="background:#fff; border:2px solid #10b981; border-radius:12px; padding:14px; animation:fadeIn 0.3s;">
+                                <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:8px;">
+                                    <div style="font-size:0.75rem; font-weight:800; color:#059669;">【正解発表】</div>
+                                    <div style="font-size:0.72rem; color:#64748b; font-weight:700;">音声読み上げ中</div>
+                                </div>
+                                <div style="display:flex; align-items:center; gap:14px; flex-wrap:wrap;">
+                                    <!-- カラーチップ -->
+                                    <div style="width:68px; height:68px; border-radius:10px; background-color:${current.hex}; box-shadow:0 2px 4px rgba(0,0,0,0.15); border:1px solid rgba(0,0,0,0.1); flex-shrink:0;"></div>
+                                    <div>
+                                        <div style="font-size:1.5rem; font-weight:900; color:#0f172a; line-height:1.2;">
+                                            ${current.clean_name}
+                                        </div>
+                                        ${current.ruby ? `<div style="font-size:0.82rem; color:#64748b; font-weight:700; margin-top:2px;">（${current.ruby}）</div>` : ''}
+                                        <div style="display:flex; gap:6px; flex-wrap:wrap; margin-top:6px;">
+                                            <span class="badge badge-pccs" style="font-size:0.78rem;">PCCS: ${current.pccs} (${formatPccsForSpeech(current.pccs)})</span>
+                                            <span class="badge badge-category" style="font-size:0.74rem;">${current.category}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                ${current.origin ? `
+                                    <div style="margin-top:10px; padding-top:10px; border-top:1px dashed #e2e8f0; font-size:0.78rem; line-height:1.5; color:#475569;">
+                                        <strong>公式全文:</strong> ${current.origin}
+                                    </div>
+                                ` : ''}
+                            </div>
+                        ` : `
+                            <div onclick="revealAudioAnswerNow()" style="background:#f8fafc; border:1px dashed #cbd5e1; border-radius:12px; padding:18px; text-align:center; cursor:pointer; transition:background 0.2s;" title="クリックすると今すぐ正解を表示します">
+                                <div style="font-size:0.85rem; font-weight:800; color:#64748b;">
+                                    ${audioPhase === 'pause' ? '⏳ シンキングタイム中...（タップで今すぐ正解を見る）' : 'タップで正解を表示する ▼'}
+                                </div>
+                                <div style="font-size:0.72rem; color:#94a3b8; margin-top:4px;">音声で自動進行するか、タップすると正解・実際の色が開示されます</div>
+                            </div>
+                        `}
+                    </div>
+
+                    <!-- メイン操作ボタン群 -->
+                    <div style="display:flex; gap:8px; justify-content:center; align-items:center; flex-wrap:wrap; margin-bottom:12px;">
+                        <button onclick="prevAudioCard()" class="flashcard-btn" style="padding:10px 14px; font-size:0.85rem;" title="前の色へ">
+                            ◀ 前へ
+                        </button>
+                        <button onclick="toggleAudioPlay()" class="flashcard-btn primary" style="padding:12px 28px; font-size:1.05rem; font-weight:900; background:${audioIsPlaying ? '#f59e0b' : 'linear-gradient(135deg, #2563eb, #1d4ed8)'}; box-shadow:0 4px 10px rgba(37,99,235,0.25);">
+                            ${audioIsPlaying ? '⏸ 一時停止' : (audioPhase === 'idle' ? '▶ 音声学習を開始' : '▶ 再開する')}
+                        </button>
+                        <button onclick="nextAudioCard(false)" class="flashcard-btn" style="padding:10px 14px; font-size:0.85rem;" title="次の色へ">
+                            次へ ▶
+                        </button>
+                        <button onclick="shuffleAudioDeck()" class="flashcard-btn" style="padding:10px 12px; font-size:0.82rem;" title="再生順をシャッフル">
+                            🔀 シャッフル
+                        </button>
+                    </div>
+
+                    <!-- ★ 覚えたら除外ボタン (特大・目立つ) -->
+                    <div style="margin-top:12px; border-top:1px solid #f1f5f9; padding-top:12px;">
+                        <button onclick="markCurrentAsMastered()" class="flashcard-btn" style="width:100%; padding:11px 16px; font-size:0.9rem; font-weight:800; background:#f0fdf4; border:1.5px solid #22c55e; color:#15803d; box-shadow:0 2px 4px rgba(34,197,94,0.1); cursor:pointer;" title="この色を覚えて完了とし、再生リストから除外します">
+                            ✓ この色を覚えた！（再生リストから除外）
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 3. 再生・音声設定パネル -->
+                <div style="background:#fff; border:1px solid #e2e8f0; border-radius:12px; padding:14px 16px; margin-bottom:14px;">
+                    <div style="font-size:0.82rem; font-weight:800; color:#1e293b; margin-bottom:10px;">🎧 再生・リスニング設定</div>
+                    <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(180px, 1fr)); gap:12px; font-size:0.76rem;">
+                        <!-- シンキングタイム -->
+                        <div>
+                            <div style="color:#64748b; font-weight:700; margin-bottom:4px;">シンキングタイム:</div>
+                            <div style="display:flex; gap:4px;">
+                                <button onclick="setAudioPauseSeconds(2)" class="flashcard-btn ${audioPauseSeconds === 2 ? 'primary' : ''}" style="flex:1; padding:4px 6px; font-size:0.72rem;">2秒</button>
+                                <button onclick="setAudioPauseSeconds(3)" class="flashcard-btn ${audioPauseSeconds === 3 ? 'primary' : ''}" style="flex:1; padding:4px 6px; font-size:0.72rem;">3秒</button>
+                                <button onclick="setAudioPauseSeconds(5)" class="flashcard-btn ${audioPauseSeconds === 5 ? 'primary' : ''}" style="flex:1; padding:4px 6px; font-size:0.72rem;">5秒</button>
+                                <button onclick="setAudioPauseSeconds(0)" class="flashcard-btn ${audioPauseSeconds === 0 ? 'primary' : ''}" style="flex:1; padding:4px 6px; font-size:0.72rem;">なし</button>
+                            </div>
+                        </div>
+
+                        <!-- 読み上げ速度 -->
+                        <div>
+                            <div style="color:#64748b; font-weight:700; margin-bottom:4px;">読み上げ速度:</div>
+                            <div style="display:flex; gap:4px;">
+                                <button onclick="setAudioRate(0.85)" class="flashcard-btn ${audioRate < 0.95 ? 'primary' : ''}" style="flex:1; padding:4px 6px; font-size:0.72rem;">ゆっくり</button>
+                                <button onclick="setAudioRate(1.0)" class="flashcard-btn ${audioRate >= 0.95 && audioRate <= 1.05 ? 'primary' : ''}" style="flex:1; padding:4px 6px; font-size:0.72rem;">標準</button>
+                                <button onclick="setAudioRate(1.2)" class="flashcard-btn ${audioRate > 1.05 ? 'primary' : ''}" style="flex:1; padding:4px 6px; font-size:0.72rem;">速め</button>
+                            </div>
+                        </div>
+
+                        <!-- 自動連続再生 -->
+                        <div>
+                            <div style="color:#64748b; font-weight:700; margin-bottom:4px;">連続再生 (自動送り):</div>
+                            <div style="display:flex; gap:4px;">
+                                <button onclick="setAudioAutoAdvance(true)" class="flashcard-btn ${audioAutoAdvance ? 'primary' : ''}" style="flex:1; padding:4px 6px; font-size:0.72rem;">ON (自動)</button>
+                                <button onclick="setAudioAutoAdvance(false)" class="flashcard-btn ${!audioAutoAdvance ? 'primary' : ''}" style="flex:1; padding:4px 6px; font-size:0.72rem;">OFF (手動)</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 4. 覚えた色（除外リスト）一覧 -->
+                ${audioMasteredColors.length > 0 ? `
+                    <div style="background:#fff; border:1px solid #e2e8f0; border-radius:12px; padding:14px 16px;">
+                        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+                            <div style="font-size:0.82rem; font-weight:800; color:#15803d;">
+                                ✓ 覚えた色・除外中リスト (${audioMasteredColors.length}色)
+                            </div>
+                            <button onclick="resetAudioMasteredColors()" class="flashcard-btn" style="padding:4px 8px; font-size:0.72rem; color:#dc2626;">
+                                全て復活させる
+                            </button>
+                        </div>
+                        <div style="display:flex; flex-wrap:wrap; gap:6px; max-height:160px; overflow-y:auto; padding:4px 0;">
+                            ${audioMasteredColors.map(name => {
+                                const cData = allColorData.find(c => c.name === name || c.clean_name === name);
+                                const hex = cData ? cData.hex : '#cbd5e1';
+                                const cname = cData ? cData.clean_name : name;
+                                return `
+                                    <div style="display:inline-flex; align-items:center; gap:6px; background:#f0fdf4; border:1px solid #bbf7d0; border-radius:6px; padding:3px 8px; font-size:0.74rem;">
+                                        <span style="display:inline-block; width:12px; height:12px; border-radius:3px; background:${hex}; border:1px solid rgba(0,0,0,0.1);"></span>
+                                        <strong style="color:#166534;">${cname}</strong>
+                                        <button onclick="unmarkMasteredColor('${name}')" style="border:none; background:transparent; color:#94a3b8; font-weight:900; cursor:pointer; padding:0 2px;" title="再生リストに復元する">×</button>
+                                    </div>
+                                `;
+                            }).join('')}
+                        </div>
+                    </div>
+                ` : ''}
+            </div>
+        `;
+    }
+
     // --- メインレンダリング ---
     function render() {
         const area = document.getElementById('view-area');
@@ -13397,6 +14070,13 @@ ${exam.colorQuestion.explanation}
                 ? '暗記カード: モード選択'
                 : (flashcardType === 'color' ? `色名・PCCS暗記カード (${flashcardIndex + 1} / ${flashcardDeck.length})` : `配色技法暗記カード (${flashcardIndex + 1} / ${flashcardDeck.length})`);
             area.innerHTML = renderFlashcards();
+            return;
+        }
+
+        // --- 音声リスニング学習モード ---
+        if (currentMode === 'audio') {
+            controls.style.display = 'none';
+            renderAudioView(area, stats);
             return;
         }
 
