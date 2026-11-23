@@ -9649,12 +9649,13 @@
     }
 
     // --- 音声リスニング学習ロジック ---
-    function formatPccsForSpeech(pccs) {
+    function formatSinglePccsToken(pccs) {
         if (!pccs) return '';
         pccs = pccs.trim();
         if (pccs === 'W') return 'ホワイト';
         if (pccs === 'Bk') return 'ブラック';
         if (pccs.startsWith('N')) return 'ニュートラル' + pccs.replace('N-', '').replace('N', '');
+        if (pccs.startsWith('Gy-')) return 'グレー' + pccs.replace('Gy-', '');
 
         const toneMap = {
             'v': 'ビビッド',
@@ -9667,10 +9668,12 @@
             'p': 'ペール',
             'ltg': 'ライトグレイッシュ',
             'g': 'グレイッシュ',
-            'dkg': 'ダークグレイッシュ'
+            'dkg': 'ダークグレイッシュ',
+            's': 'ストロング',
+            'gy': 'グレー'
         };
 
-        const match = pccs.match(/^([a-zA-Z]+)(\d+)(\+)?$/);
+        const match = pccs.match(/^([a-zA-Z]+)(\d+(?:\.\d+)?)(\+)?$/);
         if (match) {
             const toneKey = match[1].toLowerCase();
             const toneName = toneMap[toneKey] || toneKey;
@@ -9679,6 +9682,11 @@
             return `${toneName}${hueNum}${plus}`;
         }
         return pccs;
+    }
+
+    function formatPccsForSpeech(pccs) {
+        if (!pccs) return '';
+        return pccs.trim().split(/\s+/).map(formatSinglePccsToken).join('、');
     }
 
     // 由来文の読み上げテキスト正規化（ルビ括弧、OCR誤字、TTS誤読漢字の補正）
@@ -9794,6 +9802,29 @@
         s = s.replace(/生の実/g, 'なまのみ');
         s = s.replace(/一見/g, 'いっけん');
         s = s.replace(/一入染/g, 'ひとしおぞめ');
+
+        // 5. 色相・色彩検定用語・誤読しやすい語の読み仮名化
+        s = s.replace(/黄緑色/g, 'きみどりいろ');
+        s = s.replace(/黄緑/g, 'きみどり');
+        s = s.replace(/黄赤/g, 'きあか');
+        s = s.replace(/赤紫色/g, 'あかむらさきいろ');
+        s = s.replace(/赤紫/g, 'あかむらさき');
+        s = s.replace(/青緑色/g, 'あおみどりいろ');
+        s = s.replace(/青緑/g, 'あおみどり');
+        s = s.replace(/青紫色/g, 'あおむらさきいろ');
+        s = s.replace(/青紫/g, 'あおむらさき');
+        s = s.replace(/金髪/g, 'きんぱつ');
+        s = s.replace(/金粉/g, 'きんぷん');
+        s = s.replace(/金色/g, 'きんいろ');
+        s = s.replace(/黄金/g, 'おうごん');
+        s = s.replace(/黒み/g, 'くろみ');
+        s = s.replace(/赤み/g, 'あかみ');
+        s = s.replace(/黄み/g, 'きみ');
+        s = s.replace(/青み/g, 'あおみ');
+        s = s.replace(/緑み/g, 'みどりみ');
+        s = s.replace(/紫み/g, 'むらさきみ');
+        s = s.replace(/灰み/g, 'はいみ');
+        s = s.replace(/茶色み/g, 'ちゃいろみ');
 
         return s;
     }
