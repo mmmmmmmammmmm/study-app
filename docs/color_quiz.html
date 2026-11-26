@@ -1929,6 +1929,130 @@
             box-shadow: 0 0 0 2px #0f766e;
         }
 
+        /* PCCSカラー選択・比較・クイズ用スタイル */
+        .pccs-quiz-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+            gap: 10px;
+            margin-top: 12px;
+        }
+        @media (max-width: 540px) {
+            .pccs-quiz-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        .pccs-color-opt-card {
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 8px;
+            background: #fff;
+            cursor: pointer;
+            transition: all 0.15s ease-in-out;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.04);
+            user-select: none;
+            position: relative;
+        }
+        .pccs-color-opt-card:hover {
+            transform: translateY(-2px);
+            border-color: #7c3aed;
+            box-shadow: 0 4px 10px rgba(124, 58, 237, 0.15);
+        }
+        .pccs-color-opt-chip {
+            width: 100%;
+            height: 64px;
+            border-radius: 8px;
+            border: 1px solid rgba(0,0,0,0.12);
+            box-shadow: inset 0 1px 2px rgba(255,255,255,0.25);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 900;
+            font-size: 1rem;
+        }
+        .pccs-color-opt-card.correct {
+            border-color: #16a34a !important;
+            background: #f0fdf4 !important;
+            box-shadow: 0 0 0 3px rgba(22, 163, 74, 0.35) !important;
+        }
+        .pccs-color-opt-card.incorrect {
+            border-color: #dc2626 !important;
+            background: #fef2f2 !important;
+            opacity: 0.55;
+        }
+        .pccs-color-opt-card.revealed-correct {
+            border-color: #16a34a !important;
+            background: #f0fdf4 !important;
+            box-shadow: 0 0 0 2px rgba(22, 163, 74, 0.3) !important;
+        }
+
+        /* PCCS全種類カラーパレット用スタイル */
+        .pccs-palette-container {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 10px;
+            margin-top: 6px;
+        }
+        .pccs-tone-row {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            margin-bottom: 5px;
+        }
+        .pccs-tone-label {
+            width: 32px;
+            font-size: 0.72rem;
+            font-weight: 800;
+            color: #475569;
+            text-align: right;
+            flex-shrink: 0;
+        }
+        .pccs-chips-scroll {
+            display: flex;
+            gap: 3px;
+            overflow-x: auto;
+            padding: 2px;
+            align-items: center;
+        }
+        .pccs-mini-chip {
+            width: 22px;
+            height: 22px;
+            min-width: 22px;
+            border-radius: 4px;
+            border: 1px solid rgba(0,0,0,0.2);
+            cursor: pointer;
+            padding: 0;
+            transition: transform 0.1s, box-shadow 0.1s;
+            box-sizing: border-box;
+            display: inline-block;
+            background: #cbd5e1;
+            position: relative;
+        }
+        .pccs-mini-chip:hover {
+            transform: scale(1.3);
+            z-index: 10;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+        }
+        .pccs-mini-chip.selected {
+            transform: scale(1.3);
+            z-index: 20;
+            outline: 2.5px solid #2563eb !important;
+            box-shadow: 0 0 0 3px rgba(37,99,235,0.4) !important;
+        }
+        .pccs-mini-chip.revealed-correct {
+            outline: 3px solid #16a34a !important;
+            transform: scale(1.35);
+            z-index: 25;
+            box-shadow: 0 0 0 4px rgba(22,163,74,0.5) !important;
+        }
+        .pccs-mini-chip.revealed-wrong {
+            outline: 2.5px solid #dc2626 !important;
+            opacity: 0.6;
+        }
+
         html, body {
             overflow-x: hidden;
             width: 100%;
@@ -1958,7 +2082,10 @@
             暗記カード
         </button>
         <button onclick="setMode('audio')" class="top-action-btn" style="background:#ea580c; color:#fff;" title="音声リスニング学習を開始">
-            🎧 音声学習
+            音声学習
+        </button>
+        <button onclick="startQuickPccsQuiz()" class="top-action-btn" style="background:#8b5cf6; color:#fff;" title="PCCS色当て問題(多肢・類似色)を開始">
+            PCCS色当て
         </button>
         <button onclick="startQuickPractical()" class="top-action-btn practical" title="実戦記述問題を開始">
             実戦記述
@@ -1980,7 +2107,8 @@
         <div id="tab-exam-q1" class="tab" onclick="setMode('exam_q1')">大問1(等色相面)</div>
         <div id="tab-exam-q5" class="tab" onclick="setMode('exam_q5')">大問5(景観色彩)</div>
         <div id="tab-flashcards" class="tab" onclick="openFlashcards()">暗記カード</div>
-        <div id="tab-audio" class="tab" onclick="setMode('audio')">🎧 音声学習</div>
+        <div id="tab-audio" class="tab" onclick="setMode('audio')">音声学習</div>
+        <div id="tab-pccs-quiz" class="tab" onclick="setMode('pccs_quiz')">PCCS色当て</div>
         <div id="tab-practical" class="tab" onclick="setMode('practical')">実戦記述</div>
         <div id="tab-practical-harmony" class="tab" onclick="setMode('practical_harmony')">実戦記述＋配色</div>
         <div id="tab-harmony" class="tab" onclick="setMode('harmony')">配色問題</div>
@@ -4338,7 +4466,7 @@
     "pccs": "d12",
     "munsell": "8G 4/6",
     "hex": "#046E56",
-    "origin": "フランス人のギネが1859年に製造特許を登録した水酸化クロームをもとにつくられた絵の具の緑色の名前。ラテン語の緑のヴィリディスから造語された名称である。現在ではクロームグリーンとともに緑色を代表する絵の具の色名である。",
+    "origin": "フランス人のギネが1859年に製造特許を登録した水酸化クロムをもとにつくられた絵の具の緑色の名前。ラテン語の緑のヴィリディスから造語された名称である。現在ではクロームグリーンとともに緑色を代表する絵の具の色名である。",
     "grade": "3級",
     "file": "IMG_1756.PNG",
     "tones": [
@@ -4350,7 +4478,7 @@
     "pccsTokens": [
       "d12"
     ],
-    "exam_origin": "フランス人のギネが1859年に製造特許を登録した水酸化クロームをもとにつくられた絵の具の緑色の名前。ラテン語の緑のヴィリディスから造語された名称であるS。現在ではクロームグリーンとともに緑色を代表する絵の具の色名である。"
+    "exam_origin": "フランス人のギネが1859年に製造特許を登録した水酸化クロームをもとにつくられた絵の具の緑色の名前。ラテン語の緑のヴィリディスから造語された名称である。現在ではクロームグリーンとともに緑色を代表する絵の具の色名である。"
   },
   {
     "name": "浅葱色 (あさぎいろ)",
@@ -9166,6 +9294,9 @@
 
     let practicalSelectedTone = '';
     let practicalSelectedHue = '';
+    let practicalSelectedColor = null; // ユーザーが選択した実際の色 (カラーチップ)
+    let practicalColorChoices = [];    // 似ている色を含む多肢カラー選択肢
+    let practicalAllShuffledColors = []; // 全PCCS色 (全トーン×全色相＋無彩色) をバラバラに並べたパレット
     let practicalAnswered = false;
 
     // 旧配色問題互換変数
@@ -9206,11 +9337,11 @@
     let activeMaterialModalIndex = -1;
     let currentFilteredMaterials = [];
 
-    // PCCSトーン代表HEX生成ヘルパー
+    // 日本色研 PCCS 24色相基準 sRGB値 (公式新配色カード199準拠)
     const pccsHueHues = {
-        1: '#E60033', 2: '#E60012', 3: '#EB6100', 4: '#F08300', 5: '#F39800', 6: '#F8B500',
-        7: '#FFD900', 8: '#FFEA00', 9: '#D7E700', 10: '#99CC00', 11: '#66B200', 12: '#009944',
-        13: '#009B72', 14: '#00A381', 15: '#00A497', 16: '#00A3AF', 17: '#0095D9', 18: '#007BBB',
+        1: '#B91F57', 2: '#D02F48', 3: '#DD443B', 4: '#E95B23', 5: '#EE7800', 6: '#F39800',
+        7: '#F8B500', 8: '#FFD900', 9: '#D7E700', 10: '#99CC00', 11: '#66B200', 12: '#009944',
+        13: '#009B72', 14: '#00A381', 15: '#00A497', 16: '#00A3AF', 17: '#0095D9', 18: '#0068B7',
         19: '#1E50A2', 20: '#383C9B', 21: '#5A4498', 22: '#704CBC', 23: '#993388', 24: '#CC0080'
     };
 
@@ -9325,6 +9456,314 @@
         const b = parseInt(hex.slice(5, 7), 16);
         const yiq = ((r * 299) + (g * 587) + (b * 114)) / 1000;
         return (yiq >= 150) ? '#0f172a' : '#ffffff';
+    }
+
+    // --- PCCS色計算 & 描画ヘルパー (日本色研・色彩検定公式 等色相面基準) ---
+    // PCCS等色相三角形 (白W=255, 黒Bk=0, 純色V) に基づく公式トーン混色比率 (w:白混色, b:黒混色, v:純色)
+    const PCCS_TONE_WEIGHTS = {
+        'v':   { w: 0.00, b: 0.00, v: 1.00 }, // 純色 (冴えた)
+        'b':   { w: 0.28, b: 0.00, v: 0.72 }, // ブライト (明るい)
+        's':   { w: 0.08, b: 0.08, v: 0.84 }, // ストロング (強い)
+        'dp':  { w: 0.00, b: 0.38, v: 0.62 }, // ディープ (濃い)
+        'lt':  { w: 0.48, b: 0.00, v: 0.52 }, // ライト (浅い)
+        'sf':  { w: 0.28, b: 0.18, v: 0.54 }, // ソフト (柔らかい)
+        'd':   { w: 0.16, b: 0.34, v: 0.50 }, // ダル (鈍い)
+        'dk':  { w: 0.00, b: 0.58, v: 0.42 }, // ダーク (暗い)
+        'p':   { w: 0.75, b: 0.00, v: 0.25 }, // ペール (薄い)
+        'ltg': { w: 0.42, b: 0.28, v: 0.30 }, // ライトグレイッシュ (明るい灰)
+        'g':   { w: 0.22, b: 0.48, v: 0.30 }, // グレイッシュ (灰みの)
+        'dkg': { w: 0.00, b: 0.76, v: 0.24 }  // ダークグレイッシュ (暗い灰)
+    };
+
+    function getPccsColorHex(tone, hue, hasPlus = false) {
+        if (!tone) return '#cbd5e1';
+        if (tone === '無彩色') {
+            return getPccsHex(String(hue));
+        }
+        const hNum = parseInt(hue, 10);
+        const baseHex = pccsHueHues[hNum] || '#2563eb';
+        const r = parseInt(baseHex.slice(1, 3), 16);
+        const g = parseInt(baseHex.slice(3, 5), 16);
+        const b = parseInt(baseHex.slice(5, 7), 16);
+
+        const weights = PCCS_TONE_WEIGHTS[tone] || { w: 0, b: 0, v: 1.0 };
+        let w = weights.w;
+        let blk = weights.b;
+        let v = weights.v;
+
+        // +記号 (lt8+, p2+等) は新配色カードのlt+, p+仕様として白混色を微調整
+        if (hasPlus) {
+            w = Math.min(0.90, w + 0.08);
+            v = Math.max(0.10, v - 0.08);
+        }
+
+        const nr = Math.round(Math.min(255, Math.max(0, r * v + 255 * w + 0 * blk)));
+        const ng = Math.round(Math.min(255, Math.max(0, g * v + 255 * w + 0 * blk)));
+        const nb = Math.round(Math.min(255, Math.max(0, b * v + 255 * w + 0 * blk)));
+
+        return '#' + [nr, ng, nb].map(x => x.toString(16).padStart(2, '0')).join('');
+    }
+
+    function getPccsHex(token) {
+        if (!token) return '#cccccc';
+        const str = String(token).trim();
+        // 日本色研 新配色カード199 無彩色公式sRGB対照表
+        const achroMap = {
+            'w': '#ffffff', 'bk': '#1a1a1a',
+            'gy-9.5': '#f2f2f2', 'n9.5': '#f2f2f2',
+            'gy-8.5': '#d9d9d9', 'n8.5': '#d9d9d9',
+            'gy-7.5': '#bfbfbf', 'n7.5': '#bfbfbf',
+            'gy-6.5': '#a6a6a6', 'n6.5': '#a6a6a6',
+            'gy-5.5': '#808080', 'n5.5': '#808080', 'n5': '#808080', 'gy-5.0': '#808080',
+            'gy-4.5': '#666666', 'n4.5': '#666666',
+            'gy-3.5': '#4d4d4d', 'n3.5': '#4d4d4d', 'gy-3.0': '#4d4d4d', 'n3': '#4d4d4d',
+            'gy-2.5': '#333333', 'n2.5': '#333333', 'n1.5': '#262626'
+        };
+        const low = str.toLowerCase();
+        if (achroMap[low]) return achroMap[low];
+
+        if (low.startsWith('gy-') || low.startsWith('n')) {
+            const val = parseFloat(low.replace(/^(gy-|n)/, ''));
+            if (!isNaN(val)) {
+                const lum = Math.round(Math.min(255, Math.max(0, (val / 10) * 255)));
+                return '#' + [lum, lum, lum].map(x => x.toString(16).padStart(2, '0')).join('');
+            }
+            return '#808080';
+        }
+
+        const m = str.match(/^([a-zA-Z]+)(\d+)(\+)?$/);
+        if (!m) return '#cbd5e1';
+        const tone = m[1].toLowerCase();
+        const hue = parseInt(m[2], 10);
+        const hasPlus = !!m[3];
+        return getPccsColorHex(tone, hue, hasPlus);
+    }
+
+    function getColorPccsTokens(c) {
+        if (!c) return [];
+        if (Array.isArray(c.pccsTokens) && c.pccsTokens.length > 0) {
+            return c.pccsTokens;
+        }
+        if (c.pccs) {
+            return c.pccs.trim().split(/\s+/).filter(Boolean);
+        }
+        return [];
+    }
+
+    // PCCS全種類の色 (全12トーン×全24色相 ＋ 全無彩色記号) リスト生成
+    function getAllPccsColorsList() {
+        const tones = ['v', 'b', 'dp', 'lt', 'sf', 'd', 'dk', 'p', 'ltg', 'g', 'dkg', 's'];
+        const list = [];
+        tones.forEach(t => {
+            for (let h = 1; h <= 24; h++) {
+                const tok = `${t}${h}`;
+                list.push({
+                    token: tok,
+                    hex: getPccsColorHex(t, h)
+                });
+            }
+        });
+        const achros = ['W', 'Gy-9.5', 'Gy-8.5', 'Gy-7.5', 'Gy-6.5', 'Gy-5.5', 'Gy-4.5', 'Gy-3.5', 'Gy-2.5', 'Bk'];
+        achros.forEach(a => {
+            list.push({
+                token: a,
+                hex: getPccsHex(a)
+            });
+        });
+        return list;
+    }
+
+    // PCCS類似トーン辞書 (明度・彩度が近いトーン群)
+    const PCCS_SIMILAR_TONES_MAP = {
+        'v': ['b', 's', 'dp', 'v'],
+        'b': ['v', 'lt', 's', 'b'],
+        's': ['v', 'b', 'sf', 'd', 's'],
+        'dp': ['v', 'dk', 'd', 'dp'],
+        'lt': ['b', 'p', 'sf', 'lt'],
+        'sf': ['lt', 'd', 'ltg', 's', 'sf'],
+        'd': ['sf', 'g', 'dk', 'dp', 'd'],
+        'dk': ['d', 'dp', 'dkg', 'dk'],
+        'p': ['lt', 'ltg', 'p'],
+        'ltg': ['p', 'sf', 'g', 'ltg'],
+        'g': ['ltg', 'd', 'dkg', 'g'],
+        'dkg': ['g', 'dk', 'dkg']
+    };
+
+    // 似ている色（隣接色相・類似トーン）を多く含んだ多肢選択肢生成 (デフォルト8択〜10択)
+    function generateSimilarPccsChoices(correctColor, totalCount = 8) {
+        if (!correctColor) return [];
+        const correctTokens = getColorPccsTokens(correctColor);
+        const prime = correctTokens[0] || 'v2';
+        
+        const choicesMap = new Map();
+        // 正解トークンをまず登録
+        correctTokens.forEach(tok => {
+            choicesMap.set(tok.toLowerCase(), {
+                token: tok,
+                hex: getPccsHex(tok),
+                isCorrect: true,
+                relation: '【正解のPCCS色】'
+            });
+        });
+
+        const m = prime.match(/^([a-zA-Z]+)(\d+)(\+)?$/);
+        if (m) {
+            const t = m[1].toLowerCase();
+            const h = parseInt(m[2], 10);
+            const similarTones = PCCS_SIMILAR_TONES_MAP[t] || ['v', 'b', 'd', 'lt'];
+
+            // 1. 同一トーンで隣接色相 (色相差 ±1, ±2)
+            const hueDeltas = [-1, 1, -2, 2, -3, 3];
+            hueDeltas.forEach(dh => {
+                let nh = h + dh;
+                while (nh <= 0) nh += 24;
+                while (nh > 24) nh -= 24;
+                const tok = `${t}${nh}`;
+                if (!choicesMap.has(tok.toLowerCase())) {
+                    choicesMap.set(tok.toLowerCase(), {
+                        token: tok,
+                        hex: getPccsHex(tok),
+                        isCorrect: false,
+                        relation: `隣接色相 (${t}トーン / 色相${nh})`
+                    });
+                }
+            });
+
+            // 2. 同一色相で類似トーン
+            similarTones.forEach(st => {
+                if (st !== t) {
+                    const tok = `${st}${h}`;
+                    if (!choicesMap.has(tok.toLowerCase())) {
+                        choicesMap.set(tok.toLowerCase(), {
+                            token: tok,
+                            hex: getPccsHex(tok),
+                            isCorrect: false,
+                            relation: `類似トーン (${st}トーン / 色相${h})`
+                        });
+                    }
+                }
+            });
+
+            // 3. 隣接色相 かつ 類似トーン (色相差 ±1 × 類似トーン)
+            similarTones.forEach(st => {
+                [-1, 1].forEach(dh => {
+                    let nh = h + dh;
+                    while (nh <= 0) nh += 24;
+                    while (nh > 24) nh -= 24;
+                    const tok = `${st}${nh}`;
+                    if (!choicesMap.has(tok.toLowerCase())) {
+                        choicesMap.set(tok.toLowerCase(), {
+                            token: tok,
+                            hex: getPccsHex(tok),
+                            isCorrect: false,
+                            relation: `類似トーン・近接色相 (${st}${nh})`
+                        });
+                    }
+                });
+            });
+        } else {
+            // 無彩色の場合の類似候補
+            const achros = ['W', 'Bk', 'N1.5', 'Gy-3.0', 'N5', 'Gy-6.5', 'p6+', 'ltg6', 'g6', 'dkg6'];
+            achros.forEach(a => {
+                if (!choicesMap.has(a.toLowerCase())) {
+                    choicesMap.set(a.toLowerCase(), {
+                        token: a,
+                        hex: getPccsHex(a),
+                        isCorrect: correctTokens.some(ct => ct.toLowerCase() === a.toLowerCase()),
+                        relation: '類似の無彩色・低彩度色'
+                    });
+                }
+            });
+        }
+
+        // 他の127色データからも近い色相・トーンを補充
+        const pool = [...allColorData].sort(() => Math.random() - 0.5);
+        for (const c of pool) {
+            if (choicesMap.size >= totalCount + 4) break;
+            const toks = getColorPccsTokens(c);
+            toks.forEach(tok => {
+                if (!choicesMap.has(tok.toLowerCase())) {
+                    choicesMap.set(tok.toLowerCase(), {
+                        token: tok,
+                        hex: getPccsHex(tok),
+                        isCorrect: false,
+                        relation: `他の慣用色 (${c.clean_name}: ${tok})`
+                    });
+                }
+            });
+        }
+
+        // 正解を確実に含めて、指定個数 (totalCount) をシャッフルして抽出
+        const allList = Array.from(choicesMap.values());
+        const correctList = allList.filter(c => c.isCorrect);
+        const incorrectList = allList.filter(c => !c.isCorrect).sort(() => Math.random() - 0.5);
+
+        const result = [...correctList, ...incorrectList.slice(0, Math.max(0, totalCount - correctList.length))];
+        return result.sort(() => Math.random() - 0.5);
+    }
+
+    // --- PCCS色当て問題 (多肢・類似色) 状態変数 ---
+    let pccsQuizIndex = 0;
+    let pccsQuizAnswered = false;
+    let pccsQuizChoices = [];
+    let pccsQuizFormat = 'origin'; // 'origin' (由来から出題) または 'name' (色名から出題)
+    let pccsQuizSelectedChoice = null;
+    let pccsQuizGradeFilter = 'all';
+
+    function startQuickPccsQuiz() {
+        pccsQuizIndex = Math.floor(Math.random() * filteredData.length);
+        setMode('pccs_quiz');
+    }
+
+    function resetPccsQuiz() {
+        let pool = allColorData;
+        if (pccsQuizGradeFilter !== 'all') {
+            pool = pool.filter(c => c.grade === pccsQuizGradeFilter);
+        }
+        if (pool.length === 0) pool = allColorData;
+        pccsQuizIndex = Math.floor(Math.random() * pool.length);
+        pccsQuizAnswered = false;
+        pccsQuizSelectedChoice = null;
+        
+        const target = pool[pccsQuizIndex];
+        // 8〜10択の似ている色選択肢を生成！
+        pccsQuizChoices = generateSimilarPccsChoices(target, 8);
+    }
+
+    function setPccsQuizFormat(fmt) {
+        pccsQuizFormat = fmt;
+        render();
+    }
+
+    function setPccsQuizGrade(grade) {
+        pccsQuizGradeFilter = grade;
+        resetPccsQuiz();
+        render();
+    }
+
+    function checkPccsQuizChoice(choiceIndex) {
+        if (pccsQuizAnswered) return;
+        pccsQuizAnswered = true;
+        const choice = pccsQuizChoices[choiceIndex];
+        pccsQuizSelectedChoice = choice;
+
+        let pool = allColorData;
+        if (pccsQuizGradeFilter !== 'all') {
+            pool = pool.filter(c => c.grade === pccsQuizGradeFilter);
+        }
+        if (pool.length === 0) pool = allColorData;
+        const target = pool[pccsQuizIndex];
+
+        if (!choice.isCorrect) {
+            saveMistake(target.name);
+        }
+
+        render();
+    }
+
+    function nextPccsQuizQuestion() {
+        resetPccsQuiz();
+        render();
     }
 
     // キーボードの左右キーで移動 (図鑑モード時 / 教材モーダル時 / 暗記カード時)
@@ -9502,9 +9941,9 @@
             stopAudioPlay();
         }
         currentMode = mode;
-        const tabs = ['list', 'exam_q1', 'exam_q5', 'flashcards', 'audio', 'practical', 'practical_harmony', 'harmony', 'mistakes', 'materials'];
+        const tabs = ['list', 'exam_q1', 'exam_q5', 'flashcards', 'audio', 'pccs_quiz', 'practical', 'practical_harmony', 'harmony', 'mistakes', 'materials'];
         tabs.forEach(t => {
-            const tabId = (t === 'practical_harmony') ? 'tab-practical-harmony' : (t === 'exam_q1' ? 'tab-exam-q1' : (t === 'exam_q5' ? 'tab-exam-q5' : 'tab-' + t));
+            const tabId = (t === 'practical_harmony') ? 'tab-practical-harmony' : (t === 'exam_q1' ? 'tab-exam-q1' : (t === 'exam_q5' ? 'tab-exam-q5' : (t === 'pccs_quiz' ? 'tab-pccs-quiz' : 'tab-' + t)));
             const el = document.getElementById(tabId);
             if (el) el.classList.toggle('active', mode === t);
         });
@@ -9519,6 +9958,8 @@
             resetQ5Exam(q5CurrentIndex);
         } else if (mode === 'audio') {
             if (audioDeck.length === 0) initAudioDeck();
+        } else if (mode === 'pccs_quiz') {
+            if (!pccsQuizChoices || pccsQuizChoices.length === 0) resetPccsQuiz();
         } else if (mode === 'practical' || mode === 'practical_harmony') {
             resetPracticalQuiz();
         } else if (mode === 'harmony') {
@@ -10654,7 +11095,7 @@
     function generateBuilderTileChoices(ch) { return []; }
 
 
-    // --- 実戦記述クイズロジック ---
+    // --- 実戦記述クイズロジック (色名手入力 ＋ PCCS値選択 ＋ 実際の色選択) ---
     function resetPracticalQuiz() {
         if (filteredData.length > 0) {
             currentIndex = Math.floor(Math.random() * filteredData.length);
@@ -10662,6 +11103,9 @@
         quizAnswered = false;
         practicalSelectedTone = '';
         practicalSelectedHue = '';
+        practicalSelectedColor = null;
+        // 全298色 (全12トーン×全24色相＋無彩色) を完全にバラバラにシャッフル配置！数えて特定できないようにする
+        practicalAllShuffledColors = shuffleArray(getAllPccsColorsList());
     }
 
     function selectPracticalTone(tone) {
@@ -10674,6 +11118,21 @@
     function selectPracticalHue(hue) {
         if (quizAnswered) return;
         practicalSelectedHue = hue;
+        // トーン選択や番号選択時に下のカラーパレットを絞り込まない（常に全色をバラバラに表示）
+        renderPracticalSelector();
+    }
+
+    function selectPracticalColorByToken(token) {
+        if (quizAnswered) return;
+        practicalSelectedColor = {
+            token: token,
+            hex: getPccsHex(token)
+        };
+        renderPracticalSelector();
+    }
+
+    function setPracticalPaletteToneFilter(tone) {
+        practicalPaletteToneFilter = tone;
         renderPracticalSelector();
     }
 
@@ -10697,10 +11156,10 @@
 
         const userSelectedPCCS = practicalSelectedTone 
             ? (practicalSelectedTone === '無彩色' ? practicalSelectedHue : practicalSelectedTone + practicalSelectedHue)
-            : '';
+            : (practicalSelectedColor ? practicalSelectedColor.token : '');
 
-        if (!userTypedName && !userSelectedPCCS) {
-            alert('色名またはPCCSを入力・選択してください。');
+        if (!userTypedName && !userSelectedPCCS && !practicalSelectedColor) {
+            alert('色名の入力、PCCS値の選択、または色の選択を行ってください。');
             return;
         }
 
@@ -10717,16 +11176,50 @@
             return tok.toLowerCase() === userPccsNorm || tok.toLowerCase() === userPccsNorm + '+';
         });
 
-        const resultArea = document.getElementById('practical-result');
-        const isPerfect = isNameCorrect && isPccsCorrect;
+        // 実際の色 (カラーチップ) の判定
+        const userColorToken = practicalSelectedColor ? practicalSelectedColor.token.toLowerCase() : userPccsNorm;
+        const isColorCorrect = userColorToken && targetData.pccsTokens.some(tok => {
+            return tok.toLowerCase() === userColorToken || tok.toLowerCase() === userColorToken + '+';
+        });
 
-        let explanationText = `<div style="font-weight:700; margin-bottom:4px;">正解: ${targetData.name} (${targetData.grade})</div><div style="font-size:0.75rem; color:#64748b; margin-bottom:6px;">PCCS: ${targetData.pccs} / マンセル: ${targetData.munsell}</div><div style="font-size:0.8rem; line-height:1.5;">${targetData.origin}</div>`;
+        const resultArea = document.getElementById('practical-result');
+        const isPerfect = isNameCorrect && isPccsCorrect && isColorCorrect;
+
+        const correctPccsChips = (targetData.pccsTokens || [targetData.pccs]).map(tok => {
+            const pHex = getPccsHex(tok);
+            const pTxt = getContrastTextColor(pHex);
+            return `<span style="display:inline-flex; align-items:center; gap:4px; background-color:${pHex}; color:${pTxt}; border-radius:6px; padding:2px 8px; font-weight:900; font-size:0.78rem; border:1px solid rgba(0,0,0,0.1);"><span style="font-size:0.65rem; opacity:0.85;">PCCS正解:</span> ${tok}</span>`;
+        }).join(' ');
+
+        let userPccsChip = '';
+        if (userSelectedPCCS) {
+            const uHex = getPccsHex(userSelectedPCCS);
+            const uTxt = getContrastTextColor(uHex);
+            userPccsChip = `<span style="display:inline-flex; align-items:center; gap:4px; background-color:${uHex}; color:${uTxt}; border-radius:6px; padding:2px 8px; font-weight:800; font-size:0.75rem; border:1px solid rgba(0,0,0,0.1);"><span style="font-size:0.65rem; opacity:0.85;">選択PCCS値:</span> ${userSelectedPCCS}</span>`;
+        }
+
+        let userColorChip = '';
+        if (practicalSelectedColor) {
+            const uTxt = getContrastTextColor(practicalSelectedColor.hex);
+            userColorChip = `<span style="display:inline-flex; align-items:center; gap:4px; background-color:${practicalSelectedColor.hex}; color:${uTxt}; border-radius:6px; padding:2px 8px; font-weight:800; font-size:0.75rem; border:1px solid rgba(0,0,0,0.1);"><span style="font-size:0.65rem; opacity:0.85;">選択色:</span> ${practicalSelectedColor.token}</span>`;
+        }
+
+        let explanationText = `
+            <div style="font-weight:800; margin-bottom:6px; font-size:0.95rem;">正解: ${targetData.name} <span class="badge ${targetData.grade === '3級' ? 'badge-grade-3' : 'badge-grade-2'}" style="font-size:0.65rem;">${targetData.grade}</span></div>
+            <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap; margin-bottom:8px;">
+                ${correctPccsChips}
+                ${userPccsChip && !isPccsCorrect ? userPccsChip : ''}
+                ${userColorChip && !isColorCorrect && userColorChip !== userPccsChip ? userColorChip : ''}
+                <span style="font-size:0.75rem; color:#64748b;">マンセル: ${targetData.munsell}</span>
+            </div>
+            <div style="font-size:0.8rem; line-height:1.5; color:#334155;">${targetData.origin}</div>
+        `;
 
         if (isPerfect) {
             resultArea.innerHTML = `
                 <div style="background:#f0fdf4; border:1px solid #16a34a; border-radius:8px; padding:12px; color:#166534; text-align:left;">
-                    <div style="font-size:1.05rem; font-weight:800; letter-spacing:0.05em; margin-bottom:6px;">完全正解</div>
-                    <div style="font-size:0.82rem; color:#334155; line-height:1.5; background:#fff; padding:10px; border-radius:6px; border:1px solid #e2e8f0;">${explanationText}</div>
+                    <div style="font-size:1.05rem; font-weight:800; letter-spacing:0.05em; margin-bottom:6px;">完全正解（色名・PCCS値・色すべて一致）</div>
+                    <div style="background:#fff; padding:10px; border-radius:6px; border:1px solid #e2e8f0;">${explanationText}</div>
                 </div>
             `;
             if (mistakes.includes(targetData.name)) {
@@ -10737,13 +11230,14 @@
             saveMistake(targetData.name);
             let details = [];
             details.push(isNameCorrect ? '色名: 正解' : `色名: 正解は [${targetData.name}]`);
-            details.push(isPccsCorrect ? 'PCCS: 正解' : `PCCS: 正解は [${targetData.pccs}]`);
+            details.push(isPccsCorrect ? 'PCCS値: 正解' : `PCCS値: 正解は [${targetData.pccs}]`);
+            details.push(isColorCorrect ? 'PCCS色: 正解' : `PCCS色: 正解は [${targetData.pccs}] の色`);
 
             resultArea.innerHTML = `
                 <div style="background:#fef2f2; border:1px solid #dc2626; border-radius:8px; padding:12px; color:#991b1b; text-align:left;">
                     <div style="font-size:1.05rem; font-weight:800; letter-spacing:0.05em; margin-bottom:6px;">正解を確認</div>
                     <div style="font-size:0.82rem; font-weight:700; margin-bottom:8px; line-height:1.6;">${details.join('<br>')}</div>
-                    <div style="font-size:0.82rem; color:#334155; line-height:1.5; background:#fff; padding:10px; border-radius:6px; border:1px solid #e2e8f0;">${explanationText}</div>
+                    <div style="background:#fff; padding:10px; border-radius:6px; border:1px solid #e2e8f0;">${explanationText}</div>
                 </div>
             `;
         }
@@ -10753,6 +11247,9 @@
             sampleEl.style.backgroundColor = targetData.hex;
             sampleEl.innerHTML = '';
         }
+
+        // 解答判定後にカラーパレットも正解結果を開示表示
+        renderPracticalSelector();
 
         const nextBtn = document.getElementById('next-practical-btn');
         if (nextBtn) {
@@ -10775,46 +11272,133 @@
     function renderPracticalSelector() {
         const preview = document.getElementById('selected-pccs-preview');
         const hueBox = document.getElementById('hue-selector-container');
+        const colorChoicesBox = document.getElementById('practical-color-choices-container');
         
-        let displayStr = '未選択';
+        let displayPccs = '未選択';
+        let hasPccs = false;
+
         if (practicalSelectedTone) {
-            displayStr = practicalSelectedTone;
+            displayPccs = practicalSelectedTone;
             if (practicalSelectedHue) {
-                displayStr = practicalSelectedTone === '無彩色' ? practicalSelectedHue : practicalSelectedTone + practicalSelectedHue;
+                displayPccs = practicalSelectedTone === '無彩色' ? practicalSelectedHue : practicalSelectedTone + practicalSelectedHue;
+                hasPccs = true;
             } else {
-                displayStr += ' + (番号を選択)';
+                displayPccs += ' + (番号を選択)';
             }
         }
-        if (preview) preview.textContent = displayStr;
+
+        // 回答前はカラーチップのPCCS記号名を絶対に漏らさない！色見本チップのみ表示
+        let colorPreviewHtml = '';
+        if (practicalSelectedColor) {
+            if (quizAnswered) {
+                colorPreviewHtml = `
+                    <span style="display:inline-flex; align-items:center; gap:5px; margin-left:8px; border-left:1px solid #cbd5e1; padding-left:8px;">
+                        <span style="font-size:0.72rem; color:#64748b; font-weight:700;">選択色:</span>
+                        <span style="display:inline-block; width:16px; height:16px; border-radius:3px; background-color:${practicalSelectedColor.hex}; border:1px solid rgba(0,0,0,0.2); vertical-align:middle;"></span>
+                        <strong style="color:#2563eb;">${practicalSelectedColor.token}</strong>
+                    </span>
+                `;
+            } else {
+                colorPreviewHtml = `
+                    <span style="display:inline-flex; align-items:center; gap:5px; margin-left:8px; border-left:1px solid #cbd5e1; padding-left:8px;">
+                        <span style="font-size:0.72rem; color:#64748b; font-weight:700;">選択色:</span>
+                        <span style="display:inline-block; width:16px; height:16px; border-radius:3px; background-color:${practicalSelectedColor.hex}; border:1px solid rgba(0,0,0,0.2); vertical-align:middle;"></span>
+                        <span style="font-size:0.7rem; color:#15803d; font-weight:800;">(色指定済)</span>
+                    </span>
+                `;
+            }
+        }
+
+        if (preview) {
+            preview.innerHTML = `
+                <span style="display:inline-flex; align-items:center; flex-wrap:wrap; gap:4px;">
+                    <strong style="${hasPccs ? 'color:#7c3aed;' : ''}">${displayPccs}</strong>
+                    ${colorPreviewHtml}
+                </span>
+            `;
+        }
 
         document.querySelectorAll('.tone-pick-btn').forEach(btn => {
             btn.classList.toggle('selected', btn.getAttribute('data-tone') === practicalSelectedTone);
         });
 
+        // 2. 色相番号ボタン (ヒント・色なしの標準番号ボタン)
         if (hueBox) {
             if (!practicalSelectedTone) {
-                hueBox.innerHTML = '<div style="font-size:0.72rem; color:#94a3b8; padding:8px 0;">先に上のトーンを選択してください</div>';
+                hueBox.innerHTML = '<div style="font-size:0.75rem; color:#94a3b8; padding:8px 0;">先に上のトーンを選択してください</div>';
             } else if (practicalSelectedTone === '無彩色') {
-                const achroOptions = ['W', 'Bk', 'N1.5', 'N5', 'N6.5', 'Gy-3.0', 'Gy-6.5'];
+                const achroOptions = ['W', 'Gy-9.5', 'Gy-8.5', 'Gy-7.5', 'Gy-6.5', 'Gy-5.5', 'Gy-4.5', 'Gy-3.5', 'Gy-2.5', 'Bk'];
                 hueBox.innerHTML = `
                     <div class="selector-step-title">無彩色の明度記号を選択:</div>
-                    <div class="hue-btn-grid" style="grid-template-columns: repeat(4, 1fr);">
-                        ${achroOptions.map(h => `
-                            <button class="hue-pick-btn ${practicalSelectedHue === h ? 'selected' : ''}" onclick="selectPracticalHue('${h}')">${h}</button>
-                        `).join('')}
+                    <div class="hue-btn-grid" style="grid-template-columns: repeat(5, 1fr);">
+                        ${achroOptions.map(h => {
+                            const isSel = (practicalSelectedHue === h);
+                            return `
+                                <button class="hue-pick-btn ${isSel ? 'selected' : ''}" onclick="selectPracticalHue('${h}')">${h}</button>
+                            `;
+                        }).join('')}
                     </div>
                 `;
             } else {
+                // 全24色相の番号ボタン (色なし・ヒントなし)
                 const hues = Array.from({length: 24}, (_, i) => String(i + 1));
                 hueBox.innerHTML = `
                     <div class="selector-step-title">色相番号 (1〜24) を選択:</div>
                     <div class="hue-btn-grid">
-                        ${hues.map(h => `
-                            <button class="hue-pick-btn ${practicalSelectedHue === h ? 'selected' : ''}" onclick="selectPracticalHue('${h}')">${h}</button>
-                        `).join('')}
+                        ${hues.map(h => {
+                            const isSel = (practicalSelectedHue === h);
+                            return `
+                                <button class="hue-pick-btn ${isSel ? 'selected' : ''}" onclick="selectPracticalHue('${h}')">${h}</button>
+                            `;
+                        }).join('')}
                     </div>
                 `;
             }
+        }
+
+        // 3. 実際の色を選択 (全トーン×全色相および無彩色の全298色 完全シャッフル・ランダム配置)
+        if (colorChoicesBox) {
+            const targetData = filteredData[currentIndex];
+            const targetTokens = targetData ? getColorPccsTokens(targetData).map(t => t.toLowerCase().replace(/\+/g, '')) : [];
+
+            let selectedStatusHtml = '';
+            if (practicalSelectedColor) {
+                if (quizAnswered) {
+                    selectedStatusHtml = `選択した色: <span style="display:inline-flex; align-items:center; gap:4px; font-weight:900; color:#2563eb;"><span style="display:inline-block; width:14px; height:14px; border-radius:3px; background-color:${practicalSelectedColor.hex}; border:1px solid rgba(0,0,0,0.2);"></span>${practicalSelectedColor.token}</span>`;
+                } else {
+                    selectedStatusHtml = `選択した色: <span style="display:inline-flex; align-items:center; gap:4px;"><span style="display:inline-block; width:14px; height:14px; border-radius:3px; background-color:${practicalSelectedColor.hex}; border:1px solid rgba(0,0,0,0.2);"></span><span style="font-size:0.75rem; color:#15803d; font-weight:800;">✓ 色を選択しました（記号は判定後に開示されます）</span></span>`;
+                }
+            } else {
+                selectedStatusHtml = '全298色（シャッフル配置）から該当する実際の色をタップ:';
+            }
+
+            let paletteHtml = `
+                <div class="pccs-palette-container" style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:10px; padding:10px;">
+                    <div style="font-size:0.75rem; font-weight:800; color:#334155; margin-bottom:8px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:4px;">
+                        <span>${selectedStatusHtml}</span>
+                        <span style="font-size:0.68rem; color:#64748b; font-weight:700;">※数えて推測できないようランダムに配置されています</span>
+                    </div>
+
+                    <div style="display:flex; flex-wrap:wrap; gap:4px; max-height:280px; overflow-y:auto; padding:6px 4px; justify-content:center; background:#fff; border:1px solid #e2e8f0; border-radius:8px;">
+                        ${practicalAllShuffledColors.map(c => {
+                            const isChosen = practicalSelectedColor && (practicalSelectedColor.token.toLowerCase() === c.token.toLowerCase());
+                            const isCorrect = targetTokens.includes(c.token.toLowerCase());
+                            let chipClass = 'pccs-mini-chip';
+                            if (isChosen) chipClass += ' selected';
+                            if (quizAnswered) {
+                                if (isCorrect) chipClass += ' revealed-correct';
+                                else if (isChosen) chipClass += ' revealed-wrong';
+                            }
+                            // 回答前はツールチップでネタバレしないよう空文字列にする（判定後にのみ開示）
+                            const chipTitle = quizAnswered ? c.token : '';
+                            return `
+                                <button type="button" class="${chipClass}" style="background-color:${c.hex};" onclick="selectPracticalColorByToken('${c.token}')" title="${chipTitle}"></button>
+                            `;
+                        }).join('')}
+                    </div>
+                </div>
+            `;
+            colorChoicesBox.innerHTML = paletteHtml;
         }
     }
 
@@ -13546,11 +14130,28 @@ ${exam.colorQuestion.explanation}
                             <!-- 3. 実際の色とPCCS (Step 2でオープン) -->
                             ${step >= 2 ? `
                                 <div class="flashcard-reveal-box" style="margin-top:6px; border-top:1px dashed #e2e8f0; padding-top:12px;">
-                                    <div style="font-size:0.74rem; font-weight:800; color:#7c3aed; margin-bottom:4px;">【実際の色とPCCS】</div>
-                                    <div class="flashcard-color-tile" style="background-color:${currentItem.hex}; color:${getContrastTextColor(currentItem.hex)};">
-                                        PCCS: ${currentItem.pccs}
+                                    <div style="font-size:0.74rem; font-weight:800; color:#7c3aed; margin-bottom:6px;">【実際の色とPCCS色見本】</div>
+                                    <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:10px;">
+                                        <!-- 慣用色見本タイル -->
+                                        <div class="flashcard-color-tile" style="background-color:${currentItem.hex}; color:${getContrastTextColor(currentItem.hex)}; margin:0; min-height:80px; display:flex; flex-direction:column; justify-content:center; align-items:center;">
+                                            <div style="font-size:0.68rem; opacity:0.85; font-weight:700;">慣用色見本</div>
+                                            <div style="font-size:1.05rem; font-weight:900;">${currentItem.clean_name}</div>
+                                        </div>
+                                        <!-- PCCS色見本タイル -->
+                                        <div style="display:flex; flex-direction:column; gap:4px;">
+                                            ${getColorPccsTokens(currentItem).map(tok => {
+                                                const pHex = getPccsHex(tok);
+                                                const pTxt = getContrastTextColor(pHex);
+                                                return `
+                                                    <div style="flex:1; min-height:38px; border-radius:8px; background-color:${pHex}; color:${pTxt}; display:flex; align-items:center; justify-content:center; gap:6px; font-weight:900; font-size:0.95rem; box-shadow:0 1px 3px rgba(0,0,0,0.1); border:1px solid rgba(0,0,0,0.08);">
+                                                        <span style="font-size:0.65rem; opacity:0.85; font-weight:700;">PCCS:</span>
+                                                        <span>${tok}</span>
+                                                    </div>
+                                                `;
+                                            }).join('')}
+                                        </div>
                                     </div>
-                                    <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; font-size:0.78rem; margin-top:8px;">
+                                    <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; font-size:0.78rem;">
                                         <div style="background:#f8fafc; padding:8px; border-radius:6px; border:1px solid #e2e8f0;">
                                             <span style="color:#64748b; font-weight:700;">系統色名:</span> <strong>${currentItem.category}</strong>
                                         </div>
@@ -13561,7 +14162,7 @@ ${exam.colorQuestion.explanation}
                                 </div>
                             ` : (step >= 1 ? `
                                 <div style="text-align:center; padding:16px 0; color:#94a3b8; font-size:0.85rem; font-weight:700;">
-                                    （タップすると実際の色とPCCSが表示されます）
+                                    （タップすると実際の色とPCCSの色見本が表示されます）
                                 </div>
                             ` : '')}
                         </div>
@@ -13818,8 +14419,27 @@ ${exam.colorQuestion.explanation}
                                     <div style="font-size:0.72rem; color:#64748b; font-weight:700;">音声読み上げ中</div>
                                 </div>
                                 <div style="display:flex; align-items:center; gap:14px; flex-wrap:wrap;">
-                                    <!-- カラーチップ -->
-                                    <div style="width:68px; height:68px; border-radius:10px; background-color:${current.hex}; box-shadow:0 2px 4px rgba(0,0,0,0.15); border:1px solid rgba(0,0,0,0.1); flex-shrink:0;"></div>
+                                    <!-- 慣用色カラーチップ -->
+                                    <div style="text-align:center;">
+                                        <div style="width:68px; height:68px; border-radius:10px; background-color:${current.hex}; box-shadow:0 2px 4px rgba(0,0,0,0.15); border:1px solid rgba(0,0,0,0.1);"></div>
+                                        <div style="font-size:0.68rem; font-weight:800; color:#64748b; margin-top:3px;">慣用色見本</div>
+                                    </div>
+                                    <!-- PCCS色カラーチップ群 -->
+                                    <div style="display:flex; gap:6px;">
+                                        ${getColorPccsTokens(current).map(tok => {
+                                            const pHex = getPccsHex(tok);
+                                            const pTxt = getContrastTextColor(pHex);
+                                            return `
+                                                <div style="text-align:center;">
+                                                    <div style="width:68px; height:68px; border-radius:10px; background-color:${pHex}; color:${pTxt}; box-shadow:0 2px 4px rgba(0,0,0,0.15); border:1px solid rgba(0,0,0,0.1); display:flex; flex-direction:column; align-items:center; justify-content:center;">
+                                                        <span style="font-size:0.6rem; opacity:0.85; font-weight:700;">PCCS色</span>
+                                                        <span style="font-size:1.05rem; font-weight:900;">${tok}</span>
+                                                    </div>
+                                                    <div style="font-size:0.68rem; font-weight:800; color:#7c3aed; margin-top:3px;">PCCS見本</div>
+                                                </div>
+                                            `;
+                                        }).join('')}
+                                    </div>
                                     <div>
                                         <div style="font-size:1.5rem; font-weight:900; color:#0f172a; line-height:1.2;">
                                             ${current.clean_name}
@@ -13938,6 +14558,172 @@ ${exam.colorQuestion.explanation}
         `;
     }
 
+    // --- PCCS色当て問題 (多肢・類似色) 画面レンダリング ---
+    function renderPccsQuizView(area, stats) {
+        let pool = allColorData;
+        if (pccsQuizGradeFilter !== 'all') {
+            pool = pool.filter(c => c.grade === pccsQuizGradeFilter);
+        }
+        if (pool.length === 0) pool = allColorData;
+
+        const target = pool[pccsQuizIndex] || pool[0];
+        const gradeBadge = target.grade === '3級' ? 'badge-grade-3' : 'badge-grade-2';
+
+        stats.innerHTML = `PCCS色当て問題 (類似色・多肢選択) - ${pccsQuizGradeFilter === 'all' ? '全127色' : pccsQuizGradeFilter}`;
+
+        const questionText = (pccsQuizFormat === 'origin')
+            ? (target.exam_origin || target.origin || '')
+            : target.clean_name;
+
+        area.innerHTML = `
+            <div class="flashcard-container" style="max-width:760px; margin:0 auto; text-align:left;">
+                <!-- 1. 最上部コントロールバー -->
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; flex-wrap:wrap; gap:8px;">
+                    <div style="display:flex; gap:6px; align-items:center;">
+                        <button onclick="setMode('list')" class="flashcard-btn" style="padding:6px 12px; font-size:0.78rem;">← 図鑑に戻る</button>
+                        <!-- 出題形式ピル -->
+                        <div style="display:inline-flex; background:#f1f5f9; padding:2px; border-radius:6px; border:1px solid #e2e8f0; font-size:0.72rem;">
+                            <button type="button" onclick="setPccsQuizFormat('origin')" style="border:none; padding:3px 8px; border-radius:4px; font-weight:700; cursor:pointer; background:${pccsQuizFormat === 'origin' ? '#8b5cf6' : 'transparent'}; color:${pccsQuizFormat === 'origin' ? '#fff' : '#64748b'};">由来から出題</button>
+                            <button type="button" onclick="setPccsQuizFormat('name')" style="border:none; padding:3px 8px; border-radius:4px; font-weight:700; cursor:pointer; background:${pccsQuizFormat === 'name' ? '#8b5cf6' : 'transparent'}; color:${pccsQuizFormat === 'name' ? '#fff' : '#64748b'};">色名から出題</button>
+                        </div>
+                    </div>
+                    <!-- 級フィルター -->
+                    <div style="display:flex; gap:4px;">
+                        <button onclick="setPccsQuizGrade('all')" class="flashcard-btn ${pccsQuizGradeFilter === 'all' ? 'primary' : ''}" style="padding:5px 9px; font-size:0.74rem;">全色</button>
+                        <button onclick="setPccsQuizGrade('3級')" class="flashcard-btn ${pccsQuizGradeFilter === '3級' ? 'primary' : ''}" style="padding:5px 9px; font-size:0.74rem;">3級のみ</button>
+                        <button onclick="setPccsQuizGrade('2級')" class="flashcard-btn ${pccsQuizGradeFilter === '2級' ? 'primary' : ''}" style="padding:5px 9px; font-size:0.74rem;">2級のみ</button>
+                    </div>
+                </div>
+
+                <!-- 2. 出題カード -->
+                <div class="flashcard-card-box" style="padding:16px 20px; margin-bottom:14px; background:#fff; border:1px solid #e2e8f0; border-radius:14px; box-shadow:0 2px 6px rgba(0,0,0,0.04);">
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+                        <span class="badge ${gradeBadge}">${target.grade}</span>
+                        <span style="font-size:0.75rem; color:#7c3aed; font-weight:800;">
+                            ※似ている色（隣接色相・類似トーン）の中から正解を選んでください
+                        </span>
+                    </div>
+
+                    ${pccsQuizFormat === 'origin' ? `
+                        <div style="font-size:0.85rem; font-weight:800; color:#1e293b; margin-bottom:4px;">
+                            【問題】以下の由来を持つ色の【PCCSの色】はどれですか？
+                        </div>
+                        <div style="font-size:0.95rem; line-height:1.6; color:#334155; background:#f8fafc; border:1px solid #e2e8f0; border-radius:10px; padding:12px; margin-top:6px;">
+                            ${escapeHtml(questionText)}
+                        </div>
+                    ` : `
+                        <div style="font-size:0.85rem; font-weight:800; color:#1e293b; margin-bottom:4px;">
+                            【問題】慣用色名に対応する【PCCSの色】はどれですか？
+                        </div>
+                        <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:10px; padding:14px; text-align:center; margin-top:6px;">
+                            <div style="font-size:1.6rem; font-weight:900; color:#0f172a;">${target.clean_name}</div>
+                            ${target.ruby ? `<div style="font-size:0.82rem; color:#64748b; font-weight:700; margin-top:2px;">（${target.ruby}）</div>` : ''}
+                        </div>
+                    `}
+                </div>
+
+                <!-- 3. 結果＆解説ボックス (解答後に表示) -->
+                ${pccsQuizAnswered ? `
+                    <div style="margin-bottom:16px; animation:fadeIn 0.25s ease-out;">
+                        <div style="background:${pccsQuizSelectedChoice && pccsQuizSelectedChoice.isCorrect ? '#f0fdf4' : '#fef2f2'}; border:2px solid ${pccsQuizSelectedChoice && pccsQuizSelectedChoice.isCorrect ? '#16a34a' : '#dc2626'}; border-radius:12px; padding:14px 18px;">
+                            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; flex-wrap:wrap; gap:8px;">
+                                <div style="font-size:1.15rem; font-weight:900; color:${pccsQuizSelectedChoice && pccsQuizSelectedChoice.isCorrect ? '#15803d' : '#b91c1c'};">
+                                    ${pccsQuizSelectedChoice && pccsQuizSelectedChoice.isCorrect ? '正解です' : '不正解です。正解の色を確認しましょう'}
+                                </div>
+                                <button onclick="nextPccsQuizQuestion()" class="flashcard-btn primary" style="padding:8px 16px; font-size:0.82rem; font-weight:800;">
+                                    次の問題へ ＞
+                                </button>
+                            </div>
+
+                            <div style="display:flex; gap:14px; align-items:center; flex-wrap:wrap; background:#fff; padding:12px; border-radius:10px; border:1px solid #e2e8f0;">
+                                <!-- 慣用色 -->
+                                <div style="text-align:center;">
+                                    <div style="width:60px; height:60px; border-radius:8px; background-color:${target.hex}; border:1px solid rgba(0,0,0,0.1); box-shadow:0 1px 3px rgba(0,0,0,0.1);"></div>
+                                    <div style="font-size:0.68rem; font-weight:800; color:#64748b; margin-top:2px;">慣用色見本</div>
+                                </div>
+                                <!-- 正解のPCCS色 -->
+                                <div style="display:flex; gap:6px;">
+                                    ${getColorPccsTokens(target).map(tok => {
+                                        const pHex = getPccsHex(tok);
+                                        const pTxt = getContrastTextColor(pHex);
+                                        return `
+                                            <div style="text-align:center;">
+                                                <div style="width:60px; height:60px; border-radius:8px; background-color:${pHex}; color:${pTxt}; border:1px solid rgba(0,0,0,0.1); box-shadow:0 1px 3px rgba(0,0,0,0.1); display:flex; flex-direction:column; align-items:center; justify-content:center;">
+                                                    <span style="font-size:0.6rem; opacity:0.85; font-weight:700;">正解PCCS</span>
+                                                    <span style="font-size:0.95rem; font-weight:900;">${tok}</span>
+                                                </div>
+                                                <div style="font-size:0.68rem; font-weight:800; color:#7c3aed; margin-top:2px;">PCCS色</div>
+                                            </div>
+                                        `;
+                                    }).join('')}
+                                </div>
+                                <div style="flex:1; min-width:180px;">
+                                    <div style="font-size:1.2rem; font-weight:900; color:#0f172a;">${target.clean_name}</div>
+                                    <div style="font-size:0.8rem; color:#475569; margin-top:2px;">
+                                        系統色名: <strong>${target.category}</strong> / PCCS: <strong style="color:#7c3aed;">${target.pccs}</strong> / マンセル: <strong>${target.munsell}</strong>
+                                    </div>
+                                    <div style="font-size:0.75rem; color:#64748b; margin-top:4px; line-height:1.4;">
+                                        ${target.origin}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                ` : ''}
+
+                <!-- 4. 多肢選択肢 (似ている色が並ぶグリッド) -->
+                <div style="font-size:0.85rem; font-weight:800; color:#1e293b; margin-bottom:6px;">
+                    【選択肢 (${pccsQuizChoices.length}択)】該当するPCCSの色をタップ:
+                </div>
+                <div class="pccs-quiz-grid">
+                    ${pccsQuizChoices.map((c, idx) => {
+                        let cardClass = 'pccs-color-opt-card';
+                        if (pccsQuizAnswered) {
+                            if (c.isCorrect) {
+                                cardClass += ' revealed-correct';
+                            }
+                            if (pccsQuizSelectedChoice === c) {
+                                cardClass += c.isCorrect ? ' correct' : ' incorrect';
+                            }
+                        }
+
+                        const textColor = getContrastTextColor(c.hex);
+
+                        return `
+                            <div class="${cardClass}" onclick="checkPccsQuizChoice(${idx})">
+                                <div class="pccs-color-opt-chip" style="background-color:${c.hex}; color:${textColor};">
+                                    ${pccsQuizAnswered ? `<span>${c.token}</span>` : `<span style="opacity:0.35; font-size:0.8rem;">色 ${idx + 1}</span>`}
+                                </div>
+                                <div style="margin-top:6px; text-align:center; width:100%;">
+                                    ${pccsQuizAnswered ? `
+                                        <div style="font-size:0.82rem; font-weight:900; color:${c.isCorrect ? '#16a34a' : '#475569'};">
+                                            ${c.token} ${c.isCorrect ? '(正解)' : ''}
+                                        </div>
+                                        <div style="font-size:0.68rem; color:${c.isCorrect ? '#16a34a' : '#64748b'}; margin-top:1px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">
+                                            ${c.relation}
+                                        </div>
+                                    ` : `
+                                        <div style="font-size:0.75rem; font-weight:800; color:#64748b;">
+                                            選択肢 ${idx + 1}
+                                        </div>
+                                    `}
+                                </div>
+                            </div>
+                        `;
+                    }).join('')}
+                </div>
+
+                ${pccsQuizAnswered ? `
+                    <div style="text-align:center; margin-top:20px;">
+                        <button onclick="nextPccsQuizQuestion()" class="flashcard-btn primary" style="padding:10px 24px; font-size:0.95rem; font-weight:900;">
+                            次のPCCS色当て問題へ ＞
+                        </button>
+                    </div>
+                ` : ''}
+            </div>
+        `;
+    }
+
     // --- メインレンダリング ---
     function render() {
         const area = document.getElementById('view-area');
@@ -13974,6 +14760,13 @@ ${exam.colorQuestion.explanation}
         if (currentMode === 'audio') {
             controls.style.display = 'none';
             renderAudioView(area, stats);
+            return;
+        }
+
+        // --- PCCS色当て問題 (多肢・類似色) モード ---
+        if (currentMode === 'pccs_quiz') {
+            controls.style.display = 'none';
+            renderPccsQuizView(area, stats);
             return;
         }
 
@@ -14298,94 +15091,109 @@ ${exam.colorQuestion.explanation}
                                 <div class="grid-container">
                             `;
                             items.forEach(item => {
-                                const origIdx = allColorData.findIndex(ac => ac.name === item.name);
-                                const gradeClass = item.grade === '3級' ? 'badge-grade-3' : 'badge-grade-2';
-                                gridHtml += `
-                                    <div class="grid-item" onclick="jumpTo(${origIdx})" title="クリックして詳細を表示">
-                                        <span class="grid-grade-tag ${gradeClass}">${item.grade}</span>
-                                        <div class="grid-color" style="background-color: ${item.hex};"></div>
-                                        <div class="grid-name">${item.clean_name}</div>
-                                        <div class="grid-sub">${item.category}</div>
-                                        <div class="grid-sub" style="color:#7c3aed; font-weight:700;">${item.pccs}</div>
-                                    </div>
-                                `;
-                            });
-                            gridHtml += `</div>`;
-                        }
-                    });
-                } else {
-                    const hueGroups = [
-                        { label: "赤・黄赤系 (Hue: 1-4)", filter: h => h >= 1 && h <= 4 },
-                        { label: "黄赤・黄系 (Hue: 5-8)", filter: h => h >= 5 && h <= 8 },
-                        { label: "黄緑・緑系 (Hue: 9-14)", filter: h => h >= 9 && h <= 14 },
-                        { label: "青緑・青系 (Hue: 15-19)", filter: h => h >= 15 && h <= 19 },
-                        { label: "青紫・紫・赤紫系 (Hue: 20-24)", filter: h => h >= 20 && h <= 24 },
-                        { label: "無彩色", filter: h => h === 99 }
-                    ];
-
-                    hueGroups.forEach(g => {
-                        const items = filteredData.filter(d => g.filter(getHue(d.pccs)));
-                        if (items.length > 0) {
-                            gridHtml += `
-                                <div class="group-title">
-                                    <span>${g.label}</span>
-                                    <span style="font-size:0.75rem; color:#64748b;">${items.length}色</span>
-                                </div>
-                                <div class="grid-container">
-                            `;
-                            items.forEach(item => {
-                                const origIdx = allColorData.findIndex(ac => ac.name === item.name);
-                                const gradeClass = item.grade === '3級' ? 'badge-grade-3' : 'badge-grade-2';
-                                gridHtml += `
-                                    <div class="grid-item" onclick="jumpTo(${origIdx})" title="クリックして詳細を表示">
-                                        <span class="grid-grade-tag ${gradeClass}">${item.grade}</span>
-                                        <div class="grid-color" style="background-color: ${item.hex};"></div>
-                                        <div class="grid-name">${item.clean_name}</div>
-                                        <div class="grid-sub">${item.category}</div>
-                                        <div class="grid-sub" style="color:#7c3aed; font-weight:700;">${item.pccs}</div>
-                                    </div>
-                                `;
-                            });
-                            gridHtml += `</div>`;
-                        }
-                    });
-                }
-
-                area.innerHTML = gridHtml;
-                return;
-            }
-
-            // === 2. 由来一覧表示 (色名・由来簡潔・PCCS) ===
-            if (colorViewFormat === 'origin') {
-                controls.style.display = 'none';
-                stats.innerHTML = `由来一覧 (${filteredData.length}色)`;
-
-                let originHtml = viewToggleHtml;
-                originHtml += `
-                    <div class="origin-list-container">
-                        ${filteredData.map(item => {
                             const origIdx = allColorData.findIndex(ac => ac.name === item.name);
                             const gradeClass = item.grade === '3級' ? 'badge-grade-3' : 'badge-grade-2';
-                            return `
-                                <div class="origin-list-item" onclick="jumpTo(${origIdx})" title="タップして詳細を表示">
-                                    <div class="origin-item-color" style="background-color: ${item.hex};"></div>
-                                    <div class="origin-item-main">
-                                        <div class="origin-item-header">
-                                            <span class="grid-grade-tag ${gradeClass}">${item.grade}</span>
-                                            <span class="origin-item-name">${escapeHtml(item.clean_name)}</span>
-                                            <span class="origin-item-ruby">${escapeHtml(item.ruby || '')}</span>
-                                            <span class="origin-item-pccs">${escapeHtml(item.pccs)}</span>
-                                        </div>
-                                        <div class="origin-item-desc">${escapeHtml(item.origin)}</div>
+                            const pccsDots = getColorPccsTokens(item).map(tok => `<span style="display:inline-block; width:8px; height:8px; border-radius:50%; background-color:${getPccsHex(tok)}; border:1px solid #fff; box-shadow:0 1px 2px rgba(0,0,0,0.25);" title="PCCS: ${tok}"></span>`).join('');
+                            gridHtml += `
+                                <div class="grid-item" onclick="jumpTo(${origIdx})" title="クリックして詳細を表示">
+                                    <span class="grid-grade-tag ${gradeClass}">${item.grade}</span>
+                                    <div class="grid-color" style="background-color: ${item.hex}; position:relative;">
+                                        <div style="position:absolute; bottom:2px; right:2px; display:flex; gap:2px;">${pccsDots}</div>
+                                    </div>
+                                    <div class="grid-name">${item.clean_name}</div>
+                                    <div class="grid-sub">${item.category}</div>
+                                    <div class="grid-sub" style="color:#7c3aed; font-weight:700; display:flex; align-items:center; justify-content:center; gap:3px;">
+                                        ${item.pccs}
                                     </div>
                                 </div>
                             `;
-                        }).join('')}
-                    </div>
-                `;
-                area.innerHTML = originHtml;
-                return;
-            }
+                            });
+                            gridHtml += `</div>`;
+                            }
+                            });
+                            } else {
+                            const hueGroups = [
+                            { label: "赤・黄赤系 (Hue: 1-4)", filter: h => h >= 1 && h <= 4 },
+                            { label: "黄赤・黄系 (Hue: 5-8)", filter: h => h >= 5 && h <= 8 },
+                            { label: "黄緑・緑系 (Hue: 9-14)", filter: h => h >= 9 && h <= 14 },
+                            { label: "青緑・青系 (Hue: 15-19)", filter: h => h >= 15 && h <= 19 },
+                            { label: "青紫・紫・赤紫系 (Hue: 20-24)", filter: h => h >= 20 && h <= 24 },
+                            { label: "無彩色", filter: h => h === 99 }
+                            ];
+
+                            hueGroups.forEach(g => {
+                            const items = filteredData.filter(d => g.filter(getHue(d.pccs)));
+                            if (items.length > 0) {
+                            gridHtml += `
+                            <div class="group-title">
+                                <span>${g.label}</span>
+                                <span style="font-size:0.75rem; color:#64748b;">${items.length}色</span>
+                            </div>
+                            <div class="grid-container">
+                            `;
+                            items.forEach(item => {
+                            const origIdx = allColorData.findIndex(ac => ac.name === item.name);
+                            const gradeClass = item.grade === '3級' ? 'badge-grade-3' : 'badge-grade-2';
+                            const pccsDots = getColorPccsTokens(item).map(tok => `<span style="display:inline-block; width:8px; height:8px; border-radius:50%; background-color:${getPccsHex(tok)}; border:1px solid #fff; box-shadow:0 1px 2px rgba(0,0,0,0.25);" title="PCCS: ${tok}"></span>`).join('');
+                            gridHtml += `
+                                <div class="grid-item" onclick="jumpTo(${origIdx})" title="クリックして詳細を表示">
+                                    <span class="grid-grade-tag ${gradeClass}">${item.grade}</span>
+                                    <div class="grid-color" style="background-color: ${item.hex}; position:relative;">
+                                        <div style="position:absolute; bottom:2px; right:2px; display:flex; gap:2px;">${pccsDots}</div>
+                                    </div>
+                                    <div class="grid-name">${item.clean_name}</div>
+                                    <div class="grid-sub">${item.category}</div>
+                                    <div class="grid-sub" style="color:#7c3aed; font-weight:700; display:flex; align-items:center; justify-content:center; gap:3px;">
+                                        ${item.pccs}
+                                    </div>
+                                </div>
+                            `;
+                            });
+                            gridHtml += `</div>`;
+                            }
+                            });
+                            }
+
+                            area.innerHTML = gridHtml;
+                            return;
+                            }
+
+                            // === 2. 由来一覧表示 (色名・由来簡潔・PCCS) ===
+                            if (colorViewFormat === 'origin') {
+                            controls.style.display = 'none';
+                            stats.innerHTML = `由来一覧 (${filteredData.length}色)`;
+
+                            let originHtml = viewToggleHtml;
+                            originHtml += `
+                            <div class="origin-list-container">
+                            ${filteredData.map(item => {
+                            const origIdx = allColorData.findIndex(ac => ac.name === item.name);
+                            const gradeClass = item.grade === '3級' ? 'badge-grade-3' : 'badge-grade-2';
+                            const pccsChips = getColorPccsTokens(item).map(tok => {
+                            const pHex = getPccsHex(tok);
+                            const pTxt = getContrastTextColor(pHex);
+                            return `<span style="display:inline-flex; align-items:center; background-color:${pHex}; color:${pTxt}; border-radius:4px; padding:1px 5px; font-size:0.7rem; font-weight:800; border:1px solid rgba(0,0,0,0.1);">${tok}</span>`;
+                            }).join(' ');
+                            return `
+                            <div class="origin-list-item" onclick="jumpTo(${origIdx})" title="タップして詳細を表示">
+                                <div class="origin-item-color" style="background-color: ${item.hex};"></div>
+                                <div class="origin-item-main">
+                                    <div class="origin-item-header">
+                                        <span class="grid-grade-tag ${gradeClass}">${item.grade}</span>
+                                        <span class="origin-item-name">${escapeHtml(item.clean_name)}</span>
+                                        <span class="origin-item-ruby">${escapeHtml(item.ruby || '')}</span>
+                                        <span class="origin-item-pccs" style="display:inline-flex; align-items:center; gap:4px;">${pccsChips}</span>
+                                    </div>
+                                    <div class="origin-item-desc">${escapeHtml(item.origin)}</div>
+                                </div>
+                            </div>
+                            `;
+                            }).join('')}
+                            </div>
+                            `;
+                            area.innerHTML = originHtml;
+                            return;
+                            }
 
             // === 3. カード詳細表示 ===
             controls.style.display = 'flex';
@@ -14424,10 +15232,32 @@ ${exam.colorQuestion.explanation}
             area.innerHTML = `
                 ${viewToggleHtml}
                 <div class="color-card">
-                    <!-- 色見本エリア (左右に直感的な大型矢印ボタンを配置) -->
-                    <div class="color-sample-container">
+                    <!-- 色見本エリア (慣用色 ＋ PCCS色の比較表示) -->
+                    <div class="color-sample-container" style="display:flex; align-items:center; justify-content:center; gap:8px;">
                         <button type="button" class="sample-arrow-btn left" onclick="prev()" title="前の色">◀</button>
-                        <div class="color-sample" style="background-color: ${data.hex}"></div>
+                        <div style="flex:1; max-width:440px; display:flex; gap:8px; align-items:stretch;">
+                            <!-- 慣用色の色見本 -->
+                            <div style="flex:1; display:flex; flex-direction:column; align-items:center;">
+                                <div class="color-sample" style="background-color: ${data.hex}; width:100%; height:110px; margin:0; border-radius:10px;"></div>
+                                <div style="font-size:0.75rem; font-weight:800; color:var(--text-main); margin-top:4px;">慣用色見本</div>
+                            </div>
+                            <!-- PCCSの色見本 -->
+                            <div style="flex:1; display:flex; flex-direction:column; align-items:center;">
+                                <div style="width:100%; height:110px; border-radius:10px; display:flex; gap:3px; overflow:hidden; border:1px solid rgba(0,0,0,0.1); box-shadow:0 2px 4px rgba(0,0,0,0.06);">
+                                    ${getColorPccsTokens(data).map(tok => {
+                                        const pHex = getPccsHex(tok);
+                                        const pTxt = getContrastTextColor(pHex);
+                                        return `
+                                            <div style="flex:1; background-color:${pHex}; color:${pTxt}; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:4px;">
+                                                <div style="font-size:0.65rem; opacity:0.85; font-weight:700;">PCCS色</div>
+                                                <div style="font-size:1.05rem; font-weight:900;">${tok}</div>
+                                            </div>
+                                        `;
+                                    }).join('')}
+                                </div>
+                                <div style="font-size:0.75rem; font-weight:800; color:#7c3aed; margin-top:4px;">PCCS標準色 (${data.pccs})</div>
+                            </div>
+                        </div>
                         <button type="button" class="sample-arrow-btn right" onclick="next()" title="次の色">▶</button>
                     </div>
                     
@@ -14445,7 +15275,10 @@ ${exam.colorQuestion.explanation}
                     <div class="badge-row" style="align-items:center;">
                         <span class="badge ${gradeClass}">${data.grade}</span>
                         <span class="badge badge-category">${data.category}</span>
-                        <span class="badge badge-pccs">PCCS: ${data.pccs}</span>
+                        <span class="badge badge-pccs" style="display:inline-flex; align-items:center; gap:5px;">
+                            <span>PCCS: ${data.pccs}</span>
+                            ${getColorPccsTokens(data).map(tok => `<span style="display:inline-block; width:10px; height:10px; border-radius:50%; background-color:${getPccsHex(tok)}; border:1px solid #fff;"></span>`).join('')}
+                        </span>
                         <span class="badge badge-munsell">マンセル: ${data.munsell}</span>
                         <button type="button" onclick="toggleMarkColor('${data.name}')" style="border:1px solid ${isColorMarked(data.name) ? '#f59e0b' : '#cbd5e1'}; background:${isColorMarked(data.name) ? '#fef3c7' : '#fff'}; border-radius:6px; padding:3px 9px; font-size:0.75rem; font-weight:800; color:${isColorMarked(data.name) ? '#b45309' : '#64748b'}; cursor:pointer;" title="暗記カード学習用に印を付ける/外す">
                             ${isColorMarked(data.name) ? '★ 印付き' : '☆ 印をつける'}
@@ -14543,7 +15376,8 @@ ${exam.colorQuestion.explanation}
             const modeTitle = (currentMode === 'practical_harmony') ? '実戦記述＋配色' : '実戦記述';
             stats.innerHTML = `${modeTitle} (問題 ${currentIndex + 1} / ${filteredData.length})`;
 
-            const toneList = ['v', 'b', 'dp', 'lt', 'sf', 'd', 'dk', 'p', 'ltg', 'g', 'dkg', '無彩色'];
+            // 全12トーン ＋ 無彩色 (すべて網羅)
+            const toneList = ['v', 'b', 'dp', 'lt', 'sf', 'd', 'dk', 'p', 'ltg', 'g', 'dkg', 's', '無彩色'];
 
             area.innerHTML = `
                 <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; flex-wrap:wrap; gap:6px;">
@@ -14581,17 +15415,17 @@ ${exam.colorQuestion.explanation}
                             </div>
                         </div>
 
-                        <!-- 2. PCCS 2ステップ選択 -->
+                        <!-- 2. PCCS 2ステップ選択 (全トーン・全数字) -->
                         <div class="input-group">
                             <div class="input-label">
-                                <span>2. PCCS記号を選択:</span>
+                                <span>2. PCCS記号を選択 (全トーン ＆ 全数字):</span>
                             </div>
                             <div class="pccs-selector-box">
                                 <div class="pccs-selection-preview">
                                     <span style="font-size:0.75rem; color:var(--text-sub); font-weight:bold;">選択中のPCCS:</span>
                                     <span id="selected-pccs-preview" class="preview-badge">未選択</span>
                                 </div>
-                                <div class="selector-step-title">トーンを選択:</div>
+                                <div class="selector-step-title">トーンを選択 (全12トーン ＋ 無彩色):</div>
                                 <div class="tone-btn-grid">
                                     ${toneList.map(t => `
                                         <button class="tone-pick-btn" data-tone="${t}" onclick="selectPracticalTone('${t}')">${t}</button>
@@ -14603,6 +15437,17 @@ ${exam.colorQuestion.explanation}
                             </div>
                         </div>
 
+                        <!-- 3. PCCSの実際の色を選択 (カラーチップ多肢選択) -->
+                        <div class="input-group">
+                            <div class="input-label">
+                                <span>3. 実際の色（カラーチップ）を選択:</span>
+                                <span style="font-size:0.72rem; color:#7c3aed; font-weight:700;">※似ている色（隣接色相・類似トーン）の中から該当する色をタップ</span>
+                            </div>
+                            <div id="practical-color-choices-container">
+                                <!-- renderPracticalSelector で多肢カラーチップが描画される -->
+                            </div>
+                        </div>
+
                         <button class="submit-answer-btn" onclick="submitPracticalAnswer()">解答を判定する</button>
                     </div>
 
@@ -14610,6 +15455,10 @@ ${exam.colorQuestion.explanation}
                     <button id="next-practical-btn" class="nav-btn" style="display:none; width:100%; margin-top:12px;" onclick="nextPracticalQuestion()">次の問題へ ＞</button>
                 </div>
             `;
+
+            setTimeout(() => {
+                renderPracticalSelector();
+            }, 0);
         }
     
         // マンセル & PCCSアニメーション処理
