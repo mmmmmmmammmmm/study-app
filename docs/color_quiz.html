@@ -3152,7 +3152,7 @@
     "pccs": "dp12",
     "munsell": "4G 4.5/9",
     "hex": "#009854",
-    "origin": "マラカイト、日本語で孔雀石(くじゃくいし)と呼ばれる鉱石からつくられた緑色の色名。古代工ジプトではすでにこの緑色が知られていて、エジプト人が目を守るおまじないにこの緑色を目のまわりに塗ったのがアイラインの始まりだという。",
+    "origin": "マラカイト、日本語で孔雀石(くじゃくいし)と呼ばれる鉱石からつくられた緑色の色名。古代エジプトではすでにこの緑色が知られていて、エジプト人が目を守るおまじないにこの緑色を目のまわりに塗ったのがアイラインの始まりだという。",
     "grade": "3級",
     "file": "IMG_1696.PNG",
     "tones": [
@@ -3164,7 +3164,7 @@
     "pccsTokens": [
       "dp12"
     ],
-    "exam_origin": "日本語で孔雀石(くじゃくいし)と呼ばれる鉱石からつくられた緑色の色名。古代工ジプトではすでにこの緑色が知られていて、エジプト人が目を守るおまじないにこの緑色を目のまわりに塗ったのがアイラインの始まりだという。"
+    "exam_origin": "日本語で孔雀石(くじゃくいし)と呼ばれる鉱石からつくられた緑色の色名。古代エジプトではすでにこの緑色が知られていて、エジプト人が目を守るおまじないにこの緑色を目のまわりに塗ったのがアイラインの始まりだという。"
   },
   {
     "name": "ボトルグリーン",
@@ -9203,6 +9203,14 @@
     let currentIndex = 0;
     let filteredData = [...allColorData];
 
+    // 実戦記述用 シャッフル山札 (全色重複なし出題用)
+    let practicalDeck = []; // filteredData のインデックスのシャッフル配列
+    let practicalDeckIndex = 0; // 現在の出題進捗 (0 〜 practicalDeck.length - 1)
+
+    // 選択クイズ用 シャッフル山札
+    let choiceQuizDeck = [];
+    let choiceQuizDeckIndex = 0;
+
     // 暗記カード機能用変数
     let flashcardMode = 'menu'; // 'menu': 選択画面, 'session': 暗記学習中
     let flashcardType = 'color'; // 'color': ①色名・PCCS・由来, 'harmony': ②配色の暗記カード
@@ -9709,23 +9717,52 @@
     let pccsQuizFormat = 'origin'; // 'origin' (由来から出題) または 'name' (色名から出題)
     let pccsQuizSelectedChoice = null;
     let pccsQuizGradeFilter = 'all';
+    let pccsQuizDeck = [];
+    let pccsQuizDeckIndex = 0;
 
-    function startQuickPccsQuiz() {
-        pccsQuizIndex = Math.floor(Math.random() * filteredData.length);
-        setMode('pccs_quiz');
-    }
-
-    function resetPccsQuiz() {
+    function getPccsQuizPool() {
         let pool = allColorData;
         if (pccsQuizGradeFilter !== 'all') {
             pool = pool.filter(c => c.grade === pccsQuizGradeFilter);
         }
-        if (pool.length === 0) pool = allColorData;
-        pccsQuizIndex = Math.floor(Math.random() * pool.length);
+        return pool.length > 0 ? pool : allColorData;
+    }
+
+    function resetPccsQuizDeck() {
+        const pool = getPccsQuizPool();
+        pccsQuizDeck = shuffleArray(Array.from({length: pool.length}, (_, i) => i));
+        pccsQuizDeckIndex = 0;
+    }
+
+    function shufflePccsQuizDeck() {
+        resetPccsQuizDeck();
+        resetPccsQuiz(false);
+        render();
+    }
+
+    function startQuickPccsQuiz() {
+        resetPccsQuizDeck();
+        pccsQuizIndex = pccsQuizDeck[0] !== undefined ? pccsQuizDeck[0] : 0;
+        setMode('pccs_quiz');
+    }
+
+    function resetPccsQuiz(isNext = false) {
+        const pool = getPccsQuizPool();
+        if (!pccsQuizDeck || pccsQuizDeck.length !== pool.length) {
+            resetPccsQuizDeck();
+        }
+        if (isNext) {
+            pccsQuizDeckIndex++;
+            if (pccsQuizDeckIndex >= pccsQuizDeck.length) {
+                // 1周完了！全色出題し終わったら再シャッフル
+                resetPccsQuizDeck();
+            }
+        }
+        pccsQuizIndex = (pccsQuizDeck[pccsQuizDeckIndex] !== undefined) ? pccsQuizDeck[pccsQuizDeckIndex] : 0;
         pccsQuizAnswered = false;
         pccsQuizSelectedChoice = null;
         
-        const target = pool[pccsQuizIndex];
+        const target = pool[pccsQuizIndex] || pool[0];
         // 8〜10択の似ている色選択肢を生成！
         pccsQuizChoices = generateSimilarPccsChoices(target, 8);
     }
@@ -9737,7 +9774,8 @@
 
     function setPccsQuizGrade(grade) {
         pccsQuizGradeFilter = grade;
-        resetPccsQuiz();
+        resetPccsQuizDeck();
+        resetPccsQuiz(false);
         render();
     }
 
@@ -9747,12 +9785,8 @@
         const choice = pccsQuizChoices[choiceIndex];
         pccsQuizSelectedChoice = choice;
 
-        let pool = allColorData;
-        if (pccsQuizGradeFilter !== 'all') {
-            pool = pool.filter(c => c.grade === pccsQuizGradeFilter);
-        }
-        if (pool.length === 0) pool = allColorData;
-        const target = pool[pccsQuizIndex];
+        const pool = getPccsQuizPool();
+        const target = pool[pccsQuizIndex] || pool[0];
 
         if (!choice.isCorrect) {
             saveMistake(target.name);
@@ -9762,7 +9796,7 @@
     }
 
     function nextPccsQuizQuestion() {
-        resetPccsQuiz();
+        resetPccsQuiz(true);
         render();
     }
 
@@ -9801,8 +9835,10 @@
         document.getElementById('grade-2').classList.toggle('active', grade === '2級');
 
         filterList();
-        if (currentMode === 'quiz' || currentMode === 'practical') {
-            resetQuizState();
+        if (currentMode === 'practical' || currentMode === 'practical_harmony') {
+            resetPracticalQuiz(false);
+        } else if (currentMode === 'quiz') {
+            resetQuizState(false);
         }
         render();
     }
@@ -9846,6 +9882,8 @@
             );
         });
         currentIndex = 0;
+        resetPracticalDeck();
+        resetChoiceQuizDeck();
     }
 
     function saveMistake(colorName) {
@@ -9959,9 +9997,12 @@
         } else if (mode === 'audio') {
             if (audioDeck.length === 0) initAudioDeck();
         } else if (mode === 'pccs_quiz') {
-            if (!pccsQuizChoices || pccsQuizChoices.length === 0) resetPccsQuiz();
+            if (!pccsQuizChoices || pccsQuizChoices.length === 0) resetPccsQuiz(false);
         } else if (mode === 'practical' || mode === 'practical_harmony') {
-            resetPracticalQuiz();
+            if (!practicalDeck || practicalDeck.length !== filteredData.length) {
+                resetPracticalDeck();
+            }
+            resetPracticalQuiz(false);
         } else if (mode === 'harmony') {
             resetBuilderChallenge();
         }
@@ -10245,6 +10286,9 @@
         s = s.replace(/流行色/g, 'りゅうこうしょく');
         s = s.replace(/実/g, 'み');
         s = s.replace(/実験/g, 'じっけん');
+        s = s.replace(/真夜中/g, 'まよなか');
+        s = s.replace(/コバルトアルミン酸塩/g, 'こばるとあるみんさんえん');
+        s = s.replace(/陶器/g, 'とうき');
 
 
         // 5. 色相・色彩検定用語・誤読しやすい語の読み仮名化
@@ -10542,13 +10586,31 @@
     }
 
     function startPracticalWithColor(index) {
-        currentIndex = index;
         setMode('practical');
+        resetPracticalDeck();
+        const pos = practicalDeck.indexOf(index);
+        if (pos > -1) {
+            practicalDeck.splice(pos, 1);
+            practicalDeck.unshift(index);
+        }
+        practicalDeckIndex = 0;
+        currentIndex = index;
+        resetPracticalQuiz(false, true);
+        render();
     }
 
     function startPracticalHarmonyWithColor(index) {
-        currentIndex = index;
         setMode('practical_harmony');
+        resetPracticalDeck();
+        const pos = practicalDeck.indexOf(index);
+        if (pos > -1) {
+            practicalDeck.splice(pos, 1);
+            practicalDeck.unshift(index);
+        }
+        practicalDeckIndex = 0;
+        currentIndex = index;
+        resetPracticalQuiz(false, true);
+        render();
     }
 
     // --- 全26種類の色彩調和技法マスタ ---
@@ -11096,9 +11158,35 @@
 
 
     // --- 実戦記述クイズロジック (色名手入力 ＋ PCCS値選択 ＋ 実際の色選択) ---
-    function resetPracticalQuiz() {
-        if (filteredData.length > 0) {
-            currentIndex = Math.floor(Math.random() * filteredData.length);
+    function resetPracticalDeck() {
+        if (!filteredData || filteredData.length === 0) {
+            practicalDeck = [];
+            practicalDeckIndex = 0;
+            return;
+        }
+        practicalDeck = shuffleArray(Array.from({length: filteredData.length}, (_, i) => i));
+        practicalDeckIndex = 0;
+    }
+
+    function shufflePracticalDeck() {
+        resetPracticalDeck();
+        resetPracticalQuiz(false);
+        render();
+    }
+
+    function resetPracticalQuiz(isNext = false, keepCurrentIndex = false) {
+        if (!practicalDeck || practicalDeck.length !== filteredData.length) {
+            resetPracticalDeck();
+        }
+        if (isNext) {
+            practicalDeckIndex++;
+            if (practicalDeckIndex >= practicalDeck.length) {
+                // 全色を1周完了！新しくシャッフルして最初から
+                resetPracticalDeck();
+            }
+        }
+        if (!keepCurrentIndex && practicalDeck.length > 0) {
+            currentIndex = practicalDeck[practicalDeckIndex] !== undefined ? practicalDeck[practicalDeckIndex] : 0;
         }
         quizAnswered = false;
         practicalSelectedTone = '';
@@ -11265,7 +11353,7 @@
     }
 
     function nextPracticalQuestion() {
-        resetPracticalQuiz();
+        resetPracticalQuiz(true);
         render();
     }
 
@@ -11402,10 +11490,29 @@
         }
     }
 
+    function resetChoiceQuizDeck() {
+        if (!filteredData || filteredData.length === 0) {
+            choiceQuizDeck = [];
+            choiceQuizDeckIndex = 0;
+            return;
+        }
+        choiceQuizDeck = shuffleArray(Array.from({length: filteredData.length}, (_, i) => i));
+        choiceQuizDeckIndex = 0;
+    }
+
     // --- 選択クイズロジック (色→名前、由来→名前、名前→由来) ---
-    function resetQuizState() {
-        if (filteredData.length > 0) {
-            currentIndex = Math.floor(Math.random() * filteredData.length);
+    function resetQuizState(isNext = false) {
+        if (!choiceQuizDeck || choiceQuizDeck.length !== filteredData.length) {
+            resetChoiceQuizDeck();
+        }
+        if (isNext) {
+            choiceQuizDeckIndex++;
+            if (choiceQuizDeckIndex >= choiceQuizDeck.length) {
+                resetChoiceQuizDeck();
+            }
+        }
+        if (choiceQuizDeck.length > 0) {
+            currentIndex = choiceQuizDeck[choiceQuizDeckIndex] !== undefined ? choiceQuizDeck[choiceQuizDeckIndex] : 0;
         }
         quizAnswered = false;
         determineQuizType();
@@ -11487,7 +11594,7 @@
     }
 
     function nextChoiceQuiz() {
-        resetQuizState();
+        resetQuizState(true);
         render();
     }
 
@@ -14560,16 +14667,14 @@ ${exam.colorQuestion.explanation}
 
     // --- PCCS色当て問題 (多肢・類似色) 画面レンダリング ---
     function renderPccsQuizView(area, stats) {
-        let pool = allColorData;
-        if (pccsQuizGradeFilter !== 'all') {
-            pool = pool.filter(c => c.grade === pccsQuizGradeFilter);
-        }
-        if (pool.length === 0) pool = allColorData;
+        let pool = getPccsQuizPool();
+        const totalCount = (pccsQuizDeck && pccsQuizDeck.length > 0) ? pccsQuizDeck.length : pool.length;
+        const currentNum = (pccsQuizDeck && pccsQuizDeck.length > 0) ? (pccsQuizDeckIndex + 1) : 1;
 
         const target = pool[pccsQuizIndex] || pool[0];
         const gradeBadge = target.grade === '3級' ? 'badge-grade-3' : 'badge-grade-2';
 
-        stats.innerHTML = `PCCS色当て問題 (類似色・多肢選択) - ${pccsQuizGradeFilter === 'all' ? '全127色' : pccsQuizGradeFilter}`;
+        stats.innerHTML = `PCCS色当て問題 (問題 ${currentNum} / ${totalCount} 全色シャッフル出題) - ${pccsQuizGradeFilter === 'all' ? '全127色' : pccsQuizGradeFilter}`;
 
         const questionText = (pccsQuizFormat === 'origin')
             ? (target.exam_origin || target.origin || '')
@@ -14581,6 +14686,7 @@ ${exam.colorQuestion.explanation}
                 <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; flex-wrap:wrap; gap:8px;">
                     <div style="display:flex; gap:6px; align-items:center;">
                         <button onclick="setMode('list')" class="flashcard-btn" style="padding:6px 12px; font-size:0.78rem;">← 図鑑に戻る</button>
+                        <button onclick="shufflePccsQuizDeck()" class="flashcard-btn" style="padding:6px 10px; font-size:0.78rem;" title="出題順を新しくシャッフルして1問目から開始">🔀 再シャッフル</button>
                         <!-- 出題形式ピル -->
                         <div style="display:inline-flex; background:#f1f5f9; padding:2px; border-radius:6px; border:1px solid #e2e8f0; font-size:0.72rem;">
                             <button type="button" onclick="setPccsQuizFormat('origin')" style="border:none; padding:3px 8px; border-radius:4px; font-weight:700; cursor:pointer; background:${pccsQuizFormat === 'origin' ? '#8b5cf6' : 'transparent'}; color:${pccsQuizFormat === 'origin' ? '#fff' : '#64748b'};">由来から出題</button>
@@ -15374,16 +15480,23 @@ ${exam.colorQuestion.explanation}
         } else if (currentMode === 'practical' || currentMode === 'practical_harmony') {
             controls.style.display = 'none';
             const modeTitle = (currentMode === 'practical_harmony') ? '実戦記述＋配色' : '実戦記述';
-            stats.innerHTML = `${modeTitle} (問題 ${currentIndex + 1} / ${filteredData.length})`;
+            const totalQuestions = (practicalDeck && practicalDeck.length > 0) ? practicalDeck.length : filteredData.length;
+            const currentNum = (practicalDeck && practicalDeck.length > 0) ? (practicalDeckIndex + 1) : (currentIndex + 1);
+            stats.innerHTML = `${modeTitle} (問題 ${currentNum} / ${totalQuestions} 全色シャッフル出題)`;
 
             // 全12トーン ＋ 無彩色 (すべて網羅)
             const toneList = ['v', 'b', 'dp', 'lt', 'sf', 'd', 'dk', 'p', 'ltg', 'g', 'dkg', 's', '無彩色'];
 
             area.innerHTML = `
                 <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; flex-wrap:wrap; gap:6px;">
-                    <button onclick="setMode('list')" style="border:none; background:#f1f5f9; color:#1e293b; font-size:0.78rem; font-weight:800; padding:6px 12px; border-radius:6px; cursor:pointer;">
-                        ← 図鑑に戻る
-                    </button>
+                    <div style="display:flex; gap:6px; align-items:center;">
+                        <button onclick="setMode('list')" style="border:none; background:#f1f5f9; color:#1e293b; font-size:0.78rem; font-weight:800; padding:6px 12px; border-radius:6px; cursor:pointer;">
+                            ← 図鑑に戻る
+                        </button>
+                        <button onclick="shufflePracticalDeck()" style="border:1px solid #cbd5e1; background:#fff; color:#475569; font-size:0.75rem; font-weight:700; padding:5px 9px; border-radius:6px; cursor:pointer;" title="全色の出題順を新しくシャッフルして1問目から開始">
+                            🔀 再シャッフル
+                        </button>
+                    </div>
                     <!-- 出題文形式切替ピル -->
                     <div style="display:inline-flex; background:#f1f5f9; padding:2px; border-radius:6px; border:1px solid #e2e8f0; font-size:0.72rem;">
                         <button type="button" onclick="setPracticalOriginFormat('exam')" style="border:none; padding:3px 8px; border-radius:4px; font-size:0.72rem; font-weight:700; cursor:pointer; background:${practicalOriginFormat !== 'official' ? '#2563eb' : 'transparent'}; color:${practicalOriginFormat !== 'official' ? '#fff' : '#64748b'};">試験仕様</button>
