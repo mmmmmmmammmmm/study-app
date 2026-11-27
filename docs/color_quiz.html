@@ -9211,6 +9211,10 @@
     let choiceQuizDeck = [];
     let choiceQuizDeckIndex = 0;
 
+    // 配色問題の基準色①用 シャッフル山札 (重複なし)
+    let harmonyColorDeck = [];
+    let harmonyColorDeckIndex = 0;
+
     // 暗記カード機能用変数
     let flashcardMode = 'menu'; // 'menu': 選択画面, 'session': 暗記学習中
     let flashcardType = 'color'; // 'color': ①色名・PCCS・由来, 'harmony': ②配色の暗記カード
@@ -9241,6 +9245,7 @@
     let audioIsPlaying = false; // 再生中フラグ
     let audioPhase = 'idle'; // 'idle', 'origin' (出題中), 'pause' (シンキングタイム), 'answer' (正解発表)
     let audioTimer = null; // タイマー参照
+    let audioSessionToken = 0; // 重複再生・ゴーストタイマー防止用世代トークン
     let audioCurrentUtterance = null; // 現在のSpeechSynthesisUtterance
     let audioMasteredColors = JSON.parse(localStorage.getItem('color_quiz_audio_mastered') || '[]'); // 覚えた色（除外リスト）
     let audioGradeFilter = 'all'; // 'all', '3級', '2級'
@@ -10318,9 +10323,13 @@
         return s;
     }
 
-    function speakAudioText(text, onEnd) {
+    function speakAudioText(text, token, onEnd) {
         if (typeof window === 'undefined' || !('speechSynthesis' in window)) {
-            if (typeof onEnd === 'function') setTimeout(onEnd, 300);
+            if (typeof onEnd === 'function') {
+                audioTimer = setTimeout(() => {
+                    if (audioSessionToken === token && audioIsPlaying) onEnd();
+                }, 300);
+            }
             return;
         }
 
@@ -10329,20 +10338,37 @@
             const utterance = new SpeechSynthesisUtterance(text);
             utterance.lang = 'ja-JP';
             utterance.rate = audioRate;
+            let finished = false;
+
             utterance.onend = () => {
-                if (typeof onEnd === 'function') onEnd();
+                if (finished) return;
+                finished = true;
+                if (audioSessionToken === token && audioIsPlaying) {
+                    if (typeof onEnd === 'function') onEnd();
+                }
             };
-            utterance.onerror = () => {
-                if (typeof onEnd === 'function') onEnd();
+            utterance.onerror = (e) => {
+                if (finished) return;
+                finished = true;
+                // キャンセルや中断('canceled', 'interrupted')によるゴースト発火は完全に無視！
+                if (e && (e.error === 'canceled' || e.error === 'interrupted')) {
+                    return;
+                }
+                if (audioSessionToken === token && audioIsPlaying) {
+                    if (typeof onEnd === 'function') onEnd();
+                }
             };
             audioCurrentUtterance = utterance;
             window.speechSynthesis.speak(utterance);
         } catch(e) {
-            if (typeof onEnd === 'function') setTimeout(onEnd, 300);
+            if (audioSessionToken === token && audioIsPlaying && typeof onEnd === 'function') {
+                audioTimer = setTimeout(onEnd, 300);
+            }
         }
     }
 
     function stopAudioPlay() {
+        audioSessionToken++; // 世代トークンを更新し、古い非同期タイマー・発話を即座に完全無効化
         audioIsPlaying = false;
         audioPhase = 'idle';
         if (audioTimer) {
@@ -10373,6 +10399,7 @@
 
         stopAudioPlay();
         audioIsPlaying = true;
+        const currentToken = audioSessionToken; // 今回の再生固有トークン
         const color = audioDeck[audioIndex];
         if (!color) return;
 
@@ -10386,8 +10413,8 @@
 
         const questionSpeech = normalizeTextForSpeech(originText);
 
-        speakAudioText(questionSpeech, () => {
-            if (!audioIsPlaying) return;
+        speakAudioText(questionSpeech, currentToken, () => {
+            if (!audioIsPlaying || audioSessionToken !== currentToken) return;
 
             // Phase 2: シンキングタイム (ポーズ)
             audioPhase = 'pause';
@@ -10395,7 +10422,7 @@
 
             const pauseMs = (audioPauseSeconds > 0) ? (audioPauseSeconds * 1000) : 500;
             audioTimer = setTimeout(() => {
-                if (!audioIsPlaying) return;
+                if (!audioIsPlaying || audioSessionToken !== currentToken) return;
 
                 // Phase 3: 正解発表
                 audioPhase = 'answer';
@@ -10405,12 +10432,12 @@
                 const pccsSpeech = formatPccsForSpeech(color.pccs);
                 const answerSpeech = `${speechName}。${pccsSpeech}。`;
 
-                speakAudioText(answerSpeech, () => {
-                    if (!audioIsPlaying) return;
+                speakAudioText(answerSpeech, currentToken, () => {
+                    if (!audioIsPlaying || audioSessionToken !== currentToken) return;
 
                     if (audioAutoAdvance) {
                         audioTimer = setTimeout(() => {
-                            if (!audioIsPlaying) return;
+                            if (!audioIsPlaying || audioSessionToken !== currentToken) return;
                             nextAudioCard(true);
                         }, 1800);
                     } else {
@@ -10433,13 +10460,20 @@
 
     function nextAudioCard(autoPlay = false) {
         if (!audioDeck || audioDeck.length === 0) return;
+        const lastColor = audioDeck[audioIndex];
         stopAudioPlay();
         if (audioIndex < audioDeck.length - 1) {
             audioIndex++;
         } else {
+            // 1周完了！全色再生し終わったので再シャッフル
             audioIndex = 0;
-            // 1周したら再シャッフル
-            audioDeck = shuffleArray(audioDeck);
+            let newDeck = shuffleArray(audioDeck);
+            // 1周目の最後と2周目の最初が同じ色なら入れ替えて連続同一色を絶対に防止！
+            if (newDeck.length > 1 && lastColor && newDeck[0].name === lastColor.name) {
+                const swapIdx = Math.floor(Math.random() * (newDeck.length - 1)) + 1;
+                [newDeck[0], newDeck[swapIdx]] = [newDeck[swapIdx], newDeck[0]];
+            }
+            audioDeck = newDeck;
         }
         audioPhase = 'idle';
         if (autoPlay || audioAutoAdvance) {
@@ -10662,7 +10696,15 @@
             };
         } else {
             const candidates = allColorData.filter(c => c.tones && c.tones.length > 0 && c.tones[0] !== '無彩色');
-            const picked = candidates[Math.floor(Math.random() * candidates.length)] || allColorData[0];
+            if (!harmonyColorDeck || harmonyColorDeck.length !== candidates.length) {
+                harmonyColorDeck = shuffleArray(candidates);
+                harmonyColorDeckIndex = 0;
+            }
+            if (harmonyColorDeckIndex >= harmonyColorDeck.length) {
+                harmonyColorDeck = shuffleArray(candidates);
+                harmonyColorDeckIndex = 0;
+            }
+            const picked = harmonyColorDeck[harmonyColorDeckIndex++] || allColorData[0];
             const rawHue = picked.hues && picked.hues[0] ? picked.hues[0].replace('+', '') : '8';
             const hue1 = parseInt(rawHue) || 8;
             const tone1 = (picked.tones && picked.tones[0]) || 'v';
